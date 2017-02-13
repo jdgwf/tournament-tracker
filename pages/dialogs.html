@@ -223,6 +223,21 @@
 			</div>
 			<div class="columns small-12 medium-6">
 				<fieldset class="fieldset">
+					<legend translate="TOURNAMENTS_GENERAL_SETTINGS">General Settings</legend>
+						<label>
+							<span translate="TOURNAMENTS_NUMBER_OF_ROUNDS"></span><br />
+							<input type="number" ng-model="tmpTournament.numberOfRounds" ng-change="updateTournamentRounds(tmpTournament.numberOfRounds)"  />
+						</label>
+						<label>
+							<input type="checkbox" ng-model="tmpTournament.trackPerGameSportsmanship" ng-change="updateTournamentTrackPerGameSportsmanship(tmpTournament.trackPerGameSportsmanship)" /> <span translate="TOURNAMENTS_SPORTSMANSHIP_PER_GAME">Track per game sportsmanship</span><br />
+
+						</label>
+						<label ng-show="tmpTournament.trackPerGameSportsmanship == true">
+							<span translate="TOURNAMENTS_SPORTSMANSHIP_WARN"></span><br />
+							<input type="number" ng-model="tmpTournament.warnSportsmanship" ng-change="updateTournamentWarnSportsmanship(tmpTournament.warnSportsmanship)"  />
+						</label>
+				</fieldset>
+				<fieldset class="fieldset">
 					<legend translate="TOURNAMENTS_EXTRA_SCORING">Extra Scoring</legend>
 
 						<label>
@@ -243,17 +258,7 @@
 
 				</fieldset>
 
-				<fieldset class="fieldset">
-					<legend translate="TOURNAMENTS_GENERAL_SETTINGS">General Settings</legend>
-						<label>
-							<input type="checkbox" ng-model="tmpTournament.trackPerGameSportsmanship" ng-change="updateTournamentTrackPerGameSportsmanship(tmpTournament.trackPerGameSportsmanship)" /> <span translate="TOURNAMENTS_SPORTSMANSHIP_PER_GAME">Track per game sportsmanship</span><br />
 
-						</label>
-						<label ng-show="tmpTournament.trackPerGameSportsmanship == true">
-							<span translate="TOURNAMENTS_SPORTSMANSHIP_WARN"></span><br />
-							<input type="number" ng-model="tmpTournament.warnSportsmanship" ng-change="updateTournamentWarnSportsmanship(tmpTournament.warnSportsmanship)"  />
-						</label>
-				</fieldset>
 			</div>
 		</div>
 

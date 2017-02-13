@@ -105,6 +105,7 @@ available_languages.push ({
 		TOURNAMENTS_GO_TO_PLAYERS: "Go To Players",
 		TOURNAMENTS_NO_AVAILABLE_PLAYERS: "There are no available players to add. Please visit the Player Adminsitration screen to add players.",
 		TOURNAMENTS_NO_PLAYERS: "There are no players in this tournament",
+		TOURNAMENTS_NUMBER_OF_ROUNDS: "Number of Rounds",
 
 
 		WELCOME_BUTTON_MANAGE_PLAYERS: "Manage Players",

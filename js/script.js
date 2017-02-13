@@ -767,6 +767,8 @@ function Tournament (importTournament, playerObjects) {
 	this.playerObjs = Array();
 	this.name = "";
 
+	this.numberOfRounds = 4;
+
 	this.pointsForWin = 2;
 	this.pointsForDraw = 1;
 	this.pointsForLoss = 0;
@@ -802,6 +804,9 @@ function Tournament (importTournament, playerObjects) {
 
 		if( typeof(importTournament.updated) != "undefined" )
 			this.updated = importTournament.updated;
+
+		if( typeof(importTournament.numberOfRounds) != "undefined" )
+			this.numberOfRounds = importTournament.numberOfRounds;
 
 		if( typeof(importTournament.pointsForWin) != "undefined" )
 			this.pointsForWin = importTournament.pointsForWin;
@@ -1146,6 +1151,10 @@ var tournamentsManageArray =
 
 			$scope.updateTournamentName = function( newValue ) {
 				$scope.tmpTournament.name = newValue;
+			}
+
+			$scope.updateTournamentRounds = function( newValue ) {
+				$scope.tmpTournament.numberOfRounds = newValue;
 			}
 
 			$scope.updateTournamentPointsForWin = function( newValue ) {
@@ -1630,6 +1639,7 @@ available_languages.push ({
 		TOURNAMENTS_GO_TO_PLAYERS: "Go To Players",
 		TOURNAMENTS_NO_AVAILABLE_PLAYERS: "There are no available players to add. Please visit the Player Adminsitration screen to add players.",
 		TOURNAMENTS_NO_PLAYERS: "There are no players in this tournament",
+		TOURNAMENTS_NUMBER_OF_ROUNDS: "Number of Rounds",
 
 
 		WELCOME_BUTTON_MANAGE_PLAYERS: "Manage Players",

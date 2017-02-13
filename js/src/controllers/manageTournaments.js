@@ -49,6 +49,10 @@ var tournamentsManageArray =
 				$scope.tmpTournament.name = newValue;
 			}
 
+			$scope.updateTournamentRounds = function( newValue ) {
+				$scope.tmpTournament.numberOfRounds = newValue;
+			}
+
 			$scope.updateTournamentPointsForWin = function( newValue ) {
 				$scope.tmpTournament.pointsForWin = newValue;
 			}
