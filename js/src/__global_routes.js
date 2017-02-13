@@ -44,6 +44,18 @@ var globalRoutes = 	[
 			controller  : 'settingsController'
 		})
 
+		// Manage Players
+		.when('/players-manage', {
+			templateUrl : 'pages/players-manage.html',
+			controller  : 'controllerPlayersManage'
+		})
+
+		// Manage Tournaments
+		.when('/tournaments-manage', {
+			templateUrl : 'pages/tournaments-manage.html',
+			controller  : 'controllerTourmamentsManage'
+		})
+
 		;
 	}
 ];

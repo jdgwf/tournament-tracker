@@ -1,0 +1,46 @@
+<div ng-include="'pages/global-header.html'"></div>
+<div ng-include="'pages/dialogs.html'"></div>
+<div class="row">
+
+	<div class="column small-12">
+
+		<fieldset class="fieldset">
+			<legend translate="WELCOME_BUTTON_MANAGE_PLAYERS">Manage Players</legend>
+			<div class="text-right">
+				<a ng-click="newPlayerDialog()"><i class="fa fa-plus"></i></a>
+			</div>
+			<table>
+				<thead>
+					<tr>
+						<th translate="GENERAL_NAME_FIRST">First Name</th>
+						<th translate="GENERAL_NAME_LAST">Last Name</th>
+						<th translate="GENERAL_NAME_NICK">Nickname</th>
+						<th translate="GENERAL_EMAIL">Email</th>
+						<th translate="GENERAL_PHONE">Phone</th>
+						<th translate="GENERAL_ACTIVE">Active</th>
+						<th>&nbsp;</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr ng-repeat="playerObj in playerList track by $index">
+						<td>{{ playerObj.name.first }}</td>
+						<td>{{ playerObj.name.last }}</td>
+						<td>{{ playerObj.name.nick }}</td>
+						<td>{{ playerObj.email }}</td>
+						<td>{{ playerObj.phone1 }}</td>
+						<td><i class="fa fa-check" ng-show="playerObj.active"></i></td>
+						<td>
+							<a ng-click="editPlayerDialog( $index );"><i class="fa fa-edit"></i></a>
+							<a ng-click="deletePlayerDialog( $index );"><i class="fa fa-trash"></i></a>
+						</td>
+					</tr>
+				</tbody>
+
+				<tfoot>
+				</tfoot>
+			</table>
+		</fieldset>
+
+	</div>
+</div>

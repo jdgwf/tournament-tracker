@@ -11,3 +11,39 @@ function generateUUID(){
     return uuid;
 }
 
+
+function getPlayersFromLocalStorage() {
+	if( !localStorage["players_list"] ) {
+		localStorage["players_list"] = "[]";
+		return Array();
+	} else {
+		return JSON.parse( localStorage["players_list"]  );
+	}
+}
+
+function getTournamentsFromLocalStorage() {
+	if( !localStorage["tournaments_list"] ) {
+		localStorage["tournaments_list"] = "[]";
+		return Array();
+	} else {
+		return JSON.parse( localStorage["tournaments_list"]  );
+	}
+}
+
+function savePlayersToLocalStorage( playersObject ) {
+	localStorage["players_list"] = JSON.stringify( playersObject );
+}
+
+function saveTourmanentsToLocalStorage( tournamentsObject ) {
+	localStorage["tournaments_list"] = JSON.stringify( tournamentsObject );
+}
+
+function getNextPlayerID( playersObject ) {
+	maxID = 0;
+	for( var playerCount = 0; playerCount < playersObject.length; playerCount++ ) {
+		if( playersObject[ playerCount ].id > maxID )
+			maxID =  playersObject[ playerCount ].id;
+	}
+
+	return maxID + 1;
+}

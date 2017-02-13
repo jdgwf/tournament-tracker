@@ -1,12 +1,14 @@
 $fontSize: 14px;
 
-$fontColor: #fdfde3;
+$fontColor: #ddd;
 $headerFooterBackground: #111;
 $bodyBackground: #333;
 
-$primaryBG: #dfab2d;
-$primaryBGHover: #b48a25;
+$primaryBG: #2d81df;
+$primaryBGHover: #5595de;
 $primaryTextColor: #fff;
+
+$headerFontColor: #fff;
 
 $darkenedBG: rgba( 0, 0, 0, .25);
 $darkenedGreenBG: rgba( 0, 66, 0, .25);
@@ -969,6 +971,55 @@ button.round, .button.round {
 
 .inline-block {
 	display: inline-block;
+}
+
+.modal-container {
+	position: fixed;
+	width: 100%;
+	left: 0;
+	top: 0;
+	height: 100%;
+	background: rgba(0,0,0,.4);
+	z-index: 1000;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	.reveal {
+		color: $headerFontColor;
+		background: $headerFooterBackground;
+		border: 2px solid $headerFontColor;
+		border-radius: 1rem;
+		width: 80%;
+		// max-width: 100%;
+		display: block;
+		top: 30px;
+		left: 50%;
+		margin-left: -40%;
+		margin-bottom: 30px;
+		label {
+			color: $headerFontColor;
+		}
+	}
+
+}
+.catalog-status {
+	list-style: none;
+	font-size: .7rem;
+	margin: 0 0 10px 0 ;
+	li {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+}
+.reveal-modal{
+    position : fixed;
+}
+// yeah, yeah bad pun is punny
+.even-modaler {
+	z-index: 2000 !important;
+}
+.no-wrap {
+	white-space: nowrap;
 }
 
 @media only screen and (max-device-width: 400px) and (orientation: portrait) {

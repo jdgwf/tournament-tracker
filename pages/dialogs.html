@@ -1,0 +1,52 @@
+<div class="modal-container even-modaler" ng-show="showConfirmDialog == true">
+	<div class="reveal">
+
+	  <p class="lead" ng-bind-html="confirmDialogQuestion">Confirmation Delete</p>
+
+	  <div class="text-right">
+	  	<button class="button small secondary" ng-click="closeConfirmDialog()"  type="button" translate="GENERAL_CANCEL"></button>
+	  	<button class="button small primary" ng-click="confirmDialogYes()" type="button" translate="GENERAL_YES"></button>
+	  </div>
+	</div>
+</div>
+
+
+<div class="modal-container even-modaler" ng-show="showEditPlayerDialog == true">
+	<div class="reveal">
+
+		<label>
+			<span translate="GENERAL_NAME_FIRST">First Name</span><br />
+			<input type="text" ng-model="tmpPlayer.name.first" ng-change="updatePlayerFirstName(tmpPlayer.name.first)"  />
+		</label>
+
+		<label>
+			<span translate="GENERAL_NAME_LAST">Last Name</span><br />
+			<input type="text" ng-model="tmpPlayer.name.last"ng-change="updatePlayerLastName(tmpPlayer.name.last)"  />
+		</label>
+
+		<label>
+			<span translate="GENERAL_NAME_NICK">Nick Name</span><br />
+			<input type="text" ng-model="tmpPlayer.name.nick" ng-change="updatePlayerNickName(tmpPlayer.name.nick)" />
+		</label>
+
+
+		<label>
+			<span translate="GENERAL_EMAIL_ADDRESS">Email Address</span><br />
+			<input type="text" ng-model="tmpPlayer.email" ng-change="updatePlayerEmail(tmpPlayer.email)" />
+		</label>
+
+		<label>
+			<span translate="GENERAL_PHONE_NUMBER">Phone 1</span><br />
+			<input type="text" ng-model="tmpPlayer.phone1" ng-change="updatePlayerPhone1(tmpPlayer.phone1)" />
+		</label>
+
+		<label>
+			<input type="checkbox" ng-model="tmpPlayer.active" ng-change="updatePlayerActive(tmpPlayer.active)" /> <span translate="GENERAL_ACTIVE">Active</span><br />
+		</label>
+
+	  <div class="text-right">
+	  	<button class="button small secondary" ng-click="closeEditPlayerDialog()"  type="button" translate="GENERAL_CANCEL"></button>
+	  	<button class="button small primary" ng-click="saveEditPlayerDialog()" type="button" translate="GENERAL_YES"></button>
+	  </div>
+	</div>
+</div>

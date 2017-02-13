@@ -29,6 +29,20 @@ available_languages.push ({
 		GENERAL_SEARCH: 'Search',
 		GENERAL_SEARCH_RESULTS: 'Search Results',
 		GENERAL_CANCEL: "Cancel",
+		GENERAL_ACTIVE: "Active",
+
+		GENERAL_YES: "Yes",
+		GENERAL_NO: "No",
+		GENERAL_SAVE: "Save",
+		GENERAL_CLOSE: "Close",
+
+		GENERAL_NAME_FIRST: "First Name",
+		GENERAL_NAME_LAST: "Last Name",
+		GENERAL_NAME_NICK: "Nickname",
+		GENERAL_PHONE: "Phone",
+		GENERAL_PHONE_NUMBER: "Phone NUmber",
+		GENERAL_EMAIL: "Email",
+		GENERAL_EMAIL_ADDRESS: "Email Address",
 
 		GENERAL_INTRODUCTORY: "Introductory",
 		GENERAL_STANDARD: "Standard",
@@ -38,6 +52,9 @@ available_languages.push ({
 		BUTTON_LANG_EN: 'English',
 		BUTTON_LANG_DE: 'German',
 		BUTTON_LANG_BR: 'Brazilian',
+
+
+		PLAYERS_DELETE_CONFIRMATION: "Are you sure you want to delete this player?",
 
 		WELCOME_BUTTON_MANAGE_PLAYERS: "Manage Players",
 		WELCOME_BUTTON_MANAGE_PLAYERS_DESC: "Manage Players Description",

@@ -44,6 +44,18 @@ var globalRoutes = 	[
 			controller  : 'settingsController'
 		})
 
+		// Manage Players
+		.when('/players-manage', {
+			templateUrl : 'pages/players-manage.html',
+			controller  : 'controllerPlayersManage'
+		})
+
+		// Manage Tournaments
+		.when('/tournaments-manage', {
+			templateUrl : 'pages/tournaments-manage.html',
+			controller  : 'controllerTourmamentsManage'
+		})
+
 		;
 	}
 ];
@@ -122,6 +134,42 @@ function generateUUID(){
     return uuid;
 }
 
+
+function getPlayersFromLocalStorage() {
+	if( !localStorage["players_list"] ) {
+		localStorage["players_list"] = "[]";
+		return Array();
+	} else {
+		return JSON.parse( localStorage["players_list"]  );
+	}
+}
+
+function getTournamentsFromLocalStorage() {
+	if( !localStorage["tournaments_list"] ) {
+		localStorage["tournaments_list"] = "[]";
+		return Array();
+	} else {
+		return JSON.parse( localStorage["tournaments_list"]  );
+	}
+}
+
+function savePlayersToLocalStorage( playersObject ) {
+	localStorage["players_list"] = JSON.stringify( playersObject );
+}
+
+function saveTourmanentsToLocalStorage( tournamentsObject ) {
+	localStorage["tournaments_list"] = JSON.stringify( tournamentsObject );
+}
+
+function getNextPlayerID( playersObject ) {
+	maxID = 0;
+	for( var playerCount = 0; playerCount < playersObject.length; playerCount++ ) {
+		if( playersObject[ playerCount ].id > maxID )
+			maxID =  playersObject[ playerCount ].id;
+	}
+
+	return maxID + 1;
+}
 
 
 var class_dice = function() {};
@@ -596,6 +644,25 @@ class_dice.prototype = {
 }
 
 
+function Player () {
+
+	this.name = {
+		first: "",
+		last: "",
+		nick: "",
+	};
+
+	this.email = "";
+	this.phone1 = "";
+
+	this.active = true;
+	this.id = -1;
+
+	this.newFunction = function() {
+
+	}
+}
+
 var creditsArray =
 	[
 		'$rootScope',
@@ -620,6 +687,204 @@ angular.module("webApp").controller(
 angular.module("cordovaApp").controller(
 	"creditsController",
 	creditsArray
+);
+
+var playersManageArray =
+	[
+		'$rootScope',
+		'$translate',
+		'$scope',
+		function ($rootScope, $translate, $scope) {
+			$translate(['APP_TITLE', 'WELCOME_BUTTON_MANAGE_PLAYERS']).then(function (translation) {
+				$rootScope.title_tag = translation.WELCOME_BUTTON_MANAGE_PLAYERS + " | " + translation.APP_TITLE;
+				$rootScope.subtitle_tag = "&raquo; " + translation.WELCOME_BUTTON_MANAGE_PLAYERS;
+			});
+
+
+			$rootScope.playerList = getPlayersFromLocalStorage();
+
+			// Confirmation Dialog
+
+			$scope.confirmDialogQuestion = "";
+
+			$scope.confirmDialog = function( confirmationMessage, onYes ) {
+				$scope.confirmDialogQuestion = confirmationMessage;
+				$scope.showConfirmDialog = true;
+				$scope.confirmDialogYes = onYes;
+			}
+
+			$scope.closeConfirmDialog = function( ) {
+				$scope.showConfirmDialog = false;
+				// reset confirm to nothing...
+				$scope.confirmDialogYes = function() {
+					$scope.showConfirmDialog = false;
+				}
+			}
+
+			// New & Edit Player Dialogs
+
+			$scope.updatePlayerFirstName = function( newValue ) {
+				$scope.tmpPlayer.name.first = newValue;
+			}
+
+			$scope.updatePlayerLastName = function( newValue ) {
+				$scope.tmpPlayer.name.last = newValue;
+			}
+
+			$scope.updatePlayerNickName = function( newValue ) {
+				$scope.tmpPlayer.name.nick = newValue;
+			}
+
+			$scope.updatePlayerActive = function( newValue ) {
+				$scope.tmpPlayer.active = newValue;
+			}
+
+
+			$scope.updatePlayerEmail = function( newValue ) {
+				$scope.tmpPlayer.email = newValue;
+			}
+
+			$scope.updatePlayerPhone1 = function( newValue ) {
+				$scope.tmpPlayer.phone1 = newValue;
+			}
+
+			$scope.newPlayerDialog = function() {
+				console.log("newPlayerDialog() called");
+
+
+				$scope.clearTempPlayerData();
+
+				$scope.showEditPlayerDialog = true;
+			}
+
+
+
+
+			$scope.deletePlayerDialog = function(indexNumber) {
+				$translate([
+					'PLAYERS_DELETE_CONFIRMATION'
+				]).then(
+					function (translation) {
+						$scope.confirmDialog(
+							translation.PLAYERS_DELETE_CONFIRMATION,
+							function() {
+								$scope.showConfirmDialog = false;
+								$rootScope.playerList.splice( indexNumber, 1 );
+								savePlayersToLocalStorage($rootScope.playerList);
+							}
+						);
+					}
+				);
+			}
+
+
+
+
+			$scope.editPlayerDialog = function(indexNumber) {
+				//~ console.log("editPlayerDialog() called");
+
+				if( $rootScope.playerList[ indexNumber] ) {
+					$scope.tmpPlayer = $rootScope.playerList[ indexNumber ];
+
+					$scope.tmpPlayerIndex  = indexNumber;
+					$scope.showEditPlayerDialog = true;
+				}
+			}
+
+			$scope.clearTempPlayerData = function() {
+				console.log("clearTempPlayerData() called");
+
+				$scope.tmpPlayer = new Player();
+
+				$scope.tmpPlayerIndex = -1;
+
+			}
+
+			$scope.saveEditPlayerDialog = function() {
+
+				console.log("saveEditPlayerDialog() called");
+				$scope.showEditPlayerDialog = false;
+
+				//~ console.log( "$rootscope.tmpPlayerNameFirst", $scope.tmpPlayerNameFirst );
+				//~ console.log( "$scope.tmpPlayerNameLast", $scope.tmpPlayerNameLast );
+				//~ console.log( "$scope.tmpPlayerNameNick", $scope.tmpPlayerNameNick );
+				//~ console.log( "$scope.tmpPlayerActive", $scope.tmpPlayerActive );
+
+
+
+
+				//~ console.log( "playerObject", playerObject );
+				//~ console.log( "$scope.tmpPlayerIndex", $scope.tmpPlayerIndex );
+				if( $scope.tmpPlayerIndex > -1 ) {
+					// Save to Index...
+					$rootScope.playerList[ $scope.tmpPlayerIndex] = $scope.tmpPlayer;
+				} else {
+					newID = getNextPlayerID($rootScope.playerList);
+					$rootScope.playerList.id = newID;
+					$rootScope.playerList.push( $scope.tmpPlayer );
+				}
+
+
+				savePlayersToLocalStorage($rootScope.playerList);
+
+				$scope.clearTempPlayerData();
+			}
+
+			$scope.closeEditPlayerDialog = function() {
+				//~ console.log("closeEditPlayerDialog() called");
+				$scope.showEditPlayerDialog = false;
+
+				$scope.clearTempPlayerData();
+			}
+
+
+		}
+
+
+
+
+	]
+;
+
+
+angular.module("webApp").controller(
+	"controllerPlayersManage",
+	playersManageArray
+);
+
+angular.module("cordovaApp").controller(
+	"controllerPlayersManage",
+	playersManageArray
+);
+
+var tournamentsManageArray =
+	[
+		'$rootScope',
+		'$translate',
+		'$scope',
+		function ($rootScope, $translate, $scope) {
+			$translate(['APP_TITLE', 'WELCOME_BUTTON_MANAGE_TOURNAMENTS']).then(function (translation) {
+				$rootScope.title_tag = translation.WELCOME_BUTTON_MANAGE_TOURNAMENTS + " | " + translation.APP_TITLE;
+				$rootScope.subtitle_tag = "&raquo; " + translation.WELCOME_BUTTON_MANAGE_TOURNAMENTS;
+			});
+
+			$rootScope.playerList = getPlayersFromLocalStorage();
+
+
+
+		}
+	]
+;
+
+
+angular.module("webApp").controller(
+	"controllerTourmamentsManage",
+	tournamentsManageArray
+);
+
+angular.module("cordovaApp").controller(
+	"controllerTourmamentsManage",
+	tournamentsManageArray
 );
 
 var settingsArray = [
@@ -769,6 +1034,20 @@ available_languages.push ({
 		GENERAL_SEARCH: 'Search',
 		GENERAL_SEARCH_RESULTS: 'Search Results',
 		GENERAL_CANCEL: "Cancel",
+		GENERAL_ACTIVE: "Active",
+
+		GENERAL_YES: "Yes",
+		GENERAL_NO: "No",
+		GENERAL_SAVE: "Save",
+		GENERAL_CLOSE: "Close",
+
+		GENERAL_NAME_FIRST: "First Name",
+		GENERAL_NAME_LAST: "Last Name",
+		GENERAL_NAME_NICK: "Nickname",
+		GENERAL_PHONE: "Phone",
+		GENERAL_PHONE_NUMBER: "Phone NUmber",
+		GENERAL_EMAIL: "Email",
+		GENERAL_EMAIL_ADDRESS: "Email Address",
 
 		GENERAL_INTRODUCTORY: "Introductory",
 		GENERAL_STANDARD: "Standard",
@@ -778,6 +1057,9 @@ available_languages.push ({
 		BUTTON_LANG_EN: 'English',
 		BUTTON_LANG_DE: 'German',
 		BUTTON_LANG_BR: 'Brazilian',
+
+
+		PLAYERS_DELETE_CONFIRMATION: "Are you sure you want to delete this player?",
 
 		WELCOME_BUTTON_MANAGE_PLAYERS: "Manage Players",
 		WELCOME_BUTTON_MANAGE_PLAYERS_DESC: "Manage Players Description",
