@@ -69,6 +69,8 @@ available_languages.push ({
 		GENERAL_ADVANCED: "Advanced",
 		GENERAL_CLOSE: "Close",
 
+		GENERAL_ROTATE_TO_LANDSCAPE: "Please rotate your device to landscape for optimal viewing",
+
 		BUTTON_LANG_EN: 'English',
 		BUTTON_LANG_DE: 'German',
 		BUTTON_LANG_BR: 'Brazilian',

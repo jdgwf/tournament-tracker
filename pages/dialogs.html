@@ -103,7 +103,11 @@
 
 
 
-
+<div ng-show="showEditTournamentPlayersDialog == true">
+	<div class="landscape-view-please">
+		<span translate="GENERAL_ROTATE_TO_LANDSCAPE">Please rotate your device to landscape for optimal viewing</span>
+	</div>
+</div>
 <div class="modal-container even-modaler" ng-show="showEditTournamentPlayersDialog == true">
 	<div class="reveal">
 		<div class="row">
@@ -126,7 +130,7 @@
 
 						<tbody>
 							<tr ng-repeat="playerObj in availablePlayers track by $index">
-								<td>{{ playerObj.name.last }}, {{ playerObj.name.first }} {{ playerObj.name.nick }} {{playerObj.id}}</td>
+								<td>{{ playerObj.name.last }}, {{ playerObj.name.first }} {{ playerObj.name.nick }}</td>
 								<td class="no-wrap text-right larger-font">
 									<a ng-click="addPlayerToTournament(playerObj.id)"><i class="fa fa-arrow-right"></i></a>
 								</td>
@@ -160,7 +164,7 @@
 								<td class="no-wrap text-left larger-font">
 									<a ng-click="removePlayerFromTournament(playerObj.id)"><i class="fa fa-arrow-left"></i></a>
 								</td>
-								<td>{{ playerObj.name.last }}, {{ playerObj.name.first }} {{ playerObj.name.nick }} {{playerObj.id}}</td>
+								<td>{{ playerObj.name.last }}, {{ playerObj.name.first }} {{ playerObj.name.nick }}</td>
 
 							</tr>
 						</tbody>
