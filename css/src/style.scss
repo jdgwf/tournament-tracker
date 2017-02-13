@@ -92,6 +92,8 @@ body {
 			th {
 				vertical-align: bottom;
 				font-weight: 700;
+				background: $primaryBG !important;
+				color: $primaryTextColor !important;
 			}
 			td {
 				vertical-align: top;
@@ -102,6 +104,7 @@ body {
 						margin: 0;
 					}
 				}
+
 			}
 			&.right-answer {
 				background: #090;
@@ -117,6 +120,12 @@ body {
 				td {
 					background: #900;
 					color: #fff;
+				}
+			}
+			&:nth-child(even) {
+
+				td {
+					background: rgba(0,0,0,.68) !important;
 				}
 			}
 		}

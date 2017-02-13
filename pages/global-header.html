@@ -15,7 +15,11 @@
 				<a ng-click="importExportPlayersDialog()" title="{{ 'MENU_TITLE_EXPORT_PLAYERS' | translate }}"><i class="fa fa-file-code-o"></i></a>
 
 			</div>
+			<div ng-show="currentTournamentsPage">
+				<a ng-click="newTournamentDialog()" title="{{ 'MENU_TITLE_ADD_TOURNAMENT' | translate }}"><i class="fa fa-plus"></i></a>
+				<a ng-click="importExportTournamentialog()" title="{{ 'MENU_TITLE_EXPORT_TOURNAMENTS' | translate }}"><i class="fa fa-file-code-o"></i></a>
 
+			</div>
 		</div>
 		<div class="text-right columns hide-for-small show-for-medium medium-3 text-left main-menu">
 

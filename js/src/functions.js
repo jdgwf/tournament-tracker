@@ -17,17 +17,38 @@ function getPlayersFromLocalStorage() {
 		localStorage["players_list"] = "[]";
 		return Array();
 	} else {
-		return JSON.parse( localStorage["players_list"]  );
+
+		var returnValue = Array();
+		var importPlayers = JSON.parse( localStorage["players_list"]  );
+
+		for( var playerC = 0; playerC < importPlayers.length; playerC++ ) {
+			var newPlayer = new Player( importPlayers[playerC] );
+			returnValue.push( newPlayer );
+		}
+		return returnValue;
 	}
 }
 
-function getTournamentsFromLocalStorage() {
+function getTournamentsFromLocalStorage( playersObject ) {
 	if( !localStorage["tournaments_list"] ) {
 		localStorage["tournaments_list"] = "[]";
 		return Array();
 	} else {
-		return JSON.parse( localStorage["tournaments_list"]  );
+		//return JSON.parse( localStorage["tournaments_list"]  );
+		var returnValue = Array();
+		var importTournaments = JSON.parse( localStorage["tournaments_list"]  );
+
+		for( var tournamentC = 0; tournamentC < importTournaments.length; tournamentC++ ) {
+			var newTournament = new Tournament( importTournaments[tournamentC] );
+
+			returnValue.push( newTournament );
+
+		}
+
+		return returnValue;
 	}
+
+
 }
 
 function savePlayersToLocalStorage( playersObject ) {
@@ -35,7 +56,18 @@ function savePlayersToLocalStorage( playersObject ) {
 }
 
 function saveTourmanentsToLocalStorage( tournamentsObject ) {
-	localStorage["tournaments_list"] = JSON.stringify( tournamentsObject );
+	var tmp = tournamentsObject;
+	if( tmp.playerObjs )
+		delete tmp.playerObjs;
+	localStorage["tournaments_list"] = JSON.stringify( tmp );
+}
+
+function getPlayerByID( playersList, playerID ) {
+	for( var playerCount = 0; playerCount < playersList.length; playerCount++ ) {
+		if( playersList[ playerCount ].id == playerID )
+			return playersList[ playerCount ];
+	}
+	return null;
 }
 
 function getNextPlayerID( playersObject ) {

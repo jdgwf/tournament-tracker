@@ -151,17 +151,38 @@ function getPlayersFromLocalStorage() {
 		localStorage["players_list"] = "[]";
 		return Array();
 	} else {
-		return JSON.parse( localStorage["players_list"]  );
+
+		var returnValue = Array();
+		var importPlayers = JSON.parse( localStorage["players_list"]  );
+
+		for( var playerC = 0; playerC < importPlayers.length; playerC++ ) {
+			var newPlayer = new Player( importPlayers[playerC] );
+			returnValue.push( newPlayer );
+		}
+		return returnValue;
 	}
 }
 
-function getTournamentsFromLocalStorage() {
+function getTournamentsFromLocalStorage( playersObject ) {
 	if( !localStorage["tournaments_list"] ) {
 		localStorage["tournaments_list"] = "[]";
 		return Array();
 	} else {
-		return JSON.parse( localStorage["tournaments_list"]  );
+		//return JSON.parse( localStorage["tournaments_list"]  );
+		var returnValue = Array();
+		var importTournaments = JSON.parse( localStorage["tournaments_list"]  );
+
+		for( var tournamentC = 0; tournamentC < importTournaments.length; tournamentC++ ) {
+			var newTournament = new Tournament( importTournaments[tournamentC] );
+
+			returnValue.push( newTournament );
+
+		}
+
+		return returnValue;
 	}
+
+
 }
 
 function savePlayersToLocalStorage( playersObject ) {
@@ -169,7 +190,18 @@ function savePlayersToLocalStorage( playersObject ) {
 }
 
 function saveTourmanentsToLocalStorage( tournamentsObject ) {
-	localStorage["tournaments_list"] = JSON.stringify( tournamentsObject );
+	var tmp = tournamentsObject;
+	if( tmp.playerObjs )
+		delete tmp.playerObjs;
+	localStorage["tournaments_list"] = JSON.stringify( tmp );
+}
+
+function getPlayerByID( playersList, playerID ) {
+	for( var playerCount = 0; playerCount < playersList.length; playerCount++ ) {
+		if( playersList[ playerCount ].id == playerID )
+			return playersList[ playerCount ];
+	}
+	return null;
 }
 
 function getNextPlayerID( playersObject ) {
@@ -655,7 +687,7 @@ class_dice.prototype = {
 }
 
 
-function Player () {
+function Player ( importPlayer ) {
 
 	this.name = {
 		first: "",
@@ -671,9 +703,49 @@ function Player () {
 	this.active = true;
 	this.id = -1;
 
+	if( typeof(importPlayer) != "undefined" ) {
+		this.name = {
+			first: importPlayer.name.first,
+			last: importPlayer.name.last,
+			nick: importPlayer.name.nick,
+		};
+
+		this.email = importPlayer.email;
+		this.phone1 = importPlayer.phone1;
+
+		this.active = true;
+		this.id = -1;
+	}
+
 	this.newFunction = function() {
 
 	}
+}
+
+function Tournament (importTournament, playerObjects) {
+
+	this.players = Array();
+	this.playerObjs = Array();
+	this.name = "";
+
+	this.createPlayerObjs = function( playersObjs) {
+		for( var playerC = 0; playerC < this.players.length; playerC ) {
+			var player = getPlayerByID( playersObjs, this.players[ playerC] );
+			if( player )
+				this.playerObjs.push( player );
+		}
+
+	}
+
+	if( typeof(importTournament) != "undefined" ) {
+		this.players = importPlayer.players;
+		this.name = importPlayer.name;
+	}
+
+	if( typeof(playerObjects) != "undefined" ) {
+		this.createPlayerObjs(playerObjects);
+	}
+
 }
 
 var creditsArray =
@@ -722,7 +794,9 @@ var playersManageArray =
 			$scope.currentPlayersPage = true;
 			$rootScope.playerList = getPlayersFromLocalStorage();
 
-			// Confirmation Dialog
+			/* *********************************************************
+			 * Confirmation Dialog
+			 * ******************************************************* */
 
 			$scope.confirmDialogQuestion = "";
 			$scope.showImportExportPlayerDialog = false;
@@ -741,7 +815,9 @@ var playersManageArray =
 				}
 			}
 
-			// New & Edit Player Dialogs
+			/* *********************************************************
+			 * New & Edit Player Dialogs
+			 * ******************************************************* */
 
 			$scope.updatePlayerFirstName = function( newValue ) {
 				$scope.tmpPlayer.name.first = newValue;
@@ -825,16 +901,7 @@ var playersManageArray =
 				console.log("saveEditPlayerDialog() called");
 				$scope.showEditPlayerDialog = false;
 
-				//~ console.log( "$rootscope.tmpPlayerNameFirst", $scope.tmpPlayerNameFirst );
-				//~ console.log( "$scope.tmpPlayerNameLast", $scope.tmpPlayerNameLast );
-				//~ console.log( "$scope.tmpPlayerNameNick", $scope.tmpPlayerNameNick );
-				//~ console.log( "$scope.tmpPlayerActive", $scope.tmpPlayerActive );
 
-
-
-
-				//~ console.log( "playerObject", playerObject );
-				//~ console.log( "$scope.tmpPlayerIndex", $scope.tmpPlayerIndex );
 				if( $scope.tmpPlayerIndex > -1 ) {
 					// Save to Index...
 
@@ -856,12 +923,14 @@ var playersManageArray =
 			}
 
 			$scope.closeEditPlayerDialog = function() {
-				//~ console.log("closeEditPlayerDialog() called");
 				$scope.showEditPlayerDialog = false;
 
 				$scope.clearTempPlayerData();
 			}
 
+			/* *********************************************************
+			 * Import/Export functions.....
+			 * ******************************************************* */
 
 			$scope.importExportPlayersDialog = function() {
 				var content = JSON.stringify( $scope.playerList );
@@ -945,7 +1014,83 @@ var tournamentsManageArray =
 
 			$rootScope.playerList = getPlayersFromLocalStorage();
 
+			$rootScope.tournamentList = getTournamentsFromLocalStorage();
 
+
+			/* *********************************************************
+			 * Confirmation Dialog
+			 * ******************************************************* */
+
+			$scope.confirmDialogQuestion = "";
+			$scope.showImportExportPlayerDialog = false;
+
+			$scope.confirmDialog = function( confirmationMessage, onYes ) {
+				$scope.confirmDialogQuestion = confirmationMessage;
+				$scope.showConfirmDialog = true;
+				$scope.confirmDialogYes = onYes;
+			}
+
+			$scope.closeConfirmDialog = function( ) {
+				$scope.showConfirmDialog = false;
+				// reset confirm to nothing...
+				$scope.confirmDialogYes = function() {
+					$scope.showConfirmDialog = false;
+				}
+			}
+
+
+
+			/* *********************************************************
+			 * Import/Export functions.....
+			 * ******************************************************* */
+
+			$scope.importExportTournamentsDialog = function() {
+				var content = JSON.stringify( $scope.tournamentsList );
+				var blob = new Blob([ content ], { type : 'application/javascript' });
+				$scope.downloadTournamentData = (window.URL || window.webkitURL).createObjectURL( blob );
+
+				$scope.showImportExportTournamentDialog = true;
+			}
+
+			$scope.closeImportExportTournamentDialog = function() {
+				$scope.showImportExportTournamentDialog = false;
+			}
+
+
+
+			$scope.uploadFile = function(files) {
+				console.log( "files", files );
+
+
+
+			    var fReader = new FileReader();
+
+			    for( var fileCounter = 0; fileCounter < files.length; fileCounter++ ) {
+
+					var file = files[ fileCounter ];
+
+
+					fReader.onload = function(textContents) {
+						if( textContents.target && textContents.target.result ) {
+							console.log( "textContents.target.result", textContents.target.result );
+							var parsed = JSON.parse( textContents.target.result );
+							if( parsed ) {
+								console.log( "parsed",  parsed );
+								$rootScope.tournamentList = $rootScope.tournamentList.concat( parsed );
+
+								saveTournamentsToLocalStorage($rootScope.tournamentList);
+							}
+						}
+
+					};
+
+
+
+					fReader.readAsText( file );
+
+				}
+
+			};
 
 		}
 	]
@@ -1102,8 +1247,11 @@ available_languages.push ({
 		MENU_TITLE_CREDITS: "Click here to view the credits and help",
 
 
-		MENU_TITLE_EXPORT_PLAYERS: "Click here to export players",
+		MENU_TITLE_EXPORT_PLAYERS: "Click here to import and/or export players",
 		MENU_TITLE_ADD_PLAYER: "Click here to add a player",
+
+		MENU_TITLE_EXPORT_TOURNAMENTS: "Click here to import and/or export tournaments",
+		MENU_TITLE_ADD_TOURNAMENT: "Click here to add a tournament",
 
 		GENERAL_SELECT_LANGUAGE: "Select Langage",
 		GENERAL_SETTINGS: "Settings",
@@ -1154,7 +1302,12 @@ available_languages.push ({
 
 		PLAYERS_DELETE_CONFIRMATION: "Are you sure you want to delete this player?",
 		PLAYERS_IMPORT_INSTRUCTIONS: "To import players into this app, navigate to your Players.json file you have saved.",
-		PLAYERS_DOWNLOAD_INSTRUCTIONS: "Click on the button below to download the current Players.json",
+		PLAYERS_DOWNLOAD_INSTRUCTIONS: "Click on the button below to download the current Players data object",
+
+		TOURNAMENTS_DELETE_CONFIRMATION: "Are you sure you want to delete this tournament?",
+		TOURNAMENTS_IMPORT_INSTRUCTIONS: "To import players into this app, navigate to your Tournaments.json file you have saved.",
+		TOURNAMENTS_DOWNLOAD_INSTRUCTIONS: "Click on the button below to download the current Tournaments data object",
+
 
 		WELCOME_BUTTON_MANAGE_PLAYERS: "Manage Players",
 		WELCOME_BUTTON_MANAGE_PLAYERS_DESC: "Before you can actually set up a tournament, you'll probably need to add some players here.",

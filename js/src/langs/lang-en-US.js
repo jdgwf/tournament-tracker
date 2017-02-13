@@ -19,8 +19,11 @@ available_languages.push ({
 		MENU_TITLE_CREDITS: "Click here to view the credits and help",
 
 
-		MENU_TITLE_EXPORT_PLAYERS: "Click here to export players",
+		MENU_TITLE_EXPORT_PLAYERS: "Click here to import and/or export players",
 		MENU_TITLE_ADD_PLAYER: "Click here to add a player",
+
+		MENU_TITLE_EXPORT_TOURNAMENTS: "Click here to import and/or export tournaments",
+		MENU_TITLE_ADD_TOURNAMENT: "Click here to add a tournament",
 
 		GENERAL_SELECT_LANGUAGE: "Select Langage",
 		GENERAL_SETTINGS: "Settings",
@@ -71,7 +74,12 @@ available_languages.push ({
 
 		PLAYERS_DELETE_CONFIRMATION: "Are you sure you want to delete this player?",
 		PLAYERS_IMPORT_INSTRUCTIONS: "To import players into this app, navigate to your Players.json file you have saved.",
-		PLAYERS_DOWNLOAD_INSTRUCTIONS: "Click on the button below to download the current Players.json",
+		PLAYERS_DOWNLOAD_INSTRUCTIONS: "Click on the button below to download the current Players data object",
+
+		TOURNAMENTS_DELETE_CONFIRMATION: "Are you sure you want to delete this tournament?",
+		TOURNAMENTS_IMPORT_INSTRUCTIONS: "To import players into this app, navigate to your Tournaments.json file you have saved.",
+		TOURNAMENTS_DOWNLOAD_INSTRUCTIONS: "Click on the button below to download the current Tournaments data object",
+
 
 		WELCOME_BUTTON_MANAGE_PLAYERS: "Manage Players",
 		WELCOME_BUTTON_MANAGE_PLAYERS_DESC: "Before you can actually set up a tournament, you'll probably need to add some players here.",

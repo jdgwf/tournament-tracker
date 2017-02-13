@@ -73,3 +73,27 @@
 	  </div>
 	</div>
 </div>
+
+
+<div class="modal-container even-modaler" ng-show="showImportExportTournamentDialog == true">
+	<div class="reveal">
+
+		<fieldset class="fieldset">
+			<legend translate="GENERAL_EXPORT">Export</legend>
+			<div translate="TOURNAMENTS_DOWNLOAD_INSTRUCTIONS">Click on the button below to download the current Tournaments.json</div>
+			<div class="text-center">
+				<a download="Players.json" ng-href="{{ downloadPlayerData }}"><button class="button primary" translate="GENERAL_DOWNLOAD">Download</button></a>
+			</div>
+		</fieldset>
+
+		<fieldset class="fieldset">
+			<legend translate="GENERAL_IMPORT">Import</legend>
+			<div translate="TOURNAMENTS_IMPORT_INSTRUCTIONS">To import players into this app, navigate to your Tournaments.json file you have saved.</div>
+			<input type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"/>
+		</fieldset>
+
+	  <div class="text-right">
+	  	<button class="button small secondary" ng-click="closeImportExportTournamentDialog()"  type="button" translate="GENERAL_CLOSE"></button>
+	  </div>
+	</div>
+</div>

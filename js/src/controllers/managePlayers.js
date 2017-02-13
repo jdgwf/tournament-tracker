@@ -14,7 +14,9 @@ var playersManageArray =
 			$scope.currentPlayersPage = true;
 			$rootScope.playerList = getPlayersFromLocalStorage();
 
-			// Confirmation Dialog
+			/* *********************************************************
+			 * Confirmation Dialog
+			 * ******************************************************* */
 
 			$scope.confirmDialogQuestion = "";
 			$scope.showImportExportPlayerDialog = false;
@@ -33,7 +35,9 @@ var playersManageArray =
 				}
 			}
 
-			// New & Edit Player Dialogs
+			/* *********************************************************
+			 * New & Edit Player Dialogs
+			 * ******************************************************* */
 
 			$scope.updatePlayerFirstName = function( newValue ) {
 				$scope.tmpPlayer.name.first = newValue;
@@ -117,16 +121,7 @@ var playersManageArray =
 				console.log("saveEditPlayerDialog() called");
 				$scope.showEditPlayerDialog = false;
 
-				//~ console.log( "$rootscope.tmpPlayerNameFirst", $scope.tmpPlayerNameFirst );
-				//~ console.log( "$scope.tmpPlayerNameLast", $scope.tmpPlayerNameLast );
-				//~ console.log( "$scope.tmpPlayerNameNick", $scope.tmpPlayerNameNick );
-				//~ console.log( "$scope.tmpPlayerActive", $scope.tmpPlayerActive );
 
-
-
-
-				//~ console.log( "playerObject", playerObject );
-				//~ console.log( "$scope.tmpPlayerIndex", $scope.tmpPlayerIndex );
 				if( $scope.tmpPlayerIndex > -1 ) {
 					// Save to Index...
 
@@ -148,12 +143,14 @@ var playersManageArray =
 			}
 
 			$scope.closeEditPlayerDialog = function() {
-				//~ console.log("closeEditPlayerDialog() called");
 				$scope.showEditPlayerDialog = false;
 
 				$scope.clearTempPlayerData();
 			}
 
+			/* *********************************************************
+			 * Import/Export functions.....
+			 * ******************************************************* */
 
 			$scope.importExportPlayersDialog = function() {
 				var content = JSON.stringify( $scope.playerList );
