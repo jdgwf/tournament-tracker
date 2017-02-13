@@ -46,7 +46,10 @@
 
 	  <div class="text-right">
 	  	<button class="button small secondary" ng-click="closeEditPlayerDialog()"  type="button" translate="GENERAL_CANCEL"></button>
-	  	<button class="button small primary" ng-click="saveEditPlayerDialog()" type="button" translate="GENERAL_YES"></button>
+
+	  	<button class="button small primary" ng-show="tmpPlayerIndex > -1" ng-click="saveEditPlayerDialog()" type="button" translate="GENERAL_SAVE"></button>
+	  	<button class="button small primary" ng-show="tmpPlayerIndex < 0" ng-click="saveEditPlayerDialog()" type="button" translate="GENERAL_ADD"></button>
+
 	  </div>
 	</div>
 </div>
@@ -82,7 +85,7 @@
 			<legend translate="GENERAL_EXPORT">Export</legend>
 			<div translate="TOURNAMENTS_DOWNLOAD_INSTRUCTIONS">Click on the button below to download the current Tournaments.json</div>
 			<div class="text-center">
-				<a download="Players.json" ng-href="{{ downloadPlayerData }}"><button class="button primary" translate="GENERAL_DOWNLOAD">Download</button></a>
+				<a download="Tournaments.json" ng-href="{{ downloadTournamentData }}"><button class="button primary" translate="GENERAL_DOWNLOAD">Download</button></a>
 			</div>
 		</fieldset>
 
@@ -95,5 +98,167 @@
 	  <div class="text-right">
 	  	<button class="button small secondary" ng-click="closeImportExportTournamentDialog()"  type="button" translate="GENERAL_CLOSE"></button>
 	  </div>
+	</div>
+</div>
+
+
+
+
+<div class="modal-container even-modaler" ng-show="showEditTournamentPlayersDialog == true">
+	<div class="reveal">
+		<div class="row">
+			<div class="columns small-6">
+				<fieldset class="fieldset">
+					<legend translate="TOURNAMENTS_PLAYERS_AVAILABLE">Available Players</legend>
+
+					<div ng-hide="availablePlayers.length > 0" class="text-center">
+						<div translate="TOURNAMENTS_NO_AVAILABLE_PLAYERS"></div>
+						<a class="button primary" href="#/players-manage/" ng-class="{currentItem:currentPlayersPage == true}" title="{{ 'TOURNAMENTS_GO_TO_PLAYERS' | translate }}" translate="TOURNAMENTS_GO_TO_PLAYERS">Go There Now</a>
+
+					</div>
+					<table ng-show="availablePlayers.length > 0">
+						<thead>
+							<tr>
+								<th translate="GENERAL_NAME">Name</th>
+								<th>&nbsp;</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr ng-repeat="playerObj in availablePlayers track by $index">
+								<td>{{ playerObj.name.last }}, {{ playerObj.name.first }} {{ playerObj.name.nick }} {{playerObj.id}}</td>
+								<td class="no-wrap text-right larger-font">
+									<a ng-click="addPlayerToTournament(playerObj.id)"><i class="fa fa-arrow-right"></i></a>
+								</td>
+							</tr>
+						</tbody>
+
+						<tfoot>
+						</tfoot>
+					</table>
+				</fieldset>
+			</div>
+			<div class="columns small-6">
+				<fieldset class="fieldset">
+					<legend translate="TOURNAMENTS_PLAYERS_PARTCIPATING">Participating Players</legend>
+
+					<div ng-hide="participatingPlayers.length > 0" class="text-center">
+						<div translate="TOURNAMENTS_NO_PLAYERS"></div>
+
+					</div>
+					<table ng-show="participatingPlayers.length > 0">
+						<thead>
+							<tr>
+								<th>&nbsp;</th>
+								<th translate="GENERAL_NAME">Name</th>
+
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr ng-repeat="playerObj in participatingPlayers track by $index">
+								<td class="no-wrap text-left larger-font">
+									<a ng-click="removePlayerFromTournament(playerObj.id)"><i class="fa fa-arrow-left"></i></a>
+								</td>
+								<td>{{ playerObj.name.last }}, {{ playerObj.name.first }} {{ playerObj.name.nick }} {{playerObj.id}}</td>
+
+							</tr>
+						</tbody>
+
+						<tfoot>
+						</tfoot>
+					</table>
+				</fieldset>
+			</div>
+		</div>
+
+	  <div class="text-right">
+	  	<button class="button small secondary" ng-click="closeTournamentPlayersDialog()"  type="button" translate="GENERAL_CLOSE"></button>
+	  </div>
+	</div>
+</div>
+
+<div class="modal-container even-modaler" ng-show="showEditTournamentDialog == true">
+	<div class="reveal">
+		<div class="row">
+			<div class="columns small-12">
+				<fieldset class="fieldset">
+					<legend translate="TOURNAMENTS_NAME">Tournament Name</legend>
+					<input type="text" ng-model="tmpTournament.name" ng-change="updateTournamentName(tmpTournament.name)"  />
+				</fieldset>
+			</div>
+		</div>
+		<div class="row">
+
+			<div class="columns small-12 medium-6">
+				<fieldset class="fieldset">
+					<legend translate="TOURNAMENTS_BASE_SCORING">Base Scoring</legend>
+						<label>
+							<span translate="TOURNAMENTS_POINTS_FOR_WIN"></span><br />
+							<input type="number" ng-model="tmpTournament.pointsForWin" ng-change="updateTournamentPointsForWin(tmpTournament.pointsForWin)"  />
+						</label>
+						<label>
+							<span translate="TOURNAMENTS_POINTS_FOR_DRAW"></span><br />
+							<input type="number" ng-model="tmpTournament.pointsForDraw" ng-change="updateTournamentPointsForDraw(tmpTournament.pointsForDraw)"  />
+						</label>
+						<label>
+							<span translate="TOURNAMENTS_POINTS_FOR_LOSS"></span><br />
+							<input type="number" ng-model="tmpTournament.pointsForLoss" ng-change="updateTournamentPointsForLoss(tmpTournament.pointsForLoss)"  />
+						</label>
+
+						<label>
+							<input type="checkbox" ng-model="tmpTournament.byeIsAverage" ng-change="updateByeIsAverage(tmpTournament.byeIsAverage)" /> <span translate="TOURNAMENTS_BYE_IS_AVERAGE">Active</span><br />
+						</label>
+						<label ng-show="tmpTournament.byeIsAverage == false">
+							<span translate="TOURNAMENTS_POINTS_FOR_BYE"></span><br />
+							<input type="number" ng-model="tmpTournament.pointsForBye" ng-change="updateTournamentPointsForBye(tmpTournament.pointsForBye)"  />
+						</label>
+
+
+				</fieldset>
+			</div>
+			<div class="columns small-12 medium-6">
+				<fieldset class="fieldset">
+					<legend translate="TOURNAMENTS_EXTRA_SCORING">Extra Scoring</legend>
+
+						<label>
+							<input type="checkbox" ng-model="tmpTournament.scoringPaint" ng-change="updateTournamentScoringPaint(tmpTournament.scoringPaint)" /> <span translate="TOURNAMENTS_SCORING_PAINT">Score Painting</span><br />
+
+						</label>
+
+						<label>
+							<input type="checkbox" ng-model="tmpTournament.scoringComp" ng-change="updateTournamentScoringComp(tmpTournament.scoringComp)" /> <span translate="TOURNAMENTS_SCORING_COMP">Score Army Composition</span><br />
+
+						</label>
+
+						<label>
+							<input type="checkbox" ng-model="tmpTournament.scoringSportsmanship" ng-change="updateTournamentScoringSportsmanship(tmpTournament.scoringSportsmanship)" /> <span translate="TOURNAMENTS_SCORING_SPORTSMANSHIP">Score Sportsmanship</span><br />
+
+						</label>
+
+
+				</fieldset>
+
+				<fieldset class="fieldset">
+					<legend translate="TOURNAMENTS_GENERAL_SETTINGS">General Settings</legend>
+						<label>
+							<input type="checkbox" ng-model="tmpTournament.trackPerGameSportsmanship" ng-change="updateTournamentTrackPerGameSportsmanship(tmpTournament.trackPerGameSportsmanship)" /> <span translate="TOURNAMENTS_SPORTSMANSHIP_PER_GAME">Track per game sportsmanship</span><br />
+
+						</label>
+						<label ng-show="tmpTournament.trackPerGameSportsmanship == true">
+							<span translate="TOURNAMENTS_SPORTSMANSHIP_WARN"></span><br />
+							<input type="number" ng-model="tmpTournament.warnSportsmanship" ng-change="updateTournamentWarnSportsmanship(tmpTournament.warnSportsmanship)"  />
+						</label>
+				</fieldset>
+			</div>
+		</div>
+
+		  <div class="text-right">
+		  	<button class="button small secondary" ng-click="closeEditTournamentDialog()"  type="button" translate="GENERAL_CANCEL"></button>
+
+		  	<button class="button small primary" ng-show="tmpTournamentIndex > -1" ng-click="saveEditTournamentDialog()" type="button" translate="GENERAL_SAVE"></button>
+		  	<button class="button small primary" ng-show="tmpTournamentIndex < 0" ng-click="saveEditTournamentDialog()" type="button" translate="GENERAL_ADD"></button>
+
+		  </div>
 	</div>
 </div>

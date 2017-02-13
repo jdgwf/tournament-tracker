@@ -45,6 +45,8 @@ available_languages.push ({
 		GENERAL_DOWNLOAD: "Download",
 		GENERAL_IMPORT: "Import",
 		GENERAL_EXPORT: "Export",
+		GENERAL_SAVE: "Save",
+		GENERAL_ADD: "Add",
 
 		GENERAL_ITEM_EDIT: "Edit Item",
 		GENERAL_ITEM_REMOVE: "Remove Item",
@@ -71,14 +73,36 @@ available_languages.push ({
 		BUTTON_LANG_DE: 'German',
 		BUTTON_LANG_BR: 'Brazilian',
 
-
 		PLAYERS_DELETE_CONFIRMATION: "Are you sure you want to delete this player?",
 		PLAYERS_IMPORT_INSTRUCTIONS: "To import players into this app, navigate to your Players.json file you have saved.",
 		PLAYERS_DOWNLOAD_INSTRUCTIONS: "Click on the button below to download the current Players data object",
 
 		TOURNAMENTS_DELETE_CONFIRMATION: "Are you sure you want to delete this tournament?",
-		TOURNAMENTS_IMPORT_INSTRUCTIONS: "To import players into this app, navigate to your Tournaments.json file you have saved.",
+		TOURNAMENTS_IMPORT_INSTRUCTIONS: "To import tournaments into this app, navigate to your Tournaments.json file you have saved. <strong>Be sure that your Players.json and Tournaments.json match, otherwise you may have orphan or wrong players!</strong>",
+
 		TOURNAMENTS_DOWNLOAD_INSTRUCTIONS: "Click on the button below to download the current Tournaments data object",
+		TOURNAMENTS_NAME: "Tournament Name",
+		TOURNAMENTS_NUM_PLAYERS: "# Players",
+		TOURNAMENTS_EDIT_PLAYERS: "Edit Players",
+		TOURNAMENTS_BASE_SCORING: "Base Scoring",
+		TOURNAMENTS_EXTRA_SCORING: "Extra Scoring",
+		TOURNAMENTS_PLAYERS: "Players",
+		TOURNAMENTS_GENERAL_SETTINGS: "General Settings",
+		TOURNAMENTS_POINTS_FOR_WIN: "Points for Win",
+		TOURNAMENTS_POINTS_FOR_DRAW: "Points for Draw",
+		TOURNAMENTS_POINTS_FOR_LOSS: "Points for Loss",
+		TOURNAMENTS_POINTS_FOR_BYE: "Points for Bye",
+		TOURNAMENTS_BYE_IS_AVERAGE: "Bye is Average",
+		TOURNAMENTS_SCORING_PAINT: "Score Painting",
+		TOURNAMENTS_SCORING_COMP: "Score Army Composition",
+		TOURNAMENTS_SCORING_SPORTSMANSHIP: "Score Sportsmanship",
+		TOURNAMENTS_SPORTSMANSHIP_PER_GAME: "Sportsmanship tracked per game",
+		TOURNAMENTS_SPORTSMANSHIP_WARN: "Warn if Player receives the following number of negative sportsmanship marks",
+		TOURNAMENTS_PLAYERS_PARTCIPATING: "Participating Players",
+		TOURNAMENTS_PLAYERS_AVAILABLE: "Available Players",
+		TOURNAMENTS_GO_TO_PLAYERS: "Go To Players",
+		TOURNAMENTS_NO_AVAILABLE_PLAYERS: "There are no available players to add. Please visit the Player Adminsitration screen to add players.",
+		TOURNAMENTS_NO_PLAYERS: "There are no players in this tournament",
 
 
 		WELCOME_BUTTON_MANAGE_PLAYERS: "Manage Players",

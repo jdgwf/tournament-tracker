@@ -65,7 +65,7 @@ var playersManageArray =
 			}
 
 			$scope.newPlayerDialog = function() {
-				console.log("newPlayerDialog() called");
+				//~ console.log("newPlayerDialog() called");
 
 
 				$scope.clearTempPlayerData();
@@ -100,7 +100,7 @@ var playersManageArray =
 				//~ console.log("editPlayerDialog() called");
 
 				if( $rootScope.playerList[ indexNumber] ) {
-					$scope.tmpPlayer = $rootScope.playerList[ indexNumber ];
+					$scope.tmpPlayer = angular.copy($rootScope.playerList[ indexNumber ]);
 
 					$scope.tmpPlayerIndex  = indexNumber;
 					$scope.showEditPlayerDialog = true;
@@ -108,7 +108,7 @@ var playersManageArray =
 			}
 
 			$scope.clearTempPlayerData = function() {
-				console.log("clearTempPlayerData() called");
+				//~ console.log("clearTempPlayerData() called");
 
 				$scope.tmpPlayer = new Player();
 
@@ -118,7 +118,7 @@ var playersManageArray =
 
 			$scope.saveEditPlayerDialog = function() {
 
-				console.log("saveEditPlayerDialog() called");
+				//~ console.log("saveEditPlayerDialog() called");
 				$scope.showEditPlayerDialog = false;
 
 
@@ -126,14 +126,21 @@ var playersManageArray =
 					// Save to Index...
 
 					$scope.tmpPlayer.updated = new Date();
-					$rootScope.playerList[ $scope.tmpPlayerIndex] = $scope.tmpPlayer;
+
+					//~ console.log( $scope.tmpPlayer.id );
+					if( $scope.tmpPlayer.id < 0 ) {
+						newID = getNextPlayerID($rootScope.playerList);
+						$scope.tmpPlayer.id = newID;
+					}
+					//~ console.log( $scope.tmpPlayer.id );
+					$rootScope.playerList[ $scope.tmpPlayerIndex] = new Player( $scope.tmpPlayer );
 				} else {
 					newID = getNextPlayerID($rootScope.playerList);
 					$scope.tmpPlayer.created = new Date();
 
 					$scope.tmpPlayer.updated = new Date();
-					$rootScope.playerList.id = newID;
-					$rootScope.playerList.push( $scope.tmpPlayer );
+					$scope.tmpPlayer.id = newID;
+					$rootScope.playerList.push( new Player( $scope.tmpPlayer ) );
 				}
 
 
@@ -167,7 +174,7 @@ var playersManageArray =
 
 
 			$scope.uploadFile = function(files) {
-				console.log( "files", files );
+				//~ console.log( "files", files );
 
 
 
@@ -180,11 +187,15 @@ var playersManageArray =
 
 					fReader.onload = function(textContents) {
 						if( textContents.target && textContents.target.result ) {
-							console.log( "textContents.target.result", textContents.target.result );
+							//~ console.log( "textContents.target.result", textContents.target.result );
 							var parsed = JSON.parse( textContents.target.result );
 							if( parsed ) {
-								console.log( "parsed",  parsed );
-								$rootScope.playerList = $rootScope.playerList.concat( parsed );
+								objectified = Array();
+								for( var pC = 0; pC < parsed.length; pC++ ) {
+									var newPlayer = new Player( parsed[pC] );
+									objectified.push( newPlayer );
+								}
+								$rootScope.playerList = $rootScope.playerList.concat( objectified );
 
 								savePlayersToLocalStorage($rootScope.playerList);
 							}

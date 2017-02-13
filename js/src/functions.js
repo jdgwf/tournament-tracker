@@ -25,6 +25,8 @@ function getPlayersFromLocalStorage() {
 			var newPlayer = new Player( importPlayers[playerC] );
 			returnValue.push( newPlayer );
 		}
+
+		returnValue.sort( sortByNames );
 		return returnValue;
 	}
 }
@@ -48,18 +50,24 @@ function getTournamentsFromLocalStorage( playersObject ) {
 		return returnValue;
 	}
 
-
 }
 
 function savePlayersToLocalStorage( playersObject ) {
+	playersObject.sort( sortByNames );
 	localStorage["players_list"] = JSON.stringify( playersObject );
+
 }
 
-function saveTourmanentsToLocalStorage( tournamentsObject ) {
-	var tmp = tournamentsObject;
-	if( tmp.playerObjs )
-		delete tmp.playerObjs;
-	localStorage["tournaments_list"] = JSON.stringify( tmp );
+function saveTournamentsToLocalStorage( tournamentsObject, playersList ) {
+	console.log( tournamentsObject );
+	for( var tC = 0; tC < tournamentsObject.length; tC++ ) {
+		if( tournamentsObject[tC].playerObjs )
+			delete tournamentsObject[tC].playerObjs;
+	}
+	localStorage["tournaments_list"] = JSON.stringify( tournamentsObject );
+	for( var tC = 0; tC < tournamentsObject.length; tC++ ) {
+		tournamentsObject[ tC ].createPlayerObjs( playersList );
+	}
 }
 
 function getPlayerByID( playersList, playerID ) {
@@ -79,3 +87,21 @@ function getNextPlayerID( playersObject ) {
 
 	return maxID + 1;
 }
+
+function sortByNames(a,b) {
+  if (a.name.last < b.name.last)
+    return -1;
+  if (a.name.last > b.name.last)
+    return 1;
+  if (a.name.first < b.name.first)
+    return -1;
+  if (a.name.first > b.name.first)
+    return 1;
+  if (a.name.nick < b.name.nick)
+    return -1;
+  if (a.name.nick > b.name.nick)
+    return 1;
+  return 0;
+}
+
+

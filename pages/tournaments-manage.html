@@ -1,10 +1,35 @@
 <div ng-include="'pages/global-header.html'"></div>
+<div ng-include="'pages/dialogs.html'"></div>
 <div class="row">
 
 	<div class="column small-12">
 		<fieldset class="fieldset">
 			<legend translate="WELCOME_BUTTON_MANAGE_TOURNAMENTS">Manage Tournaments</legend>
-			TODO Manage Tournaments
+			<table>
+				<thead>
+					<tr>
+						<th translate="GENERAL_NAME">First Name</th>
+						<th class="no-wrap" translate="TOURNAMENTS_NUM_PLAYERS"># Players</th>
+						<th>&nbsp;</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr ng-repeat="tournObj in tournamentList track by $index">
+						<td>{{ tournObj.name }}</td>
+						<td>{{ tournObj.playerObjs.length }}</td>
+
+						<td class="no-wrap larger-font">
+							<a ng-click="editTournamentPlayersDialog( $index );" title="{{ 'TOURNAMENTS_EDIT_PLAYERS' | translate }}"><i class="fa fa-users"></i></a>
+							<a ng-click="editTournamentDialog( $index );" title="{{ 'GENERAL_ITEM_EDIT' | translate }}"><i class="fa fa-edit"></i></a>
+							<a ng-click="deleteTournamentDialog( $index );" title="{{ 'GENERAL_ITEM_REMOVE' | translate }}"><i class="fa fa-trash"></i></a>
+						</td>
+					</tr>
+				</tbody>
+
+				<tfoot>
+				</tfoot>
+			</table>
 		</fieldset>
 
 
