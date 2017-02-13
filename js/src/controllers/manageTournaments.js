@@ -9,6 +9,8 @@ var tournamentsManageArray =
 				$rootScope.subtitle_tag = "&raquo; " + translation.WELCOME_BUTTON_MANAGE_TOURNAMENTS;
 			});
 
+			$scope.currentTournamentsPage = true;
+
 			$rootScope.playerList = getPlayersFromLocalStorage();
 
 

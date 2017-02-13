@@ -2,7 +2,7 @@ var available_languages = [];
 
 var appVersion = "0.01Alpha";
 
-webApp = angular.module(
+cordovaApp = angular.module(
 	'cordovaApp',
 	['ngRoute', 'ngResource', 'ngSanitize','pascalprecht.translate', 'as.sortable', 'mm.foundation'],
 	globalRoutes
@@ -26,3 +26,8 @@ angular.module('cordovaApp').controller(
 		}
 	]
 );
+
+cordovaApp.config(['$compileProvider',
+    function ($compileProvider) {
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/);
+}]);

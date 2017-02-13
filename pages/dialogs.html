@@ -50,3 +50,26 @@
 	  </div>
 	</div>
 </div>
+
+<div class="modal-container even-modaler" ng-show="showImportExportPlayerDialog == true">
+	<div class="reveal">
+
+		<fieldset class="fieldset">
+			<legend translate="GENERAL_EXPORT">Export</legend>
+			<div translate="PLAYERS_DOWNLOAD_INSTRUCTIONS">Click on the button below to download the current Players.json</div>
+			<div class="text-center">
+				<a download="Players.json" ng-href="{{ downloadPlayerData }}"><button class="button primary" translate="GENERAL_DOWNLOAD">Download</button></a>
+			</div>
+		</fieldset>
+
+		<fieldset class="fieldset">
+			<legend translate="GENERAL_IMPORT">Import</legend>
+			<div translate="PLAYERS_IMPORT_INSTRUCTIONS">To import players into this app, navigate to your Players.json file you have saved.</div>
+			<input type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"/>
+		</fieldset>
+
+	  <div class="text-right">
+	  	<button class="button small secondary" ng-click="closeImportExportPlayerDialog()"  type="button" translate="GENERAL_CLOSE"></button>
+	  </div>
+	</div>
+</div>

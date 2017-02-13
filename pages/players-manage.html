@@ -6,9 +6,7 @@
 
 		<fieldset class="fieldset">
 			<legend translate="WELCOME_BUTTON_MANAGE_PLAYERS">Manage Players</legend>
-			<div class="text-right">
-				<a ng-click="newPlayerDialog()"><i class="fa fa-plus"></i></a>
-			</div>
+
 			<table>
 				<thead>
 					<tr>
@@ -31,8 +29,8 @@
 						<td>{{ playerObj.phone1 }}</td>
 						<td><i class="fa fa-check" ng-show="playerObj.active"></i></td>
 						<td>
-							<a ng-click="editPlayerDialog( $index );"><i class="fa fa-edit"></i></a>
-							<a ng-click="deletePlayerDialog( $index );"><i class="fa fa-trash"></i></a>
+							<a ng-click="editPlayerDialog( $index );" title="{{ 'GENERAL_ITEM_EDIT' | translate }}"><i class="fa fa-edit"></i></a>
+							<a ng-click="deletePlayerDialog( $index );" title="{{ 'GENERAL_ITEM_REMOVE' | translate }}"><i class="fa fa-trash"></i></a>
 						</td>
 					</tr>
 				</tbody>

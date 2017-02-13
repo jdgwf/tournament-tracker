@@ -8,6 +8,8 @@ var welcomeArray =
 				$rootScope.title_tag = translation.INDEX_WELCOME + " | " + translation.APP_TITLE;
 				$rootScope.subtitle_tag = "&raquo; " + translation.INDEX_WELCOME;
 			});
+
+			$scope.currentWelcomePage = true;
 		}
 	]
 ;

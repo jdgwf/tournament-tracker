@@ -64,7 +64,7 @@ var available_languages = [];
 
 var appVersion = "0.01Alpha";
 
-webApp = angular.module(
+cordovaApp = angular.module(
 	'cordovaApp',
 	['ngRoute', 'ngResource', 'ngSanitize','pascalprecht.translate', 'as.sortable', 'mm.foundation'],
 	globalRoutes
@@ -88,6 +88,11 @@ angular.module('cordovaApp').controller(
 		}
 	]
 );
+
+cordovaApp.config(['$compileProvider',
+    function ($compileProvider) {
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/);
+}]);
 
 var available_languages = [];
 
@@ -117,6 +122,12 @@ angular.module('webApp').controller(
 		}
 	]
 );
+
+
+webApp.config(['$compileProvider',
+    function ($compileProvider) {
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/);
+}]);
 
 
 
@@ -655,6 +666,8 @@ function Player () {
 	this.email = "";
 	this.phone1 = "";
 
+
+
 	this.active = true;
 	this.id = -1;
 
@@ -673,6 +686,10 @@ var creditsArray =
 				$rootScope.title_tag = translation.INDEX_WELCOME + " | " + translation.APP_TITLE;
 				$rootScope.subtitle_tag = "&raquo; " + translation.INDEX_CREDITS;
 			});
+
+			$scope.currentCreditsPage = true;
+
+
 		}
 	]
 ;
@@ -694,18 +711,21 @@ var playersManageArray =
 		'$rootScope',
 		'$translate',
 		'$scope',
-		function ($rootScope, $translate, $scope) {
+		'$http',
+		function ($rootScope, $translate, $scope, $http) {
 			$translate(['APP_TITLE', 'WELCOME_BUTTON_MANAGE_PLAYERS']).then(function (translation) {
 				$rootScope.title_tag = translation.WELCOME_BUTTON_MANAGE_PLAYERS + " | " + translation.APP_TITLE;
 				$rootScope.subtitle_tag = "&raquo; " + translation.WELCOME_BUTTON_MANAGE_PLAYERS;
 			});
 
 
+			$scope.currentPlayersPage = true;
 			$rootScope.playerList = getPlayersFromLocalStorage();
 
 			// Confirmation Dialog
 
 			$scope.confirmDialogQuestion = "";
+			$scope.showImportExportPlayerDialog = false;
 
 			$scope.confirmDialog = function( confirmationMessage, onYes ) {
 				$scope.confirmDialogQuestion = confirmationMessage;
@@ -817,9 +837,14 @@ var playersManageArray =
 				//~ console.log( "$scope.tmpPlayerIndex", $scope.tmpPlayerIndex );
 				if( $scope.tmpPlayerIndex > -1 ) {
 					// Save to Index...
+
+					$scope.tmpPlayer.updated = new Date();
 					$rootScope.playerList[ $scope.tmpPlayerIndex] = $scope.tmpPlayer;
 				} else {
 					newID = getNextPlayerID($rootScope.playerList);
+					$scope.tmpPlayer.created = new Date();
+
+					$scope.tmpPlayer.updated = new Date();
 					$rootScope.playerList.id = newID;
 					$rootScope.playerList.push( $scope.tmpPlayer );
 				}
@@ -837,6 +862,54 @@ var playersManageArray =
 				$scope.clearTempPlayerData();
 			}
 
+
+			$scope.importExportPlayersDialog = function() {
+				var content = JSON.stringify( $scope.playerList );
+				var blob = new Blob([ content ], { type : 'application/javascript' });
+				$scope.downloadPlayerData = (window.URL || window.webkitURL).createObjectURL( blob );
+
+				$scope.showImportExportPlayerDialog = true;
+			}
+
+			$scope.closeImportExportPlayerDialog = function() {
+				$scope.showImportExportPlayerDialog = false;
+			}
+
+
+
+			$scope.uploadFile = function(files) {
+				console.log( "files", files );
+
+
+
+			    var fReader = new FileReader();
+
+			    for( var fileCounter = 0; fileCounter < files.length; fileCounter++ ) {
+
+					var file = files[ fileCounter ];
+
+
+					fReader.onload = function(textContents) {
+						if( textContents.target && textContents.target.result ) {
+							console.log( "textContents.target.result", textContents.target.result );
+							var parsed = JSON.parse( textContents.target.result );
+							if( parsed ) {
+								console.log( "parsed",  parsed );
+								$rootScope.playerList = $rootScope.playerList.concat( parsed );
+
+								savePlayersToLocalStorage($rootScope.playerList);
+							}
+						}
+
+					};
+
+
+
+					fReader.readAsText( file );
+
+				}
+
+			};
 
 		}
 
@@ -868,6 +941,8 @@ var tournamentsManageArray =
 				$rootScope.subtitle_tag = "&raquo; " + translation.WELCOME_BUTTON_MANAGE_TOURNAMENTS;
 			});
 
+			$scope.currentTournamentsPage = true;
+
 			$rootScope.playerList = getPlayersFromLocalStorage();
 
 
@@ -893,13 +968,14 @@ var settingsArray = [
 	'$scope',
 	'$route',
 	function ($rootScope, $translate,  $scope, $route) {
-		$rootScope.showSciFiCreatorMenu = false;
-		$rootScope.showChargenMenu = false;
+
 
 		$translate(['APP_TITLE', 'GENERAL_SETTINGS']).then(function (translation) {
 			$rootScope.title_tag = translation.GENERAL_SETTINGS + " | " + translation.APP_TITLE;
 			$rootScope.subtitle_tag = translation.GENERAL_SETTINGS;
 		});
+
+		$scope.currentSettingsPage = true;
 
 
 		$scope.available_languages = Array();
@@ -974,6 +1050,8 @@ var welcomeArray =
 				$rootScope.title_tag = translation.INDEX_WELCOME + " | " + translation.APP_TITLE;
 				$rootScope.subtitle_tag = "&raquo; " + translation.INDEX_WELCOME;
 			});
+
+			$scope.currentWelcomePage = true;
 		}
 	]
 ;
@@ -1017,6 +1095,15 @@ available_languages.push ({
 		INDEX_WELCOME: 'Welcome',
 		INDEX_H3_CORE: '@Gauthic\'s Tournament Tracker',
 
+		MENU_TITLE_HOME: "Click here to go home",
+		MENU_TITLE_MANAGE_PLAYERS: "Click here go to player management",
+		MENU_TITLE_MANAGE_TOURNAMENTS: "Click here to go to tournament management",
+		MENU_TITLE_SETTINGS: "Click here to change settings",
+		MENU_TITLE_CREDITS: "Click here to view the credits and help",
+
+
+		MENU_TITLE_EXPORT_PLAYERS: "Click here to export players",
+		MENU_TITLE_ADD_PLAYER: "Click here to add a player",
 
 		GENERAL_SELECT_LANGUAGE: "Select Langage",
 		GENERAL_SETTINGS: "Settings",
@@ -1035,6 +1122,12 @@ available_languages.push ({
 		GENERAL_SEARCH_RESULTS: 'Search Results',
 		GENERAL_CANCEL: "Cancel",
 		GENERAL_ACTIVE: "Active",
+		GENERAL_DOWNLOAD: "Download",
+		GENERAL_IMPORT: "Import",
+		GENERAL_EXPORT: "Export",
+
+		GENERAL_ITEM_EDIT: "Edit Item",
+		GENERAL_ITEM_REMOVE: "Remove Item",
 
 		GENERAL_YES: "Yes",
 		GENERAL_NO: "No",
@@ -1060,11 +1153,13 @@ available_languages.push ({
 
 
 		PLAYERS_DELETE_CONFIRMATION: "Are you sure you want to delete this player?",
+		PLAYERS_IMPORT_INSTRUCTIONS: "To import players into this app, navigate to your Players.json file you have saved.",
+		PLAYERS_DOWNLOAD_INSTRUCTIONS: "Click on the button below to download the current Players.json",
 
 		WELCOME_BUTTON_MANAGE_PLAYERS: "Manage Players",
-		WELCOME_BUTTON_MANAGE_PLAYERS_DESC: "Manage Players Description",
+		WELCOME_BUTTON_MANAGE_PLAYERS_DESC: "Before you can actually set up a tournament, you'll probably need to add some players here.",
 		WELCOME_BUTTON_MANAGE_TOURNAMENTS: "Manage Tourmaments",
-		WELCOME_BUTTON_MANAGE_TOURNAMENTS_DESC: "Manage Tournaments Description"
+		WELCOME_BUTTON_MANAGE_TOURNAMENTS_DESC: "In this area you'll find your past tournaments you've tracked on this device."
 
 	}
 

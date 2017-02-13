@@ -9,6 +9,8 @@ function Player () {
 	this.email = "";
 	this.phone1 = "";
 
+
+
 	this.active = true;
 	this.id = -1;
 

@@ -26,3 +26,9 @@ angular.module('webApp').controller(
 		}
 	]
 );
+
+
+webApp.config(['$compileProvider',
+    function ($compileProvider) {
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/);
+}]);

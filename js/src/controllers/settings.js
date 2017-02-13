@@ -4,13 +4,14 @@ var settingsArray = [
 	'$scope',
 	'$route',
 	function ($rootScope, $translate,  $scope, $route) {
-		$rootScope.showSciFiCreatorMenu = false;
-		$rootScope.showChargenMenu = false;
+
 
 		$translate(['APP_TITLE', 'GENERAL_SETTINGS']).then(function (translation) {
 			$rootScope.title_tag = translation.GENERAL_SETTINGS + " | " + translation.APP_TITLE;
 			$rootScope.subtitle_tag = translation.GENERAL_SETTINGS;
 		});
+
+		$scope.currentSettingsPage = true;
 
 
 		$scope.available_languages = Array();

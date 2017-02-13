@@ -12,6 +12,15 @@ available_languages.push ({
 		INDEX_WELCOME: 'Welcome',
 		INDEX_H3_CORE: '@Gauthic\'s Tournament Tracker',
 
+		MENU_TITLE_HOME: "Click here to go home",
+		MENU_TITLE_MANAGE_PLAYERS: "Click here go to player management",
+		MENU_TITLE_MANAGE_TOURNAMENTS: "Click here to go to tournament management",
+		MENU_TITLE_SETTINGS: "Click here to change settings",
+		MENU_TITLE_CREDITS: "Click here to view the credits and help",
+
+
+		MENU_TITLE_EXPORT_PLAYERS: "Click here to export players",
+		MENU_TITLE_ADD_PLAYER: "Click here to add a player",
 
 		GENERAL_SELECT_LANGUAGE: "Select Langage",
 		GENERAL_SETTINGS: "Settings",
@@ -30,6 +39,12 @@ available_languages.push ({
 		GENERAL_SEARCH_RESULTS: 'Search Results',
 		GENERAL_CANCEL: "Cancel",
 		GENERAL_ACTIVE: "Active",
+		GENERAL_DOWNLOAD: "Download",
+		GENERAL_IMPORT: "Import",
+		GENERAL_EXPORT: "Export",
+
+		GENERAL_ITEM_EDIT: "Edit Item",
+		GENERAL_ITEM_REMOVE: "Remove Item",
 
 		GENERAL_YES: "Yes",
 		GENERAL_NO: "No",
@@ -55,11 +70,13 @@ available_languages.push ({
 
 
 		PLAYERS_DELETE_CONFIRMATION: "Are you sure you want to delete this player?",
+		PLAYERS_IMPORT_INSTRUCTIONS: "To import players into this app, navigate to your Players.json file you have saved.",
+		PLAYERS_DOWNLOAD_INSTRUCTIONS: "Click on the button below to download the current Players.json",
 
 		WELCOME_BUTTON_MANAGE_PLAYERS: "Manage Players",
-		WELCOME_BUTTON_MANAGE_PLAYERS_DESC: "Manage Players Description",
+		WELCOME_BUTTON_MANAGE_PLAYERS_DESC: "Before you can actually set up a tournament, you'll probably need to add some players here.",
 		WELCOME_BUTTON_MANAGE_TOURNAMENTS: "Manage Tourmaments",
-		WELCOME_BUTTON_MANAGE_TOURNAMENTS_DESC: "Manage Tournaments Description"
+		WELCOME_BUTTON_MANAGE_TOURNAMENTS_DESC: "In this area you'll find your past tournaments you've tracked on this device."
 
 	}
 

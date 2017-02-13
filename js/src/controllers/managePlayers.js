@@ -3,18 +3,21 @@ var playersManageArray =
 		'$rootScope',
 		'$translate',
 		'$scope',
-		function ($rootScope, $translate, $scope) {
+		'$http',
+		function ($rootScope, $translate, $scope, $http) {
 			$translate(['APP_TITLE', 'WELCOME_BUTTON_MANAGE_PLAYERS']).then(function (translation) {
 				$rootScope.title_tag = translation.WELCOME_BUTTON_MANAGE_PLAYERS + " | " + translation.APP_TITLE;
 				$rootScope.subtitle_tag = "&raquo; " + translation.WELCOME_BUTTON_MANAGE_PLAYERS;
 			});
 
 
+			$scope.currentPlayersPage = true;
 			$rootScope.playerList = getPlayersFromLocalStorage();
 
 			// Confirmation Dialog
 
 			$scope.confirmDialogQuestion = "";
+			$scope.showImportExportPlayerDialog = false;
 
 			$scope.confirmDialog = function( confirmationMessage, onYes ) {
 				$scope.confirmDialogQuestion = confirmationMessage;
@@ -126,9 +129,14 @@ var playersManageArray =
 				//~ console.log( "$scope.tmpPlayerIndex", $scope.tmpPlayerIndex );
 				if( $scope.tmpPlayerIndex > -1 ) {
 					// Save to Index...
+
+					$scope.tmpPlayer.updated = new Date();
 					$rootScope.playerList[ $scope.tmpPlayerIndex] = $scope.tmpPlayer;
 				} else {
 					newID = getNextPlayerID($rootScope.playerList);
+					$scope.tmpPlayer.created = new Date();
+
+					$scope.tmpPlayer.updated = new Date();
 					$rootScope.playerList.id = newID;
 					$rootScope.playerList.push( $scope.tmpPlayer );
 				}
@@ -146,6 +154,54 @@ var playersManageArray =
 				$scope.clearTempPlayerData();
 			}
 
+
+			$scope.importExportPlayersDialog = function() {
+				var content = JSON.stringify( $scope.playerList );
+				var blob = new Blob([ content ], { type : 'application/javascript' });
+				$scope.downloadPlayerData = (window.URL || window.webkitURL).createObjectURL( blob );
+
+				$scope.showImportExportPlayerDialog = true;
+			}
+
+			$scope.closeImportExportPlayerDialog = function() {
+				$scope.showImportExportPlayerDialog = false;
+			}
+
+
+
+			$scope.uploadFile = function(files) {
+				console.log( "files", files );
+
+
+
+			    var fReader = new FileReader();
+
+			    for( var fileCounter = 0; fileCounter < files.length; fileCounter++ ) {
+
+					var file = files[ fileCounter ];
+
+
+					fReader.onload = function(textContents) {
+						if( textContents.target && textContents.target.result ) {
+							console.log( "textContents.target.result", textContents.target.result );
+							var parsed = JSON.parse( textContents.target.result );
+							if( parsed ) {
+								console.log( "parsed",  parsed );
+								$rootScope.playerList = $rootScope.playerList.concat( parsed );
+
+								savePlayersToLocalStorage($rootScope.playerList);
+							}
+						}
+
+					};
+
+
+
+					fReader.readAsText( file );
+
+				}
+
+			};
 
 		}
 

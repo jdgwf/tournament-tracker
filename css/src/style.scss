@@ -48,6 +48,11 @@ body {
 	.main-menu {
 		a {
 			font-size: 1.8rem;
+			&.currentItem {
+				i {
+					color: #fff !important;
+				}
+			}
 		}
 
 	}
