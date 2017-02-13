@@ -56,6 +56,12 @@ var globalRoutes = 	[
 			controller  : 'controllerTourmamentsManage'
 		})
 
+		// Run Tournaments
+		.when('/tournaments-run', {
+			templateUrl : 'pages/tournaments-run.html',
+			controller  : 'controllerTourmamentsRun'
+		})
+
 		;
 	}
 ];

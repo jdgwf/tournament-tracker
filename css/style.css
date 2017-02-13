@@ -885,7 +885,7 @@ button.round, .button.round {
   left: 0;
   top: 0;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.7);
   z-index: 1000;
   overflow-x: hidden;
   overflow-y: scroll; }
@@ -917,23 +917,27 @@ button.round, .button.round {
     margin: 0;
     padding: 0; }
 
-/* line 1033, /srv/www/jdgwf.com/tt/public_html/css/src/style.scss */
+/* line 1034, /srv/www/jdgwf.com/tt/public_html/css/src/style.scss */
+.cursor-pointer {
+  cursor: pointer; }
+
+/* line 1037, /srv/www/jdgwf.com/tt/public_html/css/src/style.scss */
 .reveal-modal {
   position: fixed; }
 
-/* line 1037, /srv/www/jdgwf.com/tt/public_html/css/src/style.scss */
+/* line 1041, /srv/www/jdgwf.com/tt/public_html/css/src/style.scss */
 .even-modaler {
   z-index: 2000 !important; }
 
-/* line 1040, /srv/www/jdgwf.com/tt/public_html/css/src/style.scss */
+/* line 1044, /srv/www/jdgwf.com/tt/public_html/css/src/style.scss */
 .no-wrap {
   white-space: nowrap; }
 
-/* line 1043, /srv/www/jdgwf.com/tt/public_html/css/src/style.scss */
+/* line 1047, /srv/www/jdgwf.com/tt/public_html/css/src/style.scss */
 .larger-font {
   font-size: 20px !important; }
 
 @media only screen and (max-device-width: 400px) and (orientation: portrait) {
-  /* line 1048, /srv/www/jdgwf.com/tt/public_html/css/src/style.scss */
+  /* line 1052, /srv/www/jdgwf.com/tt/public_html/css/src/style.scss */
   .landscape-view-please {
     display: block; } }

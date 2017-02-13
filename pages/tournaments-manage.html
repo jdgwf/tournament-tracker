@@ -21,6 +21,8 @@
 						<td>{{ tournObj.playerObjs.length }}</td>
 
 						<td class="no-wrap larger-font">
+							<a ng-click="showTournamentResults( $index );" ng-show="tournObj.completed"><i class="fa fa-pdf"></i></a>
+							<a ng-click="showTournamentPage( $index );" ng-hide="tournObj.completed"><i class="fa fa-play"></i></a>
 							<a ng-click="editTournamentPlayersDialog( $index );" title="{{ 'TOURNAMENTS_EDIT_PLAYERS' | translate }}"><i class="fa fa-users"></i></a>
 							<a ng-click="editTournamentDialog( $index );" title="{{ 'GENERAL_ITEM_EDIT' | translate }}"><i class="fa fa-edit"></i></a>
 							<a ng-click="deleteTournamentDialog( $index );" title="{{ 'GENERAL_ITEM_REMOVE' | translate }}"><i class="fa fa-trash"></i></a>

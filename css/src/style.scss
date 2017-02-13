@@ -997,7 +997,7 @@ button.round, .button.round {
 	left: 0;
 	top: 0;
 	height: 100%;
-	background: rgba(0,0,0,.4);
+	background: rgba(0,0,0,.7);
 	z-index: 1000;
 	overflow-x: hidden;
 	overflow-y: scroll;
@@ -1029,6 +1029,10 @@ button.round, .button.round {
 		margin: 0;
 		padding: 0;
 	}
+}
+
+.cursor-pointer {
+	cursor: pointer;
 }
 .reveal-modal{
     position : fixed;

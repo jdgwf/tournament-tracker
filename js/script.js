@@ -56,6 +56,12 @@ var globalRoutes = 	[
 			controller  : 'controllerTourmamentsManage'
 		})
 
+		// Run Tournaments
+		.when('/tournaments-run', {
+			templateUrl : 'pages/tournaments-run.html',
+			controller  : 'controllerTourmamentsRun'
+		})
+
 		;
 	}
 ];
@@ -783,8 +789,20 @@ function Tournament (importTournament, playerObjects) {
 	this.created = new Date();
 	this.updated = new Date();
 
+	this.completed = false;
+
 	this.trackPerGameSportsmanship = true;
 	this.warnSportsmanship = 2;
+
+	this.scoring = Array();
+	this.extraPoints = Array();
+
+	this.paintingPoints = Array();
+	this.compPoints = Array();
+	this.sportsPoints = Array();
+
+	this.currentRound = 0;
+	this.matches = Array();
 
 	this.createPlayerObjs = function( playersObjs) {
 		this.playerObjs = Array();
@@ -793,17 +811,73 @@ function Tournament (importTournament, playerObjects) {
 			if( player )
 				this.playerObjs.push( player );
 		}
+
+		for( var roundC = 0; roundC < this.numberOfRounds; roundC++ ) {
+			if( typeof( this.scoring[ roundC ] ) == "undefined")
+				this.scoring[ roundC ] = Array();
+			for( var playerC = 0; playerC < this.playerObjs.length; playerC++ ) {
+				if( typeof( this.scoring[ roundC ][this.playerObjs[playerC].id] ) == "undefined")
+					this.scoring[ roundC ][this.playerObjs[playerC].id] = -1;
+			}
+		}
+	}
+
+	this.calculateResults = function() {
+		this.totals = Array();
+		for( var playerC = 0; playerC < this.playerObjs.length; playerC++ ) {
+			numByes = 0;
+			playerTotal = 0;
+			for( var roundC = 0; roundC < this.scoring; roundC++ ) {
+				if( this.scoring[ roundC ][ this.playerObjs[playerC].id ] != "bye" && this.scoring[ roundC ][ this.playerObjs[playerC].id ] > -1) {
+					playerTotal += this.scoring[ roundC ][ this.playerObjs[playerC].id ];
+				}
+				if( this.scoring[ roundC ][ this.playerObjs[playerC].id ] != "bye") {
+					if( !this.byeIsAverage ) {
+						playerTotal += this.pointsForBye;
+					}
+					numByes++;
+				}
+			}
+			if( this.byeIsAverage && numByes > 0 && this.currentRound > 1) {
+				averageRound = Math.round(playerTotal / ( this.numberOfRounds - numByes ));
+				playerTotal += averageRound * numByes;
+			}
+			this.totals[ this.playerObjs[ playerC].id ] = playerTotal;
+
+			this.playerObjs[ playerC].pointsBase = playerTotal;
+		}
 	}
 
 	if( typeof(importTournament) != "undefined" ) {
 		this.players = importTournament.players;
 		this.name = importTournament.name;
 
+		if( typeof(importTournament.currentRound) != "undefined" )
+			this.currentRound = importTournament.currentRound;
+
+		if( typeof(importTournament.matches) != "undefined" )
+			this.matches = importTournament.matches;
+
 		if( typeof(importTournament.created) != "undefined" )
 			this.created = importTournament.created;
 
 		if( typeof(importTournament.updated) != "undefined" )
 			this.updated = importTournament.updated;
+
+		if( typeof(importTournament.completed) != "undefined" )
+			this.completed = importTournament.completed;
+
+		if( typeof(importTournament.scoring) != "undefined" )
+			this.scoring = importTournament.scoring;
+		if( typeof(importTournament.extraPoints) != "undefined" )
+			this.extraPoints = importTournament.extraPoints;
+
+		if( typeof(importTournament.paintingPoints) != "undefined" )
+			this.paintingPoints = importTournament.paintingPoints;
+		if( typeof(importTournament.compPoints) != "undefined" )
+			this.compPoints = importTournament.compPoints;
+		if( typeof(importTournament.sportsPoints) != "undefined" )
+			this.sportsPoints = importTournament.sportsPoints;
 
 		if( typeof(importTournament.numberOfRounds) != "undefined" )
 			this.numberOfRounds = importTournament.numberOfRounds;
@@ -1106,8 +1180,9 @@ var tournamentsManageArray =
 	[
 		'$rootScope',
 		'$translate',
+		'$location',
 		'$scope',
-		function ($rootScope, $translate, $scope) {
+		function ($rootScope, $translate, $location, $scope) {
 			$translate(['APP_TITLE', 'WELCOME_BUTTON_MANAGE_TOURNAMENTS']).then(function (translation) {
 				$rootScope.title_tag = translation.WELCOME_BUTTON_MANAGE_TOURNAMENTS + " | " + translation.APP_TITLE;
 				$rootScope.subtitle_tag = "&raquo; " + translation.WELCOME_BUTTON_MANAGE_TOURNAMENTS;
@@ -1283,6 +1358,18 @@ var tournamentsManageArray =
 			}
 
 			/* *********************************************************
+			 * Results and In-Play Functions
+			 * ******************************************************* */
+			$scope.showTournamentResults = function( tournamentIndex ) {
+				alert("showTournamentResults(" + tournamentIndex + ") called - TODO");
+			}
+
+			$scope.showTournamentPage = function( tournamentIndex ) {
+				localStorage["current_tournament_view"] = tournamentIndex;
+				$location.path("tournaments-run"); // path not hash
+			}
+
+			/* *********************************************************
 			 * Player Editing
 			 * ******************************************************* */
 
@@ -1411,6 +1498,56 @@ angular.module("webApp").controller(
 angular.module("cordovaApp").controller(
 	"controllerTourmamentsManage",
 	tournamentsManageArray
+);
+
+var tournamentsRunArray =
+	[
+		'$rootScope',
+		'$translate',
+		'$location',
+		'$scope',
+		function ($rootScope, $translate, $location, $scope) {
+			$translate(['APP_TITLE', 'WELCOME_BUTTON_MANAGE_TOURNAMENTS']).then(function (translation) {
+				$rootScope.title_tag = translation.WELCOME_BUTTON_MANAGE_TOURNAMENTS + " | " + translation.APP_TITLE;
+				$rootScope.subtitle_tag = "&raquo; " + translation.WELCOME_BUTTON_MANAGE_TOURNAMENTS;
+			});
+
+			$scope.currentTournamentPage = true;
+
+			$rootScope.playerList = getPlayersFromLocalStorage();
+
+			$rootScope.tournamentList = getTournamentsFromLocalStorage();
+			for( var tC = 0; tC < $rootScope.tournamentList.length; tC++) {
+				$rootScope.tournamentList[ tC ].createPlayerObjs( $rootScope.playerList );
+			}
+
+			$scope.currentTournament = null;
+
+			if( $rootScope.tournamentList[ localStorage["current_tournament_view"] ] ) {
+				$scope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
+			}
+
+
+			$scope.currentTournament.calculateResults();
+
+
+			$scope.editScore = function( playerID, roundIndex ) {
+				console.log("editScore(" + playerID + ", " + roundIndex + ")");
+			}
+
+		}
+	]
+;
+
+
+angular.module("webApp").controller(
+	"controllerTourmamentsRun",
+	tournamentsRunArray
+);
+
+angular.module("cordovaApp").controller(
+	"controllerTourmamentsRun",
+	tournamentsRunArray
 );
 
 var settingsArray = [
@@ -1598,10 +1735,13 @@ available_languages.push ({
 		GENERAL_EMAIL: "Email",
 		GENERAL_EMAIL_ADDRESS: "Email Address",
 
+		GENERAL_IMPORT_EXPORT_EXPLANATION: "Use this import/export function to transfer data from one device to another.",
+
 		GENERAL_INTRODUCTORY: "Introductory",
 		GENERAL_STANDARD: "Standard",
 		GENERAL_ADVANCED: "Advanced",
 		GENERAL_CLOSE: "Close",
+		GENERAL_ERROR: "Error",
 
 		GENERAL_ROTATE_TO_LANDSCAPE: "Please rotate your device to landscape for optimal viewing",
 
@@ -1641,6 +1781,13 @@ available_languages.push ({
 		TOURNAMENTS_NO_PLAYERS: "There are no players in this tournament",
 		TOURNAMENTS_NUMBER_OF_ROUNDS: "Number of Rounds",
 
+		TOURNAMENT_IN_PLAY: "Tournament In-Play",
+		TOURNAMENT_NO_CURRENT_TOURNAMENT: "For some reason the tournament that you're trying to reach has been either removed or moved on this device. Please select the Tournament icon above then 'play' an existing tournament",
+		TOURNAMENT_BASE_SCORE: "Base Score",
+		TOURNAMENT_FINAL_SCORE: "Final Score",
+		TOURNAMENT_PAINTING_SCORE: "Painting Score",
+		TOURNAMENT_COMPOSITION_SCORE: "Comp Score",
+		TOURNAMENT_SPORTSMANSHIP_SCORE: "Sports Score",
 
 		WELCOME_BUTTON_MANAGE_PLAYERS: "Manage Players",
 		WELCOME_BUTTON_MANAGE_PLAYERS_DESC: "Before you can actually set up a tournament, you'll probably need to add some players here.",

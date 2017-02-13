@@ -64,10 +64,13 @@ available_languages.push ({
 		GENERAL_EMAIL: "Email",
 		GENERAL_EMAIL_ADDRESS: "Email Address",
 
+		GENERAL_IMPORT_EXPORT_EXPLANATION: "Use this import/export function to transfer data from one device to another.",
+
 		GENERAL_INTRODUCTORY: "Introductory",
 		GENERAL_STANDARD: "Standard",
 		GENERAL_ADVANCED: "Advanced",
 		GENERAL_CLOSE: "Close",
+		GENERAL_ERROR: "Error",
 
 		GENERAL_ROTATE_TO_LANDSCAPE: "Please rotate your device to landscape for optimal viewing",
 
@@ -107,6 +110,13 @@ available_languages.push ({
 		TOURNAMENTS_NO_PLAYERS: "There are no players in this tournament",
 		TOURNAMENTS_NUMBER_OF_ROUNDS: "Number of Rounds",
 
+		TOURNAMENT_IN_PLAY: "Tournament In-Play",
+		TOURNAMENT_NO_CURRENT_TOURNAMENT: "For some reason the tournament that you're trying to reach has been either removed or moved on this device. Please select the Tournament icon above then 'play' an existing tournament",
+		TOURNAMENT_BASE_SCORE: "Base Score",
+		TOURNAMENT_FINAL_SCORE: "Final Score",
+		TOURNAMENT_PAINTING_SCORE: "Painting Score",
+		TOURNAMENT_COMPOSITION_SCORE: "Comp Score",
+		TOURNAMENT_SPORTSMANSHIP_SCORE: "Sports Score",
 
 		WELCOME_BUTTON_MANAGE_PLAYERS: "Manage Players",
 		WELCOME_BUTTON_MANAGE_PLAYERS_DESC: "Before you can actually set up a tournament, you'll probably need to add some players here.",

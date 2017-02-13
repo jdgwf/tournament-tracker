@@ -2,8 +2,9 @@ var tournamentsManageArray =
 	[
 		'$rootScope',
 		'$translate',
+		'$location',
 		'$scope',
-		function ($rootScope, $translate, $scope) {
+		function ($rootScope, $translate, $location, $scope) {
 			$translate(['APP_TITLE', 'WELCOME_BUTTON_MANAGE_TOURNAMENTS']).then(function (translation) {
 				$rootScope.title_tag = translation.WELCOME_BUTTON_MANAGE_TOURNAMENTS + " | " + translation.APP_TITLE;
 				$rootScope.subtitle_tag = "&raquo; " + translation.WELCOME_BUTTON_MANAGE_TOURNAMENTS;
@@ -176,6 +177,18 @@ var tournamentsManageArray =
 				$scope.showEditTournamentDialog = false;
 
 				$scope.clearTempTournamentData();
+			}
+
+			/* *********************************************************
+			 * Results and In-Play Functions
+			 * ******************************************************* */
+			$scope.showTournamentResults = function( tournamentIndex ) {
+				alert("showTournamentResults(" + tournamentIndex + ") called - TODO");
+			}
+
+			$scope.showTournamentPage = function( tournamentIndex ) {
+				localStorage["current_tournament_view"] = tournamentIndex;
+				$location.path("tournaments-run"); // path not hash
 			}
 
 			/* *********************************************************

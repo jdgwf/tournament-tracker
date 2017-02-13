@@ -1,0 +1,54 @@
+<div ng-include="'pages/global-header.html'"></div>
+<div ng-include="'pages/dialogs.html'"></div>
+<div class="row">
+
+	<div class="column small-12">
+
+		<fieldset class="fieldset">
+			<legend translate="TOURNAMENT_IN_PLAY">Tournament In Play</legend>
+
+			<div ng-show="currentTournament == null">
+				<h2 translate="GENERAL_ERROR">Error</h2>
+				<p translate="TOURNAMENT_NO_CURRENT_TOURNAMENT"></p>
+			</div>
+
+			<div ng-show="currentTournament != null">
+				<table>
+
+					<thead>
+						<tr>
+							<th>&nbsp;</th>
+							<th class="text-center" colspan="{{currentTournament.numberOfRounds}}">Round #</th>
+							<th  class="text-center" colspan="5">Scoring</th>
+						</tr>
+						<tr>
+							<th translate="GENERAL_PLAYER">Player</th>
+							<th class="text-center" ng-repeat="n in [].constructor( currentTournament.numberOfRounds ) track by $index">{{$index + 1}}</th>
+							<th class="text-center" translate="TOURNAMENT_BASE_SCORE">Base Score</th>
+
+							<th class="text-center" translate="TOURNAMENT_PAINTING_SCORE">Painting</th>
+							<th class="text-center" translate="TOURNAMENT_COMPOSITION_SCORE">Comp</th>
+							<th class="text-center" translate="TOURNAMENT_SPORTSMANSHIP_SCORE">Sports</th>
+
+							<th class="text-center" translate="TOURNAMENT_FINAL_SCORE">Final Score</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="playerObjs in currentTournament.playerObjs">
+							<td>{{playerObjs.name.last}}, {{playerObjs.name.first}} {{playerObjs.name.nick}}</td>
+							<td class="text-center cursor-pointer" ng-click="editScore(playerObjs.id, $index)" ng-repeat="n in [].constructor( currentTournament.numberOfRounds ) track by $index">{{currentTournament.scoring[$index][playerObjs.id]}}</td>
+							<td>{{playerObjs.pointsBase}}</td>
+
+							<td>{{playerObjs.pointsPainting}}</td>
+							<td>{{playerObjs.pointsComp}}</td>
+							<td>{{playerObjs.pointsSports}}</td>
+
+							<td>{{playerObjs.pointsFinal}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</fieldset>
+
+	</div>
+</div>
