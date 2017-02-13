@@ -1,7 +1,7 @@
 <header class="sticky-top">
 	<div class="row">
 
-		<div class="columns small-6 medium-3 text-left main-menu">
+		<div class="columns small-4 text-left main-menu no-wrap">
 
 			<a href="#/" ng-class="{currentItem:currentWelcomePage == true}" title="{{ 'MENU_TITLE_HOME' | translate }}"><i class="fa fa-home"></i></a>
 
@@ -9,7 +9,7 @@
 			<a href="#/tournaments-manage/" ng-class="{currentItem:currentTournamentsPage == true}" title="{{ 'MENU_TITLE_MANAGE_TOURNAMENTS' | translate }}"><i class="fa fa-table"></i></a>
 
 		</div>
-		<div class="text-center columns small-6 medium-6 text-left main-menu">
+		<div class="text-center columns small-4 main-menu no-wrap">
 			<div ng-show="currentPlayersPage">
 				<a ng-click="newPlayerDialog()" title="{{ 'MENU_TITLE_ADD_PLAYER' | translate }}"><i class="fa fa-plus"></i></a>
 				<a ng-click="importExportPlayersDialog()" title="{{ 'MENU_TITLE_EXPORT_PLAYERS' | translate }}"><i class="fa fa-file-code-o"></i></a>
@@ -21,7 +21,7 @@
 
 			</div>
 		</div>
-		<div class="text-right columns hide-for-small show-for-medium medium-3 text-left main-menu">
+		<div class="text-right columns small-4 main-menu no-wrap">
 
 			<a href="#/settings/" ng-class="{currentItem:currentSettingsPage == true}" title="{{ 'MENU_TITLE_SETTINGS' | translate }}"><i class="fa fa-gear"></i></a>
 			<a href="#/credits/" ng-class="{currentItem:currentCreditsPage == true}" title="{{ 'MENU_TITLE_CREDITS' | translate }}"><i class="fa fa-question"></i></a>

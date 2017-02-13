@@ -13,8 +13,8 @@
 						<th translate="GENERAL_NAME_FIRST">First Name</th>
 						<th translate="GENERAL_NAME_LAST">Last Name</th>
 						<th translate="GENERAL_NAME_NICK">Nickname</th>
-						<th translate="GENERAL_EMAIL">Email</th>
-						<th translate="GENERAL_PHONE">Phone</th>
+						<th class="hide-for-small-only" translate="GENERAL_EMAIL">Email</th>
+						<th class="hide-for-small-only" translate="GENERAL_PHONE">Phone</th>
 						<th translate="GENERAL_ACTIVE">Active</th>
 						<th>&nbsp;</th>
 					</tr>
@@ -25,10 +25,10 @@
 						<td>{{ playerObj.name.first }}</td>
 						<td>{{ playerObj.name.last }}</td>
 						<td>{{ playerObj.name.nick }}</td>
-						<td>{{ playerObj.email }}</td>
-						<td>{{ playerObj.phone1 }}</td>
+						<td class="hide-for-small-only">{{ playerObj.email }}</td>
+						<td class="hide-for-small-only">{{ playerObj.phone1 }}</td>
 						<td><i class="fa fa-check" ng-show="playerObj.active"></i></td>
-						<td>
+						<td class="no-wrap larger-font">
 							<a ng-click="editPlayerDialog( $index );" title="{{ 'GENERAL_ITEM_EDIT' | translate }}"><i class="fa fa-edit"></i></a>
 							<a ng-click="deletePlayerDialog( $index );" title="{{ 'GENERAL_ITEM_REMOVE' | translate }}"><i class="fa fa-trash"></i></a>
 						</td>
