@@ -1135,13 +1135,15 @@ var playersManageArray =
 			}
 
 			$scope.restorePlayerFromDelete = function(playerID) {
-				//~ console.log("restorePlayerFromDelete(" + playerID + ") called");
+				console.log("restorePlayerFromDelete(" + playerID + ") called");
 				//playerObj = getPlayerByID( $rootScope.playerList, playerID );
 				indexNumber = getPlayerIndexByID( $rootScope.playerList, playerID );
 				if( $rootScope.playerList[indexNumber] ) {
 					$rootScope.playerList[indexNumber].deleted = false;
 					savePlayersToLocalStorage($rootScope.playerList);
 					$scope.getNumberOfDeleted();
+				} else {
+					console.log("ERROR", "No playerID " + playerID + " found!");
 				}
 			}
 
@@ -1248,7 +1250,19 @@ var playersManageArray =
 								objectified = Array();
 								for( var pC = 0; pC < parsed.length; pC++ ) {
 									var newPlayer = new Player( parsed[pC] );
-									objectified.push( newPlayer );
+
+									// Don't duplicate ID numbers!!!
+									playerIDExists = getPlayerIndexByID( $rootScope.playerList, newPlayer.id )
+									if( playerIDExists > -1) {
+										if( $scope.importAsNewPlayers ) {
+											newPlayer.id = getNextPlayerID( $rootScope.playerList);
+											objectified.push( newPlayer );
+										} else {
+											$rootScope.playerList[ playerIDExists ] = newPlayer;
+										}
+									} else {
+										objectified.push( newPlayer );
+									}
 								}
 								$rootScope.playerList = $rootScope.playerList.concat( objectified );
 
@@ -1906,6 +1920,7 @@ available_languages.push ({
 		GENERAL_UPDATED: "Updated",
 		GENERAL_FINISHED: "Finished",
 		GENERAL_FINISHED: "Deleted",
+		GENERAL_ID: "ID",
 
 		GENERAL_ROTATE_TO_LANDSCAPE: "Please rotate your device to landscape for optimal viewing",
 
@@ -1920,6 +1935,7 @@ available_languages.push ({
 		PLAYERS_DELETED_PLAYERS: "Deleted Players",
 		PLAYERS_NO_PLAYERS: "There are no players here. Add one by pressing the + at the top of the screen.",
 		PLAYERS_NO_DELETED_PLAYERS: "There are no deleted players",
+		PLAYERS_IMPORT_OVERWRITE_INSTRUCTIONS: "If you have an import file with existing Player IDs, then check here to create new IDs for players in the import file.<br /><strong>Warning</strong>: If you do not check this, any existing Player IDs in the import file will overwrite your existing Player Data.",
 
 		TOURNAMENTS_DELETE_CONFIRMATION: "Are you sure you want to delete this tournament?",
 		TOURNAMENTS_IMPORT_INSTRUCTIONS: "To import tournaments into this app, navigate to your Tournaments.json file you have saved. <strong>Be sure that your Players.json and Tournaments.json match, otherwise you may have orphan or wrong players!</strong>",

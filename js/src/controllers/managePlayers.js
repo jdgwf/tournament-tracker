@@ -244,7 +244,19 @@ var playersManageArray =
 								objectified = Array();
 								for( var pC = 0; pC < parsed.length; pC++ ) {
 									var newPlayer = new Player( parsed[pC] );
-									objectified.push( newPlayer );
+
+									// Don't duplicate ID numbers!!!
+									playerIDExists = getPlayerIndexByID( $rootScope.playerList, newPlayer.id )
+									if( playerIDExists > -1) {
+										if( $scope.importAsNewPlayers ) {
+											newPlayer.id = getNextPlayerID( $rootScope.playerList);
+											objectified.push( newPlayer );
+										} else {
+											$rootScope.playerList[ playerIDExists ] = newPlayer;
+										}
+									} else {
+										objectified.push( newPlayer );
+									}
 								}
 								$rootScope.playerList = $rootScope.playerList.concat( objectified );
 

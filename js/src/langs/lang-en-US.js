@@ -77,6 +77,7 @@ available_languages.push ({
 		GENERAL_UPDATED: "Updated",
 		GENERAL_FINISHED: "Finished",
 		GENERAL_FINISHED: "Deleted",
+		GENERAL_ID: "ID",
 
 		GENERAL_ROTATE_TO_LANDSCAPE: "Please rotate your device to landscape for optimal viewing",
 
@@ -91,6 +92,7 @@ available_languages.push ({
 		PLAYERS_DELETED_PLAYERS: "Deleted Players",
 		PLAYERS_NO_PLAYERS: "There are no players here. Add one by pressing the + at the top of the screen.",
 		PLAYERS_NO_DELETED_PLAYERS: "There are no deleted players",
+		PLAYERS_IMPORT_OVERWRITE_INSTRUCTIONS: "If you have an import file with existing Player IDs, then check here to create new IDs for players in the import file.<br /><strong>Warning</strong>: If you do not check this, any existing Player IDs in the import file will overwrite your existing Player Data.",
 
 		TOURNAMENTS_DELETE_CONFIRMATION: "Are you sure you want to delete this tournament?",
 		TOURNAMENTS_IMPORT_INSTRUCTIONS: "To import tournaments into this app, navigate to your Tournaments.json file you have saved. <strong>Be sure that your Players.json and Tournaments.json match, otherwise you may have orphan or wrong players!</strong>",

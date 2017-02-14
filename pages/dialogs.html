@@ -68,11 +68,16 @@
 		<fieldset class="fieldset">
 			<legend translate="GENERAL_IMPORT">Import</legend>
 			<div translate="PLAYERS_IMPORT_INSTRUCTIONS">To import players into this app, navigate to your Players.json file you have saved.</div>
+			<br />
+			<label>
+				<input type="checkbox" ng-model="importAsNewPlayers" ng-change="updateImportAsNewPlayers(importAsNewPlayers)" /> <span translate="PLAYERS_IMPORT_OVERWRITE_INSTRUCTIONS">If you have an import file with existing Player IDs, then check here to create new IDs for players in the import file.</span><br />
+			</label>
+			<br />
 			<input type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"/>
 		</fieldset>
 
 	  <div class="text-right">
-	  	<button class="button small secondary" ng-click="closeImportExportPlayerDialog()"  type="button" translate="GENERAL_CLOSE"></button>
+	  	<button class="button small primary" ng-click="closeImportExportPlayerDialog()"  type="button" translate="GENERAL_CLOSE"></button>
 	  </div>
 	</div>
 </div>
@@ -96,7 +101,7 @@
 		</fieldset>
 
 	  <div class="text-right">
-	  	<button class="button small secondary" ng-click="closeImportExportTournamentDialog()"  type="button" translate="GENERAL_CLOSE"></button>
+	  	<button class="button small primary" ng-click="closeImportExportTournamentDialog()"  type="button" translate="GENERAL_CLOSE"></button>
 	  </div>
 	</div>
 </div>
