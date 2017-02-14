@@ -6,7 +6,6 @@
 
 		<fieldset class="fieldset">
 			<legend translate="WELCOME_BUTTON_MANAGE_PLAYERS">Manage Players</legend>
-
 			<table>
 				<thead>
 					<tr>
@@ -16,22 +15,29 @@
 						<th class="hide-for-small-only" translate="GENERAL_EMAIL">Email</th>
 						<th class="hide-for-small-only" translate="GENERAL_PHONE">Phone</th>
 						<th translate="GENERAL_ACTIVE">Active</th>
+<!--
+						<th translate="GENERAL_DELETED">Deleted</th>
+-->
 						<th>&nbsp;</th>
 					</tr>
 				</thead>
 
 				<tbody>
 					<tr ng-repeat="playerObj in playerList track by $index">
-						<td>{{ playerObj.name.first }}</td>
-						<td>{{ playerObj.name.last }}</td>
-						<td>{{ playerObj.name.nick }}</td>
-						<td class="hide-for-small-only">{{ playerObj.email }}</td>
-						<td class="hide-for-small-only">{{ playerObj.phone1 }}</td>
-						<td><i class="fa fa-check" ng-show="playerObj.active"></i></td>
-						<td class="no-wrap larger-font">
-							<a ng-click="editPlayerDialog( $index );" title="{{ 'GENERAL_ITEM_EDIT' | translate }}"><i class="fa fa-edit"></i></a>
-							<a ng-click="deletePlayerDialog( $index );" title="{{ 'GENERAL_ITEM_REMOVE' | translate }}"><i class="fa fa-trash"></i></a>
-						</td>
+
+							<td ng-hide="playerObj.deleted">{{ playerObj.name.first }}</td>
+							<td ng-hide="playerObj.deleted">{{ playerObj.name.last }}</td>
+							<td ng-hide="playerObj.deleted">{{ playerObj.name.nick }}</td>
+							<td ng-hide="playerObj.deleted" class="hide-for-small-only">{{ playerObj.email }}</td>
+							<td ng-hide="playerObj.deleted" class="hide-for-small-only">{{ playerObj.phone1 }}</td>
+							<td ng-hide="playerObj.deleted"><i class="fa fa-check" ng-show="playerObj.active"></i></td>
+<!--
+							<td ng-hide="playerObj.deleted"><i class="fa fa-check" ng-show="playerObj.deleted"></i></td>
+-->
+							<td ng-hide="playerObj.deleted" class="no-wrap larger-font">
+								<a ng-click="editPlayerDialog( $index );" title="{{ 'GENERAL_ITEM_EDIT' | translate }}"><i class="fa fa-edit"></i></a>
+								<a ng-click="deletePlayerDialog( $index );" title="{{ 'GENERAL_ITEM_REMOVE' | translate }}"><i class="fa fa-trash"></i></a>
+							</td>
 					</tr>
 				</tbody>
 

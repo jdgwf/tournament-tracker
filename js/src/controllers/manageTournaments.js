@@ -19,6 +19,10 @@ var tournamentsManageArray =
 				$rootScope.tournamentList[ tC ].createPlayerObjs( $rootScope.playerList );
 			}
 
+			$scope.currentTournament = null;
+			if( $rootScope.tournamentList[ localStorage["current_tournament_view"] ] ) {
+				$scope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
+			}
 
 			/* *********************************************************
 			 * Confirmation Dialog
@@ -41,7 +45,7 @@ var tournamentsManageArray =
 				}
 			}
 
-
+			//~ console.log("$rootScope.tournamentList", $rootScope.tournamentList);
 			/* *********************************************************
 			 * Tournament New/Delete/Edit Functions
 			 * ******************************************************* */
@@ -96,7 +100,7 @@ var tournamentsManageArray =
 			}
 
 			$scope.newTournamentDialog = function() {
-				console.log("newTournamentDialog() called");
+				//~ console.log("newTournamentDialog() called");
 
 
 				$scope.clearTempTournamentData();
@@ -220,7 +224,13 @@ var tournamentsManageArray =
 				$scope.participatingPlayers =  angular.copy($scope.tmpTournament.playerObjs);
 
 				for( var playerC = 0; playerC < $scope.playerList.length; playerC++ ) {
-					if( $scope.tmpTournament.players.indexOf( $scope.playerList[playerC].id ) === -1 ) {
+					if(
+						$scope.tmpTournament.players.indexOf( $scope.playerList[playerC].id ) === -1
+							&&
+						$scope.playerList[playerC].active == true
+							&&
+						$scope.playerList[playerC].deleted == false
+					) {
 						$scope.availablePlayers.push( $scope.playerList[playerC] );
 					}
 				}

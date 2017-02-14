@@ -104,4 +104,10 @@ function sortByNames(a,b) {
   return 0;
 }
 
+function formatDate( incomingDate ) {
+	var dateFormat = require('dateformat');
+
+	return dateFormat(incomingDate, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+}
+
 

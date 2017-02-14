@@ -50,6 +50,12 @@ var globalRoutes = 	[
 			controller  : 'controllerPlayersManage'
 		})
 
+		// Manage Players
+		.when('/players-deleted', {
+			templateUrl : 'pages/players-deleted.html',
+			controller  : 'controllerPlayersManage'
+		})
+
 		// Manage Tournaments
 		.when('/tournaments-manage', {
 			templateUrl : 'pages/tournaments-manage.html',

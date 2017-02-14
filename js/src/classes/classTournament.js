@@ -25,12 +25,12 @@ function Tournament (importTournament, playerObjects) {
 	this.trackPerGameSportsmanship = true;
 	this.warnSportsmanship = 2;
 
-	this.scoring = Array();
+	this.scoring =
 	this.extraPoints = Array();
 
-	this.paintingPoints = Array();
-	this.compPoints = Array();
-	this.sportsPoints = Array();
+	this.pointsPainting = Array();
+	this.pointsComposition = Array();
+	this.pointsSportsmanship = Array();
 
 	this.currentRound = 0;
 	this.matches = Array();
@@ -49,6 +49,15 @@ function Tournament (importTournament, playerObjects) {
 			for( var playerC = 0; playerC < this.playerObjs.length; playerC++ ) {
 				if( typeof( this.scoring[ roundC ][this.playerObjs[playerC].id] ) == "undefined")
 					this.scoring[ roundC ][this.playerObjs[playerC].id] = -1;
+
+				if( typeof( this.pointsPainting[this.playerObjs[playerC].id] ) == "undefined")
+					this.pointsPainting[this.playerObjs[playerC].id] = -1;
+
+				if( typeof( this.pointsComposition[this.playerObjs[playerC].id] ) == "undefined")
+					this.pointsComposition[this.playerObjs[playerC].id] = -1;
+
+				if( typeof( this.pointsSportsmanship[this.playerObjs[playerC].id] ) == "undefined")
+					this.pointsSportsmanship[this.playerObjs[playerC].id] = -1;
 			}
 		}
 	}
@@ -76,6 +85,20 @@ function Tournament (importTournament, playerObjects) {
 			this.totals[ this.playerObjs[ playerC].id ] = playerTotal;
 
 			this.playerObjs[ playerC].pointsBase = playerTotal;
+
+
+			this.playerObjs[ playerC].pointsFinal = this.playerObjs[ playerC].pointsBase;
+
+			if( this.pointsPainting[ this.playerObjs[ playerC].id] > 0 )
+				this.playerObjs[ playerC].pointsFinal += this.pointsPainting[ this.playerObjs[ playerC].id];
+
+			if( this.pointsComposition[ this.playerObjs[ playerC].id] > 0 )
+				this.playerObjs[ playerC].pointsFinal +=  this.pointsComposition[ this.playerObjs[ playerC].id];
+
+
+			if( this.pointsSportsmanship[ this.playerObjs[ playerC].id] > 0 )
+				this.playerObjs[ playerC].pointsFinal += this.pointsSportsmanship[ this.playerObjs[ playerC].id];
+
 		}
 	}
 
@@ -90,10 +113,10 @@ function Tournament (importTournament, playerObjects) {
 			this.matches = importTournament.matches;
 
 		if( typeof(importTournament.created) != "undefined" )
-			this.created = importTournament.created;
+			this.created = new Date(importTournament.created);
 
 		if( typeof(importTournament.updated) != "undefined" )
-			this.updated = importTournament.updated;
+			this.updated = new Date(importTournament.updated);
 
 		if( typeof(importTournament.completed) != "undefined" )
 			this.completed = importTournament.completed;
@@ -103,12 +126,12 @@ function Tournament (importTournament, playerObjects) {
 		if( typeof(importTournament.extraPoints) != "undefined" )
 			this.extraPoints = importTournament.extraPoints;
 
-		if( typeof(importTournament.paintingPoints) != "undefined" )
-			this.paintingPoints = importTournament.paintingPoints;
-		if( typeof(importTournament.compPoints) != "undefined" )
-			this.compPoints = importTournament.compPoints;
-		if( typeof(importTournament.sportsPoints) != "undefined" )
-			this.sportsPoints = importTournament.sportsPoints;
+		if( typeof(importTournament.pointsPainting) != "undefined" )
+			this.pointsPainting = importTournament.pointsPainting;
+		if( typeof(importTournament.pointsComposition) != "undefined" )
+			this.pointsComposition = importTournament.pointsComposition;
+		if( typeof(importTournament.pointsSportsmanship) != "undefined" )
+			this.pointsSportsmanship = importTournament.pointsSportsmanship;
 
 		if( typeof(importTournament.numberOfRounds) != "undefined" )
 			this.numberOfRounds = importTournament.numberOfRounds;

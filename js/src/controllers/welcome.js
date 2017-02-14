@@ -10,6 +10,21 @@ var welcomeArray =
 			});
 
 			$scope.currentWelcomePage = true;
+
+
+			$scope.currentPlayersPage = true;
+			$rootScope.playerList = getPlayersFromLocalStorage();
+
+
+			$rootScope.tournamentList = getTournamentsFromLocalStorage();
+			for( var tC = 0; tC < $rootScope.tournamentList.length; tC++) {
+				$rootScope.tournamentList[ tC ].createPlayerObjs( $rootScope.playerList );
+			}
+
+			$scope.currentTournament = null;
+			if( $rootScope.tournamentList[ localStorage["current_tournament_view"] ] ) {
+				$scope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
+			}
 		}
 	]
 ;

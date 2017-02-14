@@ -13,6 +13,10 @@
 			</div>
 
 			<div ng-show="currentTournament != null">
+				<h4 class="text-center">
+					<span translate="TOURNAMENT_CURRENT_ROUND">Current Round</span>
+					<span ng-bind="currentTournament.currentRound">-1</span>
+				</h4>
 				<table>
 
 					<thead>
@@ -26,24 +30,43 @@
 							<th class="text-center" ng-repeat="n in [].constructor( currentTournament.numberOfRounds ) track by $index">{{$index + 1}}</th>
 							<th class="text-center" translate="TOURNAMENT_BASE_SCORE">Base Score</th>
 
-							<th class="text-center" translate="TOURNAMENT_PAINTING_SCORE">Painting</th>
-							<th class="text-center" translate="TOURNAMENT_COMPOSITION_SCORE">Comp</th>
-							<th class="text-center" translate="TOURNAMENT_SPORTSMANSHIP_SCORE">Sports</th>
+							<th ng-show="currentTournament.scoringPaint" class="text-center" translate="TOURNAMENT_PAINTING_SCORE">Painting</th>
+							<th ng-show="currentTournament.scoringComp" class="text-center" translate="TOURNAMENT_COMPOSITION_SCORE">Comp</th>
+							<th ng-show="currentTournament.scoringSportsmanship" class="text-center" translate="TOURNAMENT_SPORTSMANSHIP_SCORE">Sports</th>
 
 							<th class="text-center" translate="TOURNAMENT_FINAL_SCORE">Final Score</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr ng-repeat="playerObjs in currentTournament.playerObjs">
-							<td>{{playerObjs.name.last}}, {{playerObjs.name.first}} {{playerObjs.name.nick}}</td>
-							<td class="text-center cursor-pointer" ng-click="editScore(playerObjs.id, $index)" ng-repeat="n in [].constructor( currentTournament.numberOfRounds ) track by $index">{{currentTournament.scoring[$index][playerObjs.id]}}</td>
-							<td>{{playerObjs.pointsBase}}</td>
+							<td>
+								<span ng-hide="playerObjs.name.nick != ''">{{playerObjs.name.last}}, {{playerObjs.name.first}}</span>
 
-							<td>{{playerObjs.pointsPainting}}</td>
-							<td>{{playerObjs.pointsComp}}</td>
-							<td>{{playerObjs.pointsSports}}</td>
+								<span ng-show="playerObjs.name.nick != ''">"{{playerObjs.name.nick}}"</span>
+							</td>
 
-							<td>{{playerObjs.pointsFinal}}</td>
+							<td class="text-center" ng-click="editScore(playerObjs.id, $index)" ng-repeat="n in [].constructor( currentTournament.numberOfRounds ) track by $index">
+								<div class="cursor-pointer" ng-show="currentTournament.currentRound > $index && currentTournament.scoring[$index][playerObjs.id] > -1">{{currentTournament.scoring[$index][playerObjs.id]}}</div>
+								<div class="cursor-pointer" ng-show="currentTournament.currentRound > $index && currentTournament.scoring[$index][playerObjs.id] < 0" title="{{ 'TOURNAMENT_NOT_ENTERED' | translate }}" translate="TOURNAMENT_NE">n/e</div>
+
+								<div ng-hide="currentTournament.currentRound > $index" title="{{ 'TOURNAMENT_NOT_AVAILABLE' | translate }}" translate="TOURNAMENT_NA">n/a</div>
+							</td>
+							<td class="text-center">{{playerObjs.pointsBase}}</td>
+
+							<td ng-show="currentTournament.scoringPaint" ng-click="editPaintingScore(playerObjs.id)" class="text-center cursor-pointer"">
+								<div ng-show="currentTournament.pointsPainting[ playerObjs.id ] > -1">{{currentTournament.pointsPainting[ playerObjs.id ]}}</div>
+								<div ng-hide="currentTournament.pointsPainting[ playerObjs.id ] > -1" title="{{ 'TOURNAMENT_NOT_ENTERED' | translate }}" translate="TOURNAMENT_NE">n/a</div>
+							</td>
+							<td ng-show="currentTournament.scoringComp" ng-click="editCompositionScore(playerObjs.id)" class="text-center cursor-pointer"">
+								<div ng-show="currentTournament.pointsComposition[ playerObjs.id ] > -1">{{currentTournament.pointsComposition[ playerObjs.id ]}}</div>
+								<div ng-hide="currentTournament.pointsComposition[ playerObjs.id ] > -1" title="{{ 'TOURNAMENT_NOT_ENTERED' | translate }}" translate="TOURNAMENT_NE">n/a</div>
+							</td>
+							<td ng-show="currentTournament.scoringSportsmanship" ng-click="editSportsmanshipScore(playerObjs.id)" class="text-center cursor-pointer"">
+								<div ng-show="currentTournament.pointsSportsmanship[ playerObjs.id ] > -1">{{currentTournament.pointsSportsmanship[ playerObjs.id ]}}</div>
+								<div ng-hide="currentTournament.pointsSportsmanship[ playerObjs.id ] > -1" title="{{ 'TOURNAMENT_NOT_ENTERED' | translate }}" translate="TOURNAMENT_NE">n/a</div>
+							</td>
+
+							<td class="text-center">{{playerObjs.pointsFinal}}</td>
 						</tr>
 					</tbody>
 				</table>

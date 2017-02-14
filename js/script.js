@@ -50,6 +50,12 @@ var globalRoutes = 	[
 			controller  : 'controllerPlayersManage'
 		})
 
+		// Manage Players
+		.when('/players-deleted', {
+			templateUrl : 'pages/players-deleted.html',
+			controller  : 'controllerPlayersManage'
+		})
+
 		// Manage Tournaments
 		.when('/tournaments-manage', {
 			templateUrl : 'pages/tournaments-manage.html',
@@ -242,6 +248,12 @@ function sortByNames(a,b) {
   if (a.name.nick > b.name.nick)
     return 1;
   return 0;
+}
+
+function formatDate( incomingDate ) {
+	var dateFormat = require('dateformat');
+
+	return dateFormat(incomingDate, "dddd, mmmm dS, yyyy, h:MM:ss TT");
 }
 
 
@@ -734,30 +746,37 @@ function Player ( importPlayer ) {
 	this.updated = new Date();
 
 	this.active = true;
+	this.deleted = false;
 	this.id = -1;
 
 	if( typeof(importPlayer) != "undefined" ) {
 		if( typeof(importPlayer.email) != "undefined") {
 			this.name = {
-				first: importPlayer.name.first,
-				last: importPlayer.name.last,
-				nick: importPlayer.name.nick,
+				first: importPlayer.name.first.trim(),
+				last: importPlayer.name.last.trim(),
+				nick: importPlayer.name.nick.trim(),
 			};
 		}
 
 		if( typeof(importPlayer.created) != "undefined" )
-			this.created = importPlayer.created;
+			this.created = new Date( importPlayer.created );
 
 		if( typeof(importPlayer.updated) != "undefined" )
-			this.updated = importPlayer.updated;
+			this.updated = new Date( importPlayer.updated );
 
 		if( typeof(importPlayer.email) != "undefined")
 			this.email = importPlayer.email;
+
 		if( typeof(importPlayer.phone1) != "undefined")
 			this.phone1 = importPlayer.phone1;
 
 		if( typeof(importPlayer.active) != "undefined")
 			this.active = importPlayer.active;
+
+		if( typeof(importPlayer.deleted) != "undefined")
+			this.deleted = importPlayer.deleted;
+
+
 		if( typeof(importPlayer.id) != "undefined")
 			this.id = importPlayer.id;
 	}
@@ -794,12 +813,12 @@ function Tournament (importTournament, playerObjects) {
 	this.trackPerGameSportsmanship = true;
 	this.warnSportsmanship = 2;
 
-	this.scoring = Array();
+	this.scoring =
 	this.extraPoints = Array();
 
-	this.paintingPoints = Array();
-	this.compPoints = Array();
-	this.sportsPoints = Array();
+	this.pointsPainting = Array();
+	this.pointsComposition = Array();
+	this.pointsSportsmanship = Array();
 
 	this.currentRound = 0;
 	this.matches = Array();
@@ -818,6 +837,15 @@ function Tournament (importTournament, playerObjects) {
 			for( var playerC = 0; playerC < this.playerObjs.length; playerC++ ) {
 				if( typeof( this.scoring[ roundC ][this.playerObjs[playerC].id] ) == "undefined")
 					this.scoring[ roundC ][this.playerObjs[playerC].id] = -1;
+
+				if( typeof( this.pointsPainting[this.playerObjs[playerC].id] ) == "undefined")
+					this.pointsPainting[this.playerObjs[playerC].id] = -1;
+
+				if( typeof( this.pointsComposition[this.playerObjs[playerC].id] ) == "undefined")
+					this.pointsComposition[this.playerObjs[playerC].id] = -1;
+
+				if( typeof( this.pointsSportsmanship[this.playerObjs[playerC].id] ) == "undefined")
+					this.pointsSportsmanship[this.playerObjs[playerC].id] = -1;
 			}
 		}
 	}
@@ -845,6 +873,20 @@ function Tournament (importTournament, playerObjects) {
 			this.totals[ this.playerObjs[ playerC].id ] = playerTotal;
 
 			this.playerObjs[ playerC].pointsBase = playerTotal;
+
+
+			this.playerObjs[ playerC].pointsFinal = this.playerObjs[ playerC].pointsBase;
+
+			if( this.pointsPainting[ this.playerObjs[ playerC].id] > 0 )
+				this.playerObjs[ playerC].pointsFinal += this.pointsPainting[ this.playerObjs[ playerC].id];
+
+			if( this.pointsComposition[ this.playerObjs[ playerC].id] > 0 )
+				this.playerObjs[ playerC].pointsFinal +=  this.pointsComposition[ this.playerObjs[ playerC].id];
+
+
+			if( this.pointsSportsmanship[ this.playerObjs[ playerC].id] > 0 )
+				this.playerObjs[ playerC].pointsFinal += this.pointsSportsmanship[ this.playerObjs[ playerC].id];
+
 		}
 	}
 
@@ -859,10 +901,10 @@ function Tournament (importTournament, playerObjects) {
 			this.matches = importTournament.matches;
 
 		if( typeof(importTournament.created) != "undefined" )
-			this.created = importTournament.created;
+			this.created = new Date(importTournament.created);
 
 		if( typeof(importTournament.updated) != "undefined" )
-			this.updated = importTournament.updated;
+			this.updated = new Date(importTournament.updated);
 
 		if( typeof(importTournament.completed) != "undefined" )
 			this.completed = importTournament.completed;
@@ -872,12 +914,12 @@ function Tournament (importTournament, playerObjects) {
 		if( typeof(importTournament.extraPoints) != "undefined" )
 			this.extraPoints = importTournament.extraPoints;
 
-		if( typeof(importTournament.paintingPoints) != "undefined" )
-			this.paintingPoints = importTournament.paintingPoints;
-		if( typeof(importTournament.compPoints) != "undefined" )
-			this.compPoints = importTournament.compPoints;
-		if( typeof(importTournament.sportsPoints) != "undefined" )
-			this.sportsPoints = importTournament.sportsPoints;
+		if( typeof(importTournament.pointsPainting) != "undefined" )
+			this.pointsPainting = importTournament.pointsPainting;
+		if( typeof(importTournament.pointsComposition) != "undefined" )
+			this.pointsComposition = importTournament.pointsComposition;
+		if( typeof(importTournament.pointsSportsmanship) != "undefined" )
+			this.pointsSportsmanship = importTournament.pointsSportsmanship;
 
 		if( typeof(importTournament.numberOfRounds) != "undefined" )
 			this.numberOfRounds = importTournament.numberOfRounds;
@@ -927,7 +969,19 @@ var creditsArray =
 
 			$scope.currentCreditsPage = true;
 
+			$scope.currentPlayersPage = true;
+			$rootScope.playerList = getPlayersFromLocalStorage();
 
+
+			$rootScope.tournamentList = getTournamentsFromLocalStorage();
+			for( var tC = 0; tC < $rootScope.tournamentList.length; tC++) {
+				$rootScope.tournamentList[ tC ].createPlayerObjs( $rootScope.playerList );
+			}
+
+			$scope.currentTournament = null;
+			if( $rootScope.tournamentList[ localStorage["current_tournament_view"] ] ) {
+				$scope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
+			}
 		}
 	]
 ;
@@ -957,8 +1011,25 @@ var playersManageArray =
 			});
 
 
+
 			$scope.currentPlayersPage = true;
 			$rootScope.playerList = getPlayersFromLocalStorage();
+
+			$scope.numDeletedPlayers = 0;
+			for( var pC = 0; pC < $rootScope.playerList.length; pC++ ) {
+				if( $rootScope.playerList[pC].deleted )
+					$scope.numDeletedPlayers++;
+			}
+
+			$rootScope.tournamentList = getTournamentsFromLocalStorage();
+			for( var tC = 0; tC < $rootScope.tournamentList.length; tC++) {
+				$rootScope.tournamentList[ tC ].createPlayerObjs( $rootScope.playerList );
+			}
+
+			$scope.currentTournament = null;
+			if( $rootScope.tournamentList[ localStorage["current_tournament_view"] ] ) {
+				$scope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
+			}
 
 			/* *********************************************************
 			 * Confirmation Dialog
@@ -1031,12 +1102,17 @@ var playersManageArray =
 							translation.PLAYERS_DELETE_CONFIRMATION,
 							function() {
 								$scope.showConfirmDialog = false;
-								$rootScope.playerList.splice( indexNumber, 1 );
+								$rootScope.playerList[ indexNumber ].deleted = true;
 								savePlayersToLocalStorage($rootScope.playerList);
 							}
 						);
 					}
 				);
+			}
+
+			$scope.restorePlayerFromDelete = function(indexNumber) {
+				$rootScope.playerList[ indexNumber ].deleted = false;
+				savePlayersToLocalStorage($rootScope.playerList);
 			}
 
 
@@ -1197,6 +1273,10 @@ var tournamentsManageArray =
 				$rootScope.tournamentList[ tC ].createPlayerObjs( $rootScope.playerList );
 			}
 
+			$scope.currentTournament = null;
+			if( $rootScope.tournamentList[ localStorage["current_tournament_view"] ] ) {
+				$scope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
+			}
 
 			/* *********************************************************
 			 * Confirmation Dialog
@@ -1219,7 +1299,7 @@ var tournamentsManageArray =
 				}
 			}
 
-
+			//~ console.log("$rootScope.tournamentList", $rootScope.tournamentList);
 			/* *********************************************************
 			 * Tournament New/Delete/Edit Functions
 			 * ******************************************************* */
@@ -1274,7 +1354,7 @@ var tournamentsManageArray =
 			}
 
 			$scope.newTournamentDialog = function() {
-				console.log("newTournamentDialog() called");
+				//~ console.log("newTournamentDialog() called");
 
 
 				$scope.clearTempTournamentData();
@@ -1398,7 +1478,13 @@ var tournamentsManageArray =
 				$scope.participatingPlayers =  angular.copy($scope.tmpTournament.playerObjs);
 
 				for( var playerC = 0; playerC < $scope.playerList.length; playerC++ ) {
-					if( $scope.tmpTournament.players.indexOf( $scope.playerList[playerC].id ) === -1 ) {
+					if(
+						$scope.tmpTournament.players.indexOf( $scope.playerList[playerC].id ) === -1
+							&&
+						$scope.playerList[playerC].active == true
+							&&
+						$scope.playerList[playerC].deleted == false
+					) {
 						$scope.availablePlayers.push( $scope.playerList[playerC] );
 					}
 				}
@@ -1512,7 +1598,9 @@ var tournamentsRunArray =
 				$rootScope.subtitle_tag = "&raquo; " + translation.WELCOME_BUTTON_MANAGE_TOURNAMENTS;
 			});
 
-			$scope.currentTournamentPage = true;
+			//$scope.currentTournamentPage = true;
+
+			$scope.currentTournamentsRun = true;
 
 			$rootScope.playerList = getPlayersFromLocalStorage();
 
@@ -1533,6 +1621,18 @@ var tournamentsRunArray =
 
 			$scope.editScore = function( playerID, roundIndex ) {
 				console.log("editScore(" + playerID + ", " + roundIndex + ")");
+			}
+
+			$scope.editPaintingScore = function( playerID ) {
+				console.log("editPaintingScore(" + playerID + ")");
+			}
+
+			$scope.editCompositionScore = function( playerID ) {
+				console.log("editCompositionScore(" + playerID + ")");
+			}
+
+			$scope.editSportsmanshipScore = function( playerID ) {
+				console.log("editSportsmanshipScore(" + playerID + ")");
 			}
 
 		}
@@ -1565,6 +1665,19 @@ var settingsArray = [
 
 		$scope.currentSettingsPage = true;
 
+			$scope.currentPlayersPage = true;
+			$rootScope.playerList = getPlayersFromLocalStorage();
+
+
+			$rootScope.tournamentList = getTournamentsFromLocalStorage();
+			for( var tC = 0; tC < $rootScope.tournamentList.length; tC++) {
+				$rootScope.tournamentList[ tC ].createPlayerObjs( $rootScope.playerList );
+			}
+
+			$scope.currentTournament = null;
+			if( $rootScope.tournamentList[ localStorage["current_tournament_view"] ] ) {
+				$scope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
+			}
 
 		$scope.available_languages = Array();
 		$scope.users_language = {};
@@ -1640,6 +1753,21 @@ var welcomeArray =
 			});
 
 			$scope.currentWelcomePage = true;
+
+
+			$scope.currentPlayersPage = true;
+			$rootScope.playerList = getPlayersFromLocalStorage();
+
+
+			$rootScope.tournamentList = getTournamentsFromLocalStorage();
+			for( var tC = 0; tC < $rootScope.tournamentList.length; tC++) {
+				$rootScope.tournamentList[ tC ].createPlayerObjs( $rootScope.playerList );
+			}
+
+			$scope.currentTournament = null;
+			if( $rootScope.tournamentList[ localStorage["current_tournament_view"] ] ) {
+				$scope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
+			}
 		}
 	]
 ;
@@ -1718,6 +1846,8 @@ available_languages.push ({
 		GENERAL_EXPORT: "Export",
 		GENERAL_SAVE: "Save",
 		GENERAL_ADD: "Add",
+		GENERAL_PLAYER: 'Player',
+		GENERAL_ITEM_RESTORE: "Restore",
 
 		GENERAL_ITEM_EDIT: "Edit Item",
 		GENERAL_ITEM_REMOVE: "Remove Item",
@@ -1742,6 +1872,10 @@ available_languages.push ({
 		GENERAL_ADVANCED: "Advanced",
 		GENERAL_CLOSE: "Close",
 		GENERAL_ERROR: "Error",
+		GENERAL_CREATED: "Created",
+		GENERAL_UPDATED: "Updated",
+		GENERAL_FINISHED: "Finished",
+		GENERAL_FINISHED: "Deleted",
 
 		GENERAL_ROTATE_TO_LANDSCAPE: "Please rotate your device to landscape for optimal viewing",
 
@@ -1752,6 +1886,8 @@ available_languages.push ({
 		PLAYERS_DELETE_CONFIRMATION: "Are you sure you want to delete this player?",
 		PLAYERS_IMPORT_INSTRUCTIONS: "To import players into this app, navigate to your Players.json file you have saved.",
 		PLAYERS_DOWNLOAD_INSTRUCTIONS: "Click on the button below to download the current Players data object",
+		PLAYERS_RETURN_TO_MANAGE: "Return to Player Management",
+		PLAYERS_DELETED_PLAYERS: "Deleted Players",
 
 		TOURNAMENTS_DELETE_CONFIRMATION: "Are you sure you want to delete this tournament?",
 		TOURNAMENTS_IMPORT_INSTRUCTIONS: "To import tournaments into this app, navigate to your Tournaments.json file you have saved. <strong>Be sure that your Players.json and Tournaments.json match, otherwise you may have orphan or wrong players!</strong>",
@@ -1788,6 +1924,14 @@ available_languages.push ({
 		TOURNAMENT_PAINTING_SCORE: "Painting Score",
 		TOURNAMENT_COMPOSITION_SCORE: "Comp Score",
 		TOURNAMENT_SPORTSMANSHIP_SCORE: "Sports Score",
+		TOURNAMENT_CURRENT_ROUND: "Current Round:",
+		TOURNAMENT_NA: "n/a",
+		TOURNAMENT_NE: "n/e",
+		TOURNAMENT_NOT_AVAILABLE: "not available",
+		TOURNAMENT_NOT_ENTERED: "not entered",
+		TOURNAMENTS_FINISHED: "Finished",
+		TOURNAMENTS_ROUND_NO: "Round #",
+
 
 		WELCOME_BUTTON_MANAGE_PLAYERS: "Manage Players",
 		WELCOME_BUTTON_MANAGE_PLAYERS_DESC: "Before you can actually set up a tournament, you'll probably need to add some players here.",

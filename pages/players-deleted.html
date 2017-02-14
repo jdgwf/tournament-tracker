@@ -1,0 +1,45 @@
+<div ng-include="'pages/global-header.html'"></div>
+<div ng-include="'pages/dialogs.html'"></div>
+<div class="row">
+
+	<div class="column small-12">
+
+		<fieldset class="fieldset">
+			<legend translate="PLAYERS_DELETED_PLAYERS">Manage Players</legend>
+			<div class="text-right">
+				<a href="#/players-manage/" class="button primary" translate="PLAYERS_RETURN_TO_MANAGE">Return to Management</a>
+			</div>
+			<table>
+				<thead>
+					<tr>
+						<th translate="GENERAL_NAME_FIRST">First Name</th>
+						<th translate="GENERAL_NAME_LAST">Last Name</th>
+						<th translate="GENERAL_NAME_NICK">Nickname</th>
+						<th class="hide-for-small-only" translate="GENERAL_EMAIL">Email</th>
+						<th class="hide-for-small-only" translate="GENERAL_PHONE">Phone</th>
+
+						<th>&nbsp;</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr ng-repeat="playerObj in playerList track by $index">
+
+							<td ng-show="playerObj.deleted">{{ playerObj.name.first }}</td>
+							<td ng-show="playerObj.deleted">{{ playerObj.name.last }}</td>
+							<td ng-show="playerObj.deleted">{{ playerObj.name.nick }}</td>
+							<td ng-show="playerObj.deleted" class="hide-for-small-only">{{ playerObj.email }}</td>
+							<td ng-show="playerObj.deleted" class="hide-for-small-only">{{ playerObj.phone1 }}</td>
+							<td ng-show="playerObj.deleted" class="no-wrap larger-font">
+								<a ng-click="restorePlayerFromDelete( $index );" title="{{ 'GENERAL_ITEM_RESTORE' | translate }}"><i class="fa fa-magic"></i></a>
+							</td>
+					</tr>
+				</tbody>
+
+				<tfoot>
+				</tfoot>
+			</table>
+		</fieldset>
+
+	</div>
+</div>

@@ -47,6 +47,8 @@ available_languages.push ({
 		GENERAL_EXPORT: "Export",
 		GENERAL_SAVE: "Save",
 		GENERAL_ADD: "Add",
+		GENERAL_PLAYER: 'Player',
+		GENERAL_ITEM_RESTORE: "Restore",
 
 		GENERAL_ITEM_EDIT: "Edit Item",
 		GENERAL_ITEM_REMOVE: "Remove Item",
@@ -71,6 +73,10 @@ available_languages.push ({
 		GENERAL_ADVANCED: "Advanced",
 		GENERAL_CLOSE: "Close",
 		GENERAL_ERROR: "Error",
+		GENERAL_CREATED: "Created",
+		GENERAL_UPDATED: "Updated",
+		GENERAL_FINISHED: "Finished",
+		GENERAL_FINISHED: "Deleted",
 
 		GENERAL_ROTATE_TO_LANDSCAPE: "Please rotate your device to landscape for optimal viewing",
 
@@ -81,6 +87,8 @@ available_languages.push ({
 		PLAYERS_DELETE_CONFIRMATION: "Are you sure you want to delete this player?",
 		PLAYERS_IMPORT_INSTRUCTIONS: "To import players into this app, navigate to your Players.json file you have saved.",
 		PLAYERS_DOWNLOAD_INSTRUCTIONS: "Click on the button below to download the current Players data object",
+		PLAYERS_RETURN_TO_MANAGE: "Return to Player Management",
+		PLAYERS_DELETED_PLAYERS: "Deleted Players",
 
 		TOURNAMENTS_DELETE_CONFIRMATION: "Are you sure you want to delete this tournament?",
 		TOURNAMENTS_IMPORT_INSTRUCTIONS: "To import tournaments into this app, navigate to your Tournaments.json file you have saved. <strong>Be sure that your Players.json and Tournaments.json match, otherwise you may have orphan or wrong players!</strong>",
@@ -117,6 +125,14 @@ available_languages.push ({
 		TOURNAMENT_PAINTING_SCORE: "Painting Score",
 		TOURNAMENT_COMPOSITION_SCORE: "Comp Score",
 		TOURNAMENT_SPORTSMANSHIP_SCORE: "Sports Score",
+		TOURNAMENT_CURRENT_ROUND: "Current Round:",
+		TOURNAMENT_NA: "n/a",
+		TOURNAMENT_NE: "n/e",
+		TOURNAMENT_NOT_AVAILABLE: "not available",
+		TOURNAMENT_NOT_ENTERED: "not entered",
+		TOURNAMENTS_FINISHED: "Finished",
+		TOURNAMENTS_ROUND_NO: "Round #",
+
 
 		WELCOME_BUTTON_MANAGE_PLAYERS: "Manage Players",
 		WELCOME_BUTTON_MANAGE_PLAYERS_DESC: "Before you can actually set up a tournament, you'll probably need to add some players here.",

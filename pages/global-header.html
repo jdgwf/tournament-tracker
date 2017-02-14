@@ -7,12 +7,13 @@
 
 			<a href="#/players-manage/" ng-class="{currentItem:currentPlayersPage == true}" title="{{ 'MENU_TITLE_MANAGE_PLAYERS' | translate }}"><i class="fa fa-users"></i></a>
 			<a href="#/tournaments-manage/" ng-class="{currentItem:currentTournamentsPage == true}" title="{{ 'MENU_TITLE_MANAGE_TOURNAMENTS' | translate }}"><i class="fa fa-table"></i></a>
-
+			<a ng-show="currentTournament" href="#/tournaments-run/" ng-class="{currentItem:currentTournamentsRun == true}" title="{{ 'MENU_TITLE_CURRENT_TOURNAMENT' | translate }}"><i class="fa fa-play"></i></a>
 		</div>
 		<div class="text-center columns small-4 main-menu no-wrap">
 			<div ng-show="currentPlayersPage">
 				<a ng-click="newPlayerDialog()" title="{{ 'MENU_TITLE_ADD_PLAYER' | translate }}"><i class="fa fa-plus"></i></a>
 				<a ng-click="importExportPlayersDialog()" title="{{ 'MENU_TITLE_EXPORT_PLAYERS' | translate }}"><i class="fa fa-file-code-o"></i></a>
+				<a href="#/players-deleted/" ng-show="numDeletedPlayers > 0" title="{{ 'PLAYERS_DELETED_PLAYERS' | translate }}"><i class="fa fa-trash"></i></a>
 
 			</div>
 			<div ng-show="currentTournamentsPage">

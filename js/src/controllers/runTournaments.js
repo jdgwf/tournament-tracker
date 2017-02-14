@@ -10,7 +10,9 @@ var tournamentsRunArray =
 				$rootScope.subtitle_tag = "&raquo; " + translation.WELCOME_BUTTON_MANAGE_TOURNAMENTS;
 			});
 
-			$scope.currentTournamentPage = true;
+			//$scope.currentTournamentPage = true;
+
+			$scope.currentTournamentsRun = true;
 
 			$rootScope.playerList = getPlayersFromLocalStorage();
 
@@ -31,6 +33,18 @@ var tournamentsRunArray =
 
 			$scope.editScore = function( playerID, roundIndex ) {
 				console.log("editScore(" + playerID + ", " + roundIndex + ")");
+			}
+
+			$scope.editPaintingScore = function( playerID ) {
+				console.log("editPaintingScore(" + playerID + ")");
+			}
+
+			$scope.editCompositionScore = function( playerID ) {
+				console.log("editCompositionScore(" + playerID + ")");
+			}
+
+			$scope.editSportsmanshipScore = function( playerID ) {
+				console.log("editSportsmanshipScore(" + playerID + ")");
 			}
 
 		}

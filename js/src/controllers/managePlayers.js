@@ -11,8 +11,25 @@ var playersManageArray =
 			});
 
 
+
 			$scope.currentPlayersPage = true;
 			$rootScope.playerList = getPlayersFromLocalStorage();
+
+			$scope.numDeletedPlayers = 0;
+			for( var pC = 0; pC < $rootScope.playerList.length; pC++ ) {
+				if( $rootScope.playerList[pC].deleted )
+					$scope.numDeletedPlayers++;
+			}
+
+			$rootScope.tournamentList = getTournamentsFromLocalStorage();
+			for( var tC = 0; tC < $rootScope.tournamentList.length; tC++) {
+				$rootScope.tournamentList[ tC ].createPlayerObjs( $rootScope.playerList );
+			}
+
+			$scope.currentTournament = null;
+			if( $rootScope.tournamentList[ localStorage["current_tournament_view"] ] ) {
+				$scope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
+			}
 
 			/* *********************************************************
 			 * Confirmation Dialog
@@ -85,12 +102,17 @@ var playersManageArray =
 							translation.PLAYERS_DELETE_CONFIRMATION,
 							function() {
 								$scope.showConfirmDialog = false;
-								$rootScope.playerList.splice( indexNumber, 1 );
+								$rootScope.playerList[ indexNumber ].deleted = true;
 								savePlayersToLocalStorage($rootScope.playerList);
 							}
 						);
 					}
 				);
+			}
+
+			$scope.restorePlayerFromDelete = function(indexNumber) {
+				$rootScope.playerList[ indexNumber ].deleted = false;
+				savePlayersToLocalStorage($rootScope.playerList);
 			}
 
 
