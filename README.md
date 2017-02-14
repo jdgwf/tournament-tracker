@@ -4,7 +4,7 @@ Application for tracking and scoring various Miniature Wargame Tournaments
 
 ##Development
 ### Technology
-This application is an Angular Javascript application that allows a user to create a BattleMech (and evenutually more!) from any device with access to a modern web browser.
+This application is an Angular Javascript application that allows a user to create and run miniature wargame tournaments from any device with access to a modern web browser.
 
 The tools are powered by HTML, Foundation 6 and AngularJS. All data and logic are then compiled and handled by grunt via npm.
 
