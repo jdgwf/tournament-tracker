@@ -1267,11 +1267,12 @@ var playersManageArray =
 								$rootScope.playerList = $rootScope.playerList.concat( objectified );
 
 								savePlayersToLocalStorage($rootScope.playerList);
+
+								$scope.getNumberOfDeleted();
 							}
 						}
 
 					};
-
 
 
 					fReader.readAsText( file );
