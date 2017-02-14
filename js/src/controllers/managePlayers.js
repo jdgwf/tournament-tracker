@@ -15,11 +15,7 @@ var playersManageArray =
 			$scope.currentPlayersPage = true;
 			$rootScope.playerList = getPlayersFromLocalStorage();
 
-			$scope.numDeletedPlayers = 0;
-			for( var pC = 0; pC < $rootScope.playerList.length; pC++ ) {
-				if( $rootScope.playerList[pC].deleted )
-					$scope.numDeletedPlayers++;
-			}
+
 
 			$rootScope.tournamentList = getTournamentsFromLocalStorage();
 			for( var tC = 0; tC < $rootScope.tournamentList.length; tC++) {
@@ -30,6 +26,22 @@ var playersManageArray =
 			if( $rootScope.tournamentList[ localStorage["current_tournament_view"] ] ) {
 				$scope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
 			}
+
+			$scope.getNumberOfDeleted = function() {
+				$scope.deletedPlayers = Array();
+				$scope.activePlayers = Array();
+
+				for( var pC = 0; pC < $rootScope.playerList.length; pC++ ) {
+					if( $rootScope.playerList[pC].deleted )
+						$scope.deletedPlayers.push( $rootScope.playerList[pC] );
+					else
+						$scope.activePlayers.push( $rootScope.playerList[pC] );
+				}
+
+				$scope.numDeletedPlayers = $scope.deletedPlayers.length;
+			}
+
+			$scope.getNumberOfDeleted();
 
 			/* *********************************************************
 			 * Confirmation Dialog
@@ -93,7 +105,7 @@ var playersManageArray =
 
 
 
-			$scope.deletePlayerDialog = function(indexNumber) {
+			$scope.deletePlayerDialog = function(playerID) {
 				$translate([
 					'PLAYERS_DELETE_CONFIRMATION'
 				]).then(
@@ -102,30 +114,44 @@ var playersManageArray =
 							translation.PLAYERS_DELETE_CONFIRMATION,
 							function() {
 								$scope.showConfirmDialog = false;
-								$rootScope.playerList[ indexNumber ].deleted = true;
-								savePlayersToLocalStorage($rootScope.playerList);
+								for( var pC = 0; pC < $rootScope.playerList.length; pC++ ) {
+									if( playerID == $rootScope.playerList[ pC ].id ) {
+										$rootScope.playerList[ pC ].deleted = true;
+										savePlayersToLocalStorage($rootScope.playerList);
+										$scope.getNumberOfDeleted();
+									}
+								}
+
 							}
 						);
 					}
 				);
 			}
 
-			$scope.restorePlayerFromDelete = function(indexNumber) {
-				$rootScope.playerList[ indexNumber ].deleted = false;
-				savePlayersToLocalStorage($rootScope.playerList);
+			$scope.restorePlayerFromDelete = function(playerID) {
+				//~ console.log("restorePlayerFromDelete(" + playerID + ") called");
+				//playerObj = getPlayerByID( $rootScope.playerList, playerID );
+				indexNumber = getPlayerIndexByID( $rootScope.playerList, playerID );
+				if( $rootScope.playerList[indexNumber] ) {
+					$rootScope.playerList[indexNumber].deleted = false;
+					savePlayersToLocalStorage($rootScope.playerList);
+					$scope.getNumberOfDeleted();
+				}
 			}
 
 
 
 
-			$scope.editPlayerDialog = function(indexNumber) {
-				//~ console.log("editPlayerDialog() called");
+			$scope.editPlayerDialog = function(playerID) {
+				//~ console.log("editPlayerDialog(" + playerID + ") called");
+				//~ playerObj = getPlayerByID( $rootScope.playerList, playerID );
+				indexNumber = getPlayerIndexByID( $rootScope.playerList, playerID );
+				if( $rootScope.playerList[indexNumber] ) {
+					$scope.tmpPlayer = angular.copy( $rootScope.playerList[indexNumber] );
 
-				if( $rootScope.playerList[ indexNumber] ) {
-					$scope.tmpPlayer = angular.copy($rootScope.playerList[ indexNumber ]);
-
-					$scope.tmpPlayerIndex  = indexNumber;
+					$scope.tmpPlayerIndex = indexNumber;
 					$scope.showEditPlayerDialog = true;
+
 				}
 			}
 
@@ -155,7 +181,7 @@ var playersManageArray =
 						$scope.tmpPlayer.id = newID;
 					}
 					//~ console.log( $scope.tmpPlayer.id );
-					$rootScope.playerList[ $scope.tmpPlayerIndex] = new Player( $scope.tmpPlayer );
+					$rootScope.playerList[ $scope.tmpPlayerIndex ] = new Player( $scope.tmpPlayer );
 				} else {
 					newID = getNextPlayerID($rootScope.playerList);
 					$scope.tmpPlayer.created = new Date();
@@ -167,6 +193,7 @@ var playersManageArray =
 
 
 				savePlayersToLocalStorage($rootScope.playerList);
+				$scope.getNumberOfDeleted();
 
 				$scope.clearTempPlayerData();
 			}

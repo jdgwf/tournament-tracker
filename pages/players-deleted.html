@@ -23,15 +23,15 @@
 				</thead>
 
 				<tbody>
-					<tr ng-repeat="playerObj in playerList track by $index">
+					<tr ng-repeat="playerObj in deletedPlayers track by $index">
 
-							<td ng-show="playerObj.deleted">{{ playerObj.name.first }}</td>
-							<td ng-show="playerObj.deleted">{{ playerObj.name.last }}</td>
-							<td ng-show="playerObj.deleted">{{ playerObj.name.nick }}</td>
-							<td ng-show="playerObj.deleted" class="hide-for-small-only">{{ playerObj.email }}</td>
-							<td ng-show="playerObj.deleted" class="hide-for-small-only">{{ playerObj.phone1 }}</td>
-							<td ng-show="playerObj.deleted" class="no-wrap larger-font">
-								<a ng-click="restorePlayerFromDelete( $index );" title="{{ 'GENERAL_ITEM_RESTORE' | translate }}"><i class="fa fa-magic"></i></a>
+							<td>{{ playerObj.name.first }}</td>
+							<td>{{ playerObj.name.last }}</td>
+							<td>{{ playerObj.name.nick }}</td>
+							<td class="hide-for-small-only">{{ playerObj.email }}</td>
+							<td class="hide-for-small-only">{{ playerObj.phone1 }}</td>
+							<td class="no-wrap larger-font">
+								<a ng-click="restorePlayerFromDelete( playerObj.id );" title="{{ 'GENERAL_ITEM_RESTORE' | translate }}"><i class="fa fa-magic"></i></a>
 							</td>
 					</tr>
 				</tbody>
@@ -39,6 +39,8 @@
 				<tfoot>
 				</tfoot>
 			</table>
+			<div class="text-center" ng-show="numDeletedPlayers == 0" translate="PLAYERS_NO_DELETED_PLAYERS">You have no deleted players</div>
+
 		</fieldset>
 
 	</div>

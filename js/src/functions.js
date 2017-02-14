@@ -78,6 +78,14 @@ function getPlayerByID( playersList, playerID ) {
 	return null;
 }
 
+function getPlayerIndexByID( playersList, playerID ) {
+	for( var playerCount = 0; playerCount < playersList.length; playerCount++ ) {
+		if( playersList[ playerCount ].id == playerID )
+			return playerCount;
+	}
+	return -1;
+}
+
 function getNextPlayerID( playersObject ) {
 	maxID = 0;
 	for( var playerCount = 0; playerCount < playersObject.length; playerCount++ ) {

@@ -224,6 +224,14 @@ function getPlayerByID( playersList, playerID ) {
 	return null;
 }
 
+function getPlayerIndexByID( playersList, playerID ) {
+	for( var playerCount = 0; playerCount < playersList.length; playerCount++ ) {
+		if( playersList[ playerCount ].id == playerID )
+			return playerCount;
+	}
+	return -1;
+}
+
 function getNextPlayerID( playersObject ) {
 	maxID = 0;
 	for( var playerCount = 0; playerCount < playersObject.length; playerCount++ ) {
@@ -969,7 +977,6 @@ var creditsArray =
 
 			$scope.currentCreditsPage = true;
 
-			$scope.currentPlayersPage = true;
 			$rootScope.playerList = getPlayersFromLocalStorage();
 
 
@@ -985,7 +992,6 @@ var creditsArray =
 		}
 	]
 ;
-
 
 
 angular.module("webApp").controller(
@@ -1015,11 +1021,7 @@ var playersManageArray =
 			$scope.currentPlayersPage = true;
 			$rootScope.playerList = getPlayersFromLocalStorage();
 
-			$scope.numDeletedPlayers = 0;
-			for( var pC = 0; pC < $rootScope.playerList.length; pC++ ) {
-				if( $rootScope.playerList[pC].deleted )
-					$scope.numDeletedPlayers++;
-			}
+
 
 			$rootScope.tournamentList = getTournamentsFromLocalStorage();
 			for( var tC = 0; tC < $rootScope.tournamentList.length; tC++) {
@@ -1030,6 +1032,22 @@ var playersManageArray =
 			if( $rootScope.tournamentList[ localStorage["current_tournament_view"] ] ) {
 				$scope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
 			}
+
+			$scope.getNumberOfDeleted = function() {
+				$scope.deletedPlayers = Array();
+				$scope.activePlayers = Array();
+
+				for( var pC = 0; pC < $rootScope.playerList.length; pC++ ) {
+					if( $rootScope.playerList[pC].deleted )
+						$scope.deletedPlayers.push( $rootScope.playerList[pC] );
+					else
+						$scope.activePlayers.push( $rootScope.playerList[pC] );
+				}
+
+				$scope.numDeletedPlayers = $scope.deletedPlayers.length;
+			}
+
+			$scope.getNumberOfDeleted();
 
 			/* *********************************************************
 			 * Confirmation Dialog
@@ -1093,7 +1111,7 @@ var playersManageArray =
 
 
 
-			$scope.deletePlayerDialog = function(indexNumber) {
+			$scope.deletePlayerDialog = function(playerID) {
 				$translate([
 					'PLAYERS_DELETE_CONFIRMATION'
 				]).then(
@@ -1102,30 +1120,44 @@ var playersManageArray =
 							translation.PLAYERS_DELETE_CONFIRMATION,
 							function() {
 								$scope.showConfirmDialog = false;
-								$rootScope.playerList[ indexNumber ].deleted = true;
-								savePlayersToLocalStorage($rootScope.playerList);
+								for( var pC = 0; pC < $rootScope.playerList.length; pC++ ) {
+									if( playerID == $rootScope.playerList[ pC ].id ) {
+										$rootScope.playerList[ pC ].deleted = true;
+										savePlayersToLocalStorage($rootScope.playerList);
+										$scope.getNumberOfDeleted();
+									}
+								}
+
 							}
 						);
 					}
 				);
 			}
 
-			$scope.restorePlayerFromDelete = function(indexNumber) {
-				$rootScope.playerList[ indexNumber ].deleted = false;
-				savePlayersToLocalStorage($rootScope.playerList);
+			$scope.restorePlayerFromDelete = function(playerID) {
+				//~ console.log("restorePlayerFromDelete(" + playerID + ") called");
+				//playerObj = getPlayerByID( $rootScope.playerList, playerID );
+				indexNumber = getPlayerIndexByID( $rootScope.playerList, playerID );
+				if( $rootScope.playerList[indexNumber] ) {
+					$rootScope.playerList[indexNumber].deleted = false;
+					savePlayersToLocalStorage($rootScope.playerList);
+					$scope.getNumberOfDeleted();
+				}
 			}
 
 
 
 
-			$scope.editPlayerDialog = function(indexNumber) {
-				//~ console.log("editPlayerDialog() called");
+			$scope.editPlayerDialog = function(playerID) {
+				//~ console.log("editPlayerDialog(" + playerID + ") called");
+				//~ playerObj = getPlayerByID( $rootScope.playerList, playerID );
+				indexNumber = getPlayerIndexByID( $rootScope.playerList, playerID );
+				if( $rootScope.playerList[indexNumber] ) {
+					$scope.tmpPlayer = angular.copy( $rootScope.playerList[indexNumber] );
 
-				if( $rootScope.playerList[ indexNumber] ) {
-					$scope.tmpPlayer = angular.copy($rootScope.playerList[ indexNumber ]);
-
-					$scope.tmpPlayerIndex  = indexNumber;
+					$scope.tmpPlayerIndex = indexNumber;
 					$scope.showEditPlayerDialog = true;
+
 				}
 			}
 
@@ -1155,7 +1187,7 @@ var playersManageArray =
 						$scope.tmpPlayer.id = newID;
 					}
 					//~ console.log( $scope.tmpPlayer.id );
-					$rootScope.playerList[ $scope.tmpPlayerIndex] = new Player( $scope.tmpPlayer );
+					$rootScope.playerList[ $scope.tmpPlayerIndex ] = new Player( $scope.tmpPlayer );
 				} else {
 					newID = getNextPlayerID($rootScope.playerList);
 					$scope.tmpPlayer.created = new Date();
@@ -1167,6 +1199,7 @@ var playersManageArray =
 
 
 				savePlayersToLocalStorage($rootScope.playerList);
+				$scope.getNumberOfDeleted();
 
 				$scope.clearTempPlayerData();
 			}
@@ -1665,7 +1698,6 @@ var settingsArray = [
 
 		$scope.currentSettingsPage = true;
 
-			$scope.currentPlayersPage = true;
 			$rootScope.playerList = getPlayersFromLocalStorage();
 
 
@@ -1754,8 +1786,6 @@ var welcomeArray =
 
 			$scope.currentWelcomePage = true;
 
-
-			$scope.currentPlayersPage = true;
 			$rootScope.playerList = getPlayersFromLocalStorage();
 
 
@@ -1888,6 +1918,8 @@ available_languages.push ({
 		PLAYERS_DOWNLOAD_INSTRUCTIONS: "Click on the button below to download the current Players data object",
 		PLAYERS_RETURN_TO_MANAGE: "Return to Player Management",
 		PLAYERS_DELETED_PLAYERS: "Deleted Players",
+		PLAYERS_NO_PLAYERS: "There are no players here. Add one by pressing the + at the top of the screen.",
+		PLAYERS_NO_DELETED_PLAYERS: "There are no deleted players",
 
 		TOURNAMENTS_DELETE_CONFIRMATION: "Are you sure you want to delete this tournament?",
 		TOURNAMENTS_IMPORT_INSTRUCTIONS: "To import tournaments into this app, navigate to your Tournaments.json file you have saved. <strong>Be sure that your Players.json and Tournaments.json match, otherwise you may have orphan or wrong players!</strong>",
@@ -1916,6 +1948,7 @@ available_languages.push ({
 		TOURNAMENTS_NO_AVAILABLE_PLAYERS: "There are no available players to add. Please visit the Player Adminsitration screen to add players.",
 		TOURNAMENTS_NO_PLAYERS: "There are no players in this tournament",
 		TOURNAMENTS_NUMBER_OF_ROUNDS: "Number of Rounds",
+		TOURNAMENTS_NO_TOURNAMENTS: "There are no tournaments here. Add one by pressing the + at the top of the screen.",
 
 		TOURNAMENT_IN_PLAY: "Tournament In-Play",
 		TOURNAMENT_NO_CURRENT_TOURNAMENT: "For some reason the tournament that you're trying to reach has been either removed or moved on this device. Please select the Tournament icon above then 'play' an existing tournament",

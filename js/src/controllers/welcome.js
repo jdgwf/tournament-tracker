@@ -11,8 +11,6 @@ var welcomeArray =
 
 			$scope.currentWelcomePage = true;
 
-
-			$scope.currentPlayersPage = true;
 			$rootScope.playerList = getPlayersFromLocalStorage();
 
 

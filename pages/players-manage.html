@@ -9,6 +9,7 @@
 			<table>
 				<thead>
 					<tr>
+						<th>id</th>
 						<th translate="GENERAL_NAME_FIRST">First Name</th>
 						<th translate="GENERAL_NAME_LAST">Last Name</th>
 						<th translate="GENERAL_NAME_NICK">Nickname</th>
@@ -23,20 +24,20 @@
 				</thead>
 
 				<tbody>
-					<tr ng-repeat="playerObj in playerList track by $index">
-
-							<td ng-hide="playerObj.deleted">{{ playerObj.name.first }}</td>
-							<td ng-hide="playerObj.deleted">{{ playerObj.name.last }}</td>
-							<td ng-hide="playerObj.deleted">{{ playerObj.name.nick }}</td>
-							<td ng-hide="playerObj.deleted" class="hide-for-small-only">{{ playerObj.email }}</td>
-							<td ng-hide="playerObj.deleted" class="hide-for-small-only">{{ playerObj.phone1 }}</td>
-							<td ng-hide="playerObj.deleted"><i class="fa fa-check" ng-show="playerObj.active"></i></td>
+					<tr  ng-repeat="playerObj in activePlayers track by $index">
+							<td>{{ playerObj.id }}</td>
+							<td>{{ playerObj.name.first }}</td>
+							<td>{{ playerObj.name.last }}</td>
+							<td>{{ playerObj.name.nick }}</td>
+							<td class="hide-for-small-only">{{ playerObj.email }}</td>
+							<td class="hide-for-small-only">{{ playerObj.phone1 }}</td>
+							<td><i class="fa fa-check" ng-show="playerObj.active"></i></td>
 <!--
 							<td ng-hide="playerObj.deleted"><i class="fa fa-check" ng-show="playerObj.deleted"></i></td>
 -->
-							<td ng-hide="playerObj.deleted" class="no-wrap larger-font">
-								<a ng-click="editPlayerDialog( $index );" title="{{ 'GENERAL_ITEM_EDIT' | translate }}"><i class="fa fa-edit"></i></a>
-								<a ng-click="deletePlayerDialog( $index );" title="{{ 'GENERAL_ITEM_REMOVE' | translate }}"><i class="fa fa-trash"></i></a>
+							<td class="no-wrap larger-font">
+								<a ng-click="editPlayerDialog( playerObj.id );" title="{{ 'GENERAL_ITEM_EDIT' | translate }}"><i class="fa fa-edit"></i></a>
+								<a ng-click="deletePlayerDialog( playerObj.id );" title="{{ 'GENERAL_ITEM_REMOVE' | translate }}"><i class="fa fa-trash"></i></a>
 							</td>
 					</tr>
 				</tbody>
@@ -44,6 +45,7 @@
 				<tfoot>
 				</tfoot>
 			</table>
+			<div class="text-center" ng-show="numPlayers == 0" translate="PLAYERS_NO_PLAYERS">You have no players</div>
 		</fieldset>
 
 	</div>

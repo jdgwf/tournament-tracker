@@ -89,6 +89,8 @@ available_languages.push ({
 		PLAYERS_DOWNLOAD_INSTRUCTIONS: "Click on the button below to download the current Players data object",
 		PLAYERS_RETURN_TO_MANAGE: "Return to Player Management",
 		PLAYERS_DELETED_PLAYERS: "Deleted Players",
+		PLAYERS_NO_PLAYERS: "There are no players here. Add one by pressing the + at the top of the screen.",
+		PLAYERS_NO_DELETED_PLAYERS: "There are no deleted players",
 
 		TOURNAMENTS_DELETE_CONFIRMATION: "Are you sure you want to delete this tournament?",
 		TOURNAMENTS_IMPORT_INSTRUCTIONS: "To import tournaments into this app, navigate to your Tournaments.json file you have saved. <strong>Be sure that your Players.json and Tournaments.json match, otherwise you may have orphan or wrong players!</strong>",
@@ -117,6 +119,7 @@ available_languages.push ({
 		TOURNAMENTS_NO_AVAILABLE_PLAYERS: "There are no available players to add. Please visit the Player Adminsitration screen to add players.",
 		TOURNAMENTS_NO_PLAYERS: "There are no players in this tournament",
 		TOURNAMENTS_NUMBER_OF_ROUNDS: "Number of Rounds",
+		TOURNAMENTS_NO_TOURNAMENTS: "There are no tournaments here. Add one by pressing the + at the top of the screen.",
 
 		TOURNAMENT_IN_PLAY: "Tournament In-Play",
 		TOURNAMENT_NO_CURRENT_TOURNAMENT: "For some reason the tournament that you're trying to reach has been either removed or moved on this device. Please select the Tournament icon above then 'play' an existing tournament",

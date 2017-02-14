@@ -11,7 +11,6 @@ var creditsArray =
 
 			$scope.currentCreditsPage = true;
 
-			$scope.currentPlayersPage = true;
 			$rootScope.playerList = getPlayersFromLocalStorage();
 
 
@@ -27,7 +26,6 @@ var creditsArray =
 		}
 	]
 ;
-
 
 
 angular.module("webApp").controller(
