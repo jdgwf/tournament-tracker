@@ -129,13 +129,15 @@ var playersManageArray =
 			}
 
 			$scope.restorePlayerFromDelete = function(playerID) {
-				//~ console.log("restorePlayerFromDelete(" + playerID + ") called");
+				console.log("restorePlayerFromDelete(" + playerID + ") called");
 				//playerObj = getPlayerByID( $rootScope.playerList, playerID );
 				indexNumber = getPlayerIndexByID( $rootScope.playerList, playerID );
 				if( $rootScope.playerList[indexNumber] ) {
 					$rootScope.playerList[indexNumber].deleted = false;
 					savePlayersToLocalStorage($rootScope.playerList);
 					$scope.getNumberOfDeleted();
+				} else {
+					console.log("ERROR", "No playerID " + playerID + " found!");
 				}
 			}
 
