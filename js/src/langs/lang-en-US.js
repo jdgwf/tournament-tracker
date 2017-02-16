@@ -24,6 +24,7 @@ available_languages.push ({
 
 		MENU_TITLE_EXPORT_TOURNAMENTS: "Click here to import and/or export tournaments",
 		MENU_TITLE_ADD_TOURNAMENT: "Click here to add a tournament",
+		MENU_TITLE_CURRENT_TOURNAMENT: "Click here to return to your in-progress tournament",
 
 		GENERAL_SELECT_LANGUAGE: "Select Langage",
 		GENERAL_SETTINGS: "Settings",
@@ -49,6 +50,7 @@ available_languages.push ({
 		GENERAL_ADD: "Add",
 		GENERAL_PLAYER: 'Player',
 		GENERAL_ITEM_RESTORE: "Restore",
+		GENERAL_BYE: "Bye",
 
 		GENERAL_ITEM_EDIT: "Edit Item",
 		GENERAL_ITEM_REMOVE: "Remove Item",
@@ -78,6 +80,12 @@ available_languages.push ({
 		GENERAL_FINISHED: "Finished",
 		GENERAL_FINISHED: "Deleted",
 		GENERAL_ID: "ID",
+		GENERAL_ROUND: "Round",
+
+		GENERAL_NOT_ENTERED: "Not Entered",
+		GENERAL_WIN: "Win",
+		GENERAL_DRAW: "Draw",
+		GENERAL_LOSS: "Loss",
 
 		GENERAL_ROTATE_TO_LANDSCAPE: "Please rotate your device to landscape for optimal viewing",
 
@@ -103,6 +111,15 @@ available_languages.push ({
 		TOURNAMENTS_EDIT_PLAYERS: "Edit Players",
 		TOURNAMENTS_BASE_SCORING: "Base Scoring",
 		TOURNAMENTS_EXTRA_SCORING: "Extra Scoring",
+
+		TOURNAMENTS_MATCHUP_SETTINGS: "Matchup Settings",
+		TOURNAMENTS_MATCHUP_ORDERING: "Matchup Ordering",
+		TOURNAMENTS_MATCHUP_NO_DUPLICATES: "No duplicate matchups, if possible",
+
+		TOURNAMENTS_MATCHUP_HIGHEST_RANKING: "Highest Ranking",
+		TOURNAMENTS_MATCHUP_RANDOM: "Random",
+
+
 		TOURNAMENTS_PLAYERS: "Players",
 		TOURNAMENTS_GENERAL_SETTINGS: "General Settings",
 		TOURNAMENTS_POINTS_FOR_WIN: "Points for Win",
@@ -130,6 +147,9 @@ available_languages.push ({
 		TOURNAMENT_PAINTING_SCORE: "Painting Score",
 		TOURNAMENT_COMPOSITION_SCORE: "Comp Score",
 		TOURNAMENT_SPORTSMANSHIP_SCORE: "Sports Score",
+		TOURNAMENT_EDIT_PAINTING_SCORE: "Editing Painting Score",
+		TOURNAMENT_EDIT_COMPOSITION_SCORE: "Editing Comp Score",
+		TOURNAMENT_EDIT_SPORTSMANSHIP_SCORE: "Editing Sports Score",
 		TOURNAMENT_CURRENT_ROUND: "Current Round:",
 		TOURNAMENT_NA: "n/a",
 		TOURNAMENT_NE: "n/e",
@@ -137,7 +157,22 @@ available_languages.push ({
 		TOURNAMENT_NOT_ENTERED: "not entered",
 		TOURNAMENTS_FINISHED: "Finished",
 		TOURNAMENTS_ROUND_NO: "Round #",
-
+		TOURNAMENT_PRE_SETUP: "Pre-Setup",
+		TOURNAMENT_FINAL_ROUND: "Final Round",
+		TOURNAMENT_START_FIRST_ROUND: "Start First Round",
+		TOURNAMENT_START_NEXT_ROUND: "Start Next Round",
+		TOURNAMENT_START_LAST_ROUND: "Start Last Round",
+		TOURNAMENT_ROUND_MATCHUPS: "Round Matchups",
+		TOURNAMENT_TABLE_NUMBER: "Table Number",
+		TOURNAMENT_PLAYER_1: "Player 1",
+		TOURNAMENT_PLAYER_2: "Player 2",
+		TOURNAMENT_START_ROUND: "Start Next Round",
+		TOURNAMENT_CLOSE_TOURNAMENT: "Close Tournament",
+		TOURNAMENT_COMPLETE_TOURNAMENT: "Complete Tournament",
+		TOURNAMENT_GAME_IS_BYE: "Game is a bye",
+		TOURNAMENT_START_FINAL_ROUND: "Start Final Round",
+		TOURNAMENT_EDITING_GAME_SCORES: "Editing Game Scores",
+		TOURNAMENT_EXTRA_POINTS: "Extra Points",
 
 		WELCOME_BUTTON_MANAGE_PLAYERS: "Manage Players",
 		WELCOME_BUTTON_MANAGE_PLAYERS_DESC: "Before you can actually set up a tournament, you'll probably need to add some players here.",

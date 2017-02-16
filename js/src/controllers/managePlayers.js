@@ -240,6 +240,8 @@ var playersManageArray =
 						if( textContents.target && textContents.target.result ) {
 							//~ console.log( "textContents.target.result", textContents.target.result );
 							var parsed = JSON.parse( textContents.target.result );
+							playersUpdated = 0;
+							playersCreated = 0;
 							if( parsed ) {
 								objectified = Array();
 								for( var pC = 0; pC < parsed.length; pC++ ) {
@@ -251,11 +253,14 @@ var playersManageArray =
 										if( $scope.importAsNewPlayers ) {
 											newPlayer.id = getNextPlayerID( $rootScope.playerList);
 											objectified.push( newPlayer );
+											playersCreated++;
 										} else {
 											$rootScope.playerList[ playerIDExists ] = newPlayer;
+											playersUpdated++;
 										}
 									} else {
 										objectified.push( newPlayer );
+										playersCreated++;
 									}
 								}
 								$rootScope.playerList = $rootScope.playerList.concat( objectified );

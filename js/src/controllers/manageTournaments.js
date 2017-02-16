@@ -5,9 +5,29 @@ var tournamentsManageArray =
 		'$location',
 		'$scope',
 		function ($rootScope, $translate, $location, $scope) {
-			$translate(['APP_TITLE', 'WELCOME_BUTTON_MANAGE_TOURNAMENTS']).then(function (translation) {
+
+
+			$translate(['APP_TITLE', 'WELCOME_BUTTON_MANAGE_TOURNAMENTS', 'TOURNAMENTS_MATCHUP_HIGHEST_RANKING', 'TOURNAMENTS_MATCHUP_RANDOM']).then(function (translation) {
 				$rootScope.title_tag = translation.WELCOME_BUTTON_MANAGE_TOURNAMENTS + " | " + translation.APP_TITLE;
 				$rootScope.subtitle_tag = "&raquo; " + translation.WELCOME_BUTTON_MANAGE_TOURNAMENTS;
+
+				$scope.tournamentMatchupOptions = Array();
+
+				$scope.tournamentMatchupOptions.push(
+					{
+							id: "highest-ranking",
+							label: translation.TOURNAMENTS_MATCHUP_HIGHEST_RANKING
+					}
+				);
+
+				$scope.tournamentMatchupOptions.push(
+					{
+							id: "random",
+							label: translation.TOURNAMENTS_MATCHUP_RANDOM
+					}
+				);
+				$scope.tmpMatchupSelection = $scope.tournamentMatchupOptions[0];
+
 			});
 
 			$scope.currentTournamentsPage = true;
@@ -22,6 +42,8 @@ var tournamentsManageArray =
 			$scope.currentTournament = null;
 			if( $rootScope.tournamentList[ localStorage["current_tournament_view"] ] ) {
 				$scope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
+				if( $scope.currentTournament.playerObjs.length == 0 || $scope.currentTournament.completed )
+					$scope.currentTournament = null;
 			}
 
 			/* *********************************************************
@@ -105,9 +127,18 @@ var tournamentsManageArray =
 
 				$scope.clearTempTournamentData();
 
+				$scope.getMatchupSelection( $scope.tmpTournament.matchupType );
+
 				$scope.showEditTournamentDialog = true;
 			}
 
+			$scope.updateTmpMatchupSelection = function( newValue ) {
+				$scope.tmpMatchupSelection = newValue;
+			}
+
+			$scope.updateNoDuplicateMatchups = function( newValue ) {
+				$scope.tmpTournament.noDuplicateMatchups = newValue;
+			}
 
 
 
@@ -137,6 +168,8 @@ var tournamentsManageArray =
 				if( $rootScope.tournamentList[ indexNumber] ) {
 					$scope.tmpTournament = angular.copy( $rootScope.tournamentList[ indexNumber ] );
 
+					$scope.getMatchupSelection( $scope.tmpTournament.matchupType );
+
 					$scope.tmpTournamentIndex  = indexNumber;
 					$scope.showEditTournamentDialog = true;
 				}
@@ -146,9 +179,18 @@ var tournamentsManageArray =
 				//~ console.log("clearTempTournamentData() called");
 
 				$scope.tmpTournament = new Tournament();
+				$scope.getMatchupSelection( $scope.tmpTournament.matchupType );
 
 				$scope.tmpTournamentIndex = -1;
 
+			}
+
+			$scope.getMatchupSelection = function( matchupID ) {
+				$scope.tmpMatchupSelection = $scope.tournamentMatchupOptions[0];
+				for( var lCounter = 0; lCounter < $scope.tournamentMatchupOptions.length; lCounter++ ) {
+					if( $scope.tournamentMatchupOptions[ lCounter ].id == matchupID )
+						$scope.tmpMatchupSelection = $scope.tournamentMatchupOptions[ lCounter ];
+				}
 			}
 
 			$scope.saveEditTournamentDialog = function() {
@@ -156,12 +198,17 @@ var tournamentsManageArray =
 				//~ console.log("saveEditTournamentDialog() called");
 				$scope.showEditTournamentDialog = false;
 
+				$scope.tmpTournament.matchupType = $scope.tmpMatchupSelection.id;
+
 
 				if( $scope.tmpTournamentIndex > -1 ) {
 					// Save to Index...
 
 					$scope.tmpTournament.updated = new Date();
 					$rootScope.tournamentList[ $scope.tmpTournamentIndex] = $scope.tmpTournament;
+					saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
+
+					$scope.clearTempTournamentData();
 				} else {
 					newID = getNextPlayerID($rootScope.playerList);
 					$scope.tmpTournament.created = new Date();
@@ -169,12 +216,14 @@ var tournamentsManageArray =
 					$scope.tmpTournament.updated = new Date();
 					$rootScope.tournamentList.id = newID;
 					$rootScope.tournamentList.push( $scope.tmpTournament );
+					saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
+
+					$scope.clearTempTournamentData();
+					$scope.editTournamentPlayersDialog( $rootScope.tournamentList.length - 1) ;
 				}
 
 
-				saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
 
-				$scope.clearTempTournamentData();
 			}
 
 			$scope.closeEditTournamentDialog = function() {

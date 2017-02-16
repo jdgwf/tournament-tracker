@@ -63,10 +63,13 @@ function saveTournamentsToLocalStorage( tournamentsObject, playersList ) {
 	for( var tC = 0; tC < tournamentsObject.length; tC++ ) {
 		if( tournamentsObject[tC].playerObjs )
 			delete tournamentsObject[tC].playerObjs;
+		if( tournamentsObject[tC].matchupObjs )
+			delete tournamentsObject[tC].matchupObjs;
 	}
 	localStorage["tournaments_list"] = JSON.stringify( tournamentsObject );
 	for( var tC = 0; tC < tournamentsObject.length; tC++ ) {
 		tournamentsObject[ tC ].createPlayerObjs( playersList );
+		tournamentsObject[ tC ].createMatchupObjs( playersList );
 	}
 }
 
@@ -112,10 +115,43 @@ function sortByNames(a,b) {
   return 0;
 }
 
+function sortByBaseScore(a,b) {
+  if (a.pointsBase > b.pointsBase)
+    return -1;
+  if (a.pointsBase < b.pointsBase)
+    return 1;
+  return 0;
+}
+
+function sortByFinalScore(a,b) {
+  if (a.pointsFinal > b.pointsFinal)
+    return -1;
+  if (a.pointsFinal < b.pointsFinal)
+    return 1;
+  return 0;
+}
+
 function formatDate( incomingDate ) {
 	var dateFormat = require('dateformat');
 
 	return dateFormat(incomingDate, "dddd, mmmm dS, yyyy, h:MM:ss TT");
 }
 
+function shuffleArray(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
 
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
