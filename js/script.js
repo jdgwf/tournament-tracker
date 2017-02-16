@@ -2439,10 +2439,10 @@ available_languages.push ({
 
 	translations: {
 
-		APP_TITLE: '@Gauthic\'s Tournament Tracker',
+		APP_TITLE: 'Tournament Tracker',
 
 		INDEX_WELCOME: 'Welcome',
-		INDEX_H3_CORE: '@Gauthic\'s Tournament Tracker',
+		INDEX_H3_CORE: 'Tournament Tracker',
 
 		MENU_TITLE_HOME: "Click here to go home",
 		MENU_TITLE_MANAGE_PLAYERS: "Click here go to player management",
