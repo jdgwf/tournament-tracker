@@ -81,6 +81,7 @@ available_languages.push ({
 		GENERAL_FINISHED: "Deleted",
 		GENERAL_ID: "ID",
 		GENERAL_ROUND: "Round",
+		GENERAL_RESET: "Reset",
 
 		GENERAL_NOT_ENTERED: "Not Entered",
 		GENERAL_WIN: "Win",
@@ -173,6 +174,10 @@ available_languages.push ({
 		TOURNAMENT_START_FINAL_ROUND: "Start Final Round",
 		TOURNAMENT_EDITING_GAME_SCORES: "Editing Game Scores",
 		TOURNAMENT_EXTRA_POINTS: "Extra Points",
+		TOURNAMENT_SWAP: "Swap",
+		TOURNAMENT_CHOOSE_PLAYER_TO_SWAP: "Choose player to swap.",
+		TOURNAMENT_CANCEL_SWAP: "Cancel Swap Mode",
+
 
 		WELCOME_BUTTON_MANAGE_PLAYERS: "Manage Players",
 		WELCOME_BUTTON_MANAGE_PLAYERS_DESC: "Before you can actually set up a tournament, you'll probably need to add some players here.",

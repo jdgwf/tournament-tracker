@@ -221,6 +221,26 @@ var tournamentsRunArray =
 				$scope.playerMatchupDialog = false;
 			}
 
+			$scope.resetMatchups = function() {
+				$scope.currentTournament.createMatchRound( $scope.currentTournament.currentRound + 1, $scope.playerList );
+			}
+
+			$scope.swapPlayerButton = function( playerID ) {
+				if( $scope.tmpMatchupSwappingID > 0 ) {
+					// perform swap
+					$scope.currentTournament.swapPlayers( $scope.tmpMatchupSwappingID, playerID, $scope.currentTournament.currentRound + 1, $scope.playerList);
+					$scope.tmpMatchupSwappingID = 0;
+				} else {
+					// activate swap
+					$scope.tmpMatchupSwappingID = playerID;
+				}
+
+			}
+
+			$scope.cancelSwap = function() {
+				$scope.tmpMatchupSwappingID = 0;
+			}
+
 			$scope.completeTournament = function() {
 				console.log("completeTournament() called");
 

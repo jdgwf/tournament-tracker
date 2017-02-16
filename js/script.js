@@ -871,15 +871,16 @@ function Tournament (importTournament, playerObjects) {
 	this.matchupType = "highest-ranking";
 
 	this.createMatchupObjs = function( playersObjs) {
-		console.log( "classTournament.createMatchupObjs() called" );
+		//~ console.log( "classTournament.createMatchupObjs() called" );
 		this.matchupObjs = Array();
 
-		console.log( "classTournament.createMatchupObjs()", this.matches);
+		//~ console.log( "classTournament.createMatchupObjs()", this.matches);
 
 		for( var roundNumber in this.matches ) {
 			this.matchupObjs[ roundNumber ] = Array();
 			if( this.matches[ roundNumber ] ) {
 				for( var roundC = 0; roundC < this.matches[roundNumber].length; roundC++ ) {
+					console.log( "xx", roundNumber, this.matches[roundNumber][roundC] );
 					var matchObj = {
 						table: this.matches[roundNumber][roundC].table,
 						player1: getPlayerByID( playersObjs, this.matches[roundNumber][roundC].player1 ),
@@ -890,7 +891,7 @@ function Tournament (importTournament, playerObjects) {
 			}
 		}
 
-		console.log( "classTournament.createMatchupObjs()", this.matchupObjs);
+		//~ console.log( "classTournament.createMatchupObjs()", this.matchupObjs);
 	}
 
 	this.createMatchRound = function( roundNumber, playersObjs ) {
@@ -1154,6 +1155,53 @@ function Tournament (importTournament, playerObjects) {
 		}
 
 		return null;
+	}
+
+	this.swapPlayers = function( player1ID, player2ID, roundNumber, playersObjs ) {
+		/*
+				var matchObj = {
+					table: tableNumber,
+					player1: this.playerObjs[ matchCounter ].id,
+					player2: this.playerObjs[ matchCounter + 1 ].id
+				};
+		 */
+		//~ console.log( "this.swapPlayer( " + player1ID + ", " + player2ID + ", " + roundNumber + ", (OBJ) )");
+		console.log( "this.matches before", this.matches);
+		console.log( "this.matches[ roundNumber] before", this.matches[ roundNumber]);
+
+		for( var tableC = 0; tableC < this.matches[ roundNumber].length; tableC++ ) {
+			if( this.matches[ roundNumber][tableC].player1 == player1ID ) {
+				console.log( "11 p1 == p1id a", this.matches[ roundNumber][tableC].player1, player2ID);
+				this.matches[ roundNumber][tableC].player1 = player2ID;
+				console.log( "11 p1 == p1id b", this.matches[ roundNumber][tableC].player1, player2ID);
+			} else if( this.matches[ roundNumber][tableC].player1 == player2ID ) {
+				console.log( "22 p1 == p2id a", this.matches[ roundNumber][tableC].player1, player1ID);
+				this.matches[ roundNumber][tableC].player1 = player1ID;
+				console.log( "22 p1 == p2id b", this.matches[ roundNumber][tableC].player1, player1ID);
+			}
+
+			if( this.matches[ roundNumber][tableC].player2 == player1ID ) {
+
+				console.log( "33 p2 == p1id a", this.matches[ roundNumber][tableC].player2, player2ID);
+				this.matches[ roundNumber][tableC].player2 = player2ID;
+				console.log( "33 p2 == p1id a", this.matches[ roundNumber][tableC].player2, player2ID);
+
+			} else  if( this.matches[ roundNumber][tableC].player2 == player2ID ) {
+				console.log( "44 p2 == p2id a", this.matches[ roundNumber][tableC].player2, player1ID);
+				this.matches[ roundNumber][tableC].player2 = player1ID;
+				console.log( "44 p2 == p2id a", this.matches[ roundNumber][tableC].player2, player1ID);
+			}
+
+
+
+		}
+
+		console.log( "this.matches after", this.matches);
+		console.log( "this.matches[ roundNumber] after", this.matches[ roundNumber]);
+
+
+		this.createMatchupObjs( playersObjs );
+		//this.matchupObjs = Array();
 	}
 
 	this.calculateResults = function() {
@@ -2259,6 +2307,26 @@ var tournamentsRunArray =
 				$scope.playerMatchupDialog = false;
 			}
 
+			$scope.resetMatchups = function() {
+				$scope.currentTournament.createMatchRound( $scope.currentTournament.currentRound + 1, $scope.playerList );
+			}
+
+			$scope.swapPlayerButton = function( playerID ) {
+				if( $scope.tmpMatchupSwappingID > 0 ) {
+					// perform swap
+					$scope.currentTournament.swapPlayers( $scope.tmpMatchupSwappingID, playerID, $scope.currentTournament.currentRound + 1, $scope.playerList);
+					$scope.tmpMatchupSwappingID = 0;
+				} else {
+					// activate swap
+					$scope.tmpMatchupSwappingID = playerID;
+				}
+
+			}
+
+			$scope.cancelSwap = function() {
+				$scope.tmpMatchupSwappingID = 0;
+			}
+
 			$scope.completeTournament = function() {
 				console.log("completeTournament() called");
 
@@ -2513,6 +2581,7 @@ available_languages.push ({
 		GENERAL_FINISHED: "Deleted",
 		GENERAL_ID: "ID",
 		GENERAL_ROUND: "Round",
+		GENERAL_RESET: "Reset",
 
 		GENERAL_NOT_ENTERED: "Not Entered",
 		GENERAL_WIN: "Win",
@@ -2605,6 +2674,10 @@ available_languages.push ({
 		TOURNAMENT_START_FINAL_ROUND: "Start Final Round",
 		TOURNAMENT_EDITING_GAME_SCORES: "Editing Game Scores",
 		TOURNAMENT_EXTRA_POINTS: "Extra Points",
+		TOURNAMENT_SWAP: "Swap",
+		TOURNAMENT_CHOOSE_PLAYER_TO_SWAP: "Choose player to swap.",
+		TOURNAMENT_CANCEL_SWAP: "Cancel Swap Mode",
+
 
 		WELCOME_BUTTON_MANAGE_PLAYERS: "Manage Players",
 		WELCOME_BUTTON_MANAGE_PLAYERS_DESC: "Before you can actually set up a tournament, you'll probably need to add some players here.",
