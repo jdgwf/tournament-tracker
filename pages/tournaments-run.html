@@ -31,7 +31,6 @@
 
 				</h4>
 				<table>
-
 					<thead>
 						<tr>
 							<th>&nbsp;</th>
@@ -57,7 +56,7 @@
 
 								<span ng-show="playerObjs.name.nick != ''">{{playerObjs.name.first}} <strong>"{{playerObjs.name.nick}}"</strong> {{playerObjs.name.last}}</span>
 							</td>
-							<td class="text-center" ng-repeat="n in [].constructor( currentTournament.numberOfRounds ) track by $index">
+							<td class="text-left" ng-repeat="n in [].constructor( currentTournament.numberOfRounds ) track by $index">
 								<div ng-click="editScore(playerObjs.id, $index + 1)" class="cursor-pointer" ng-show="currentTournament.currentRound > $index && currentTournament.scoring[$index][playerObjs.id] != 'bye' && currentTournament.scoring[$index][playerObjs.id] == 'win'"><span class="color-green" translate="GENERAL_WIN"></span> ({{currentTournament.pointsForWin}} <span ng-show="currentTournament.extraPoints[$index][playerObjs.id] > 0"> + {{currentTournament.extraPoints[$index][playerObjs.id]}}</span>)</div>
 								<div ng-click="editScore(playerObjs.id, $index + 1)" class="cursor-pointer" ng-show="currentTournament.currentRound > $index && currentTournament.scoring[$index][playerObjs.id] != 'bye' && currentTournament.scoring[$index][playerObjs.id] == 'draw'"><span class="color-yellow" translate="GENERAL_DRAW"></span> ({{currentTournament.pointsForDraw}} <span ng-show="currentTournament.extraPoints[$index][playerObjs.id] > 0"> + {{currentTournament.extraPoints[$index][playerObjs.id]}}</span>)</div>
 								<div ng-click="editScore(playerObjs.id, $index + 1)" class="cursor-pointer" ng-show="currentTournament.currentRound > $index && currentTournament.scoring[$index][playerObjs.id] != 'bye' && currentTournament.scoring[$index][playerObjs.id] == 'loss'"><span class="color-red" translate="GENERAL_LOSS"></span> ({{currentTournament.pointsForLoss}} <span ng-show="currentTournament.extraPoints[$index][playerObjs.id] > 0"> + {{currentTournament.extraPoints[$index][playerObjs.id]}}</span>)</div>
