@@ -106,12 +106,16 @@ available_languages.push ({
 		TOURNAMENTS_DELETE_CONFIRMATION: "Are you sure you want to delete this tournament?",
 		TOURNAMENTS_IMPORT_INSTRUCTIONS: "To import tournaments into this app, navigate to your Tournaments.json file you have saved. <strong>Be sure that your Players.json and Tournaments.json match, otherwise you may have orphan or wrong players!</strong>",
 
+		TOURNAMENTS_TYPE: "Tournament Type",
 		TOURNAMENTS_DOWNLOAD_INSTRUCTIONS: "Click on the button below to download the current Tournaments data object",
 		TOURNAMENTS_NAME: "Tournament Name",
 		TOURNAMENTS_NUM_PLAYERS: "# Players",
 		TOURNAMENTS_EDIT_PLAYERS: "Edit Players",
 		TOURNAMENTS_BASE_SCORING: "Base Scoring",
 		TOURNAMENTS_EXTRA_SCORING: "Extra Scoring",
+
+		TOURNAMENT_CONTROL_POINTS: "Control Points",
+		TOURNAMENT_ARMY_POINTS: "Army Points",
 
 		TOURNAMENTS_MATCHUP_SETTINGS: "Matchup Settings",
 		TOURNAMENTS_MATCHUP_ORDERING: "Matchup Ordering",
@@ -120,6 +124,9 @@ available_languages.push ({
 		TOURNAMENTS_MATCHUP_HIGHEST_RANKING: "Highest Ranking",
 		TOURNAMENTS_MATCHUP_RANDOM: "Random",
 
+		TOURNAMENTS_SWISS: "Swiss",
+		TOURNAMENTS_STEAMROLLER: "Steamroller",
+		TOURNAMENTS_STEAMROLLER_NO_OPTIONS: "Privateer Presse's Steamroller 2016 is quite illicit on how many rounds, how to score, etc. Thanksfully because of this, there are no options. Just press the Add button below to add players.",
 
 		TOURNAMENTS_PLAYERS: "Players",
 		TOURNAMENTS_GENERAL_SETTINGS: "General Settings",

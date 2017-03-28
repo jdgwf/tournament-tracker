@@ -11,6 +11,8 @@ function Tournament (importTournament, playerObjects) {
 	this.pointsForLoss = 0;
 	this.pointsForBye = 1;
 
+	this.type = "swiss";
+
 	this.byeIsAverage = true;
 
 	this.scoringPaint = false;
@@ -27,6 +29,9 @@ function Tournament (importTournament, playerObjects) {
 
 	this.scoring = Array();	// base score from win/loss/draw status
 	this.extraPoints = Array(); // per game extra points
+
+	this.steamControlPoints = Array(); // Steamroller control points
+	this.steamArmyPoints = Array(); // Steamroller army points
 
 	this.pointsPainting = Array();
 	this.pointsComposition = Array();
@@ -72,13 +77,13 @@ function Tournament (importTournament, playerObjects) {
 
 		if( this.matchupType == "highest-ranking" ) {
 			console.log( "classTournament.createMatchupObjs() - sorting by highest-ranking" );
-			this.sortPlayerObjsByBaseScore();
+			this.sortPlayerObjsByScores();
 		} else if( this.matchupType == "random" ) {
 			console.log( "classTournament.createMatchupObjs() - sorting by random" );
 			this.playerObjs = shuffleArray( this.playerObjs );
 		} else {
 			console.log( "classTournament.createMatchupObjs() - unknown sort '" + this.matchupType + "' - sorting by highest-ranking" );
-			this.sortPlayerObjsByBaseScore();
+			this.sortPlayerObjsByScores();
 		}
 
 		var matchCounter = 0;
@@ -156,9 +161,13 @@ function Tournament (importTournament, playerObjects) {
 	}
 
 	this.getScore = function( roundNumber, playerID ) {
-		if( typeof(this.scoring[ roundNumber - 1]) != "undefined" && typeof(this.scoring[ roundNumber - 1][playerID]) != "undefined" )
-			return this.scoring[ roundNumber - 1][playerID];
-		return null;
+		//~ console.log( "getScore = function( roundNumber, playerID )", roundNumber, playerID);
+		if( typeof(this.scoring[ roundNumber - 1]) != "undefined" && typeof(this.scoring[ roundNumber - 1][playerID]) != "undefined" ) {
+			//~ console.log( "getScore - return " + this.scoring[ roundNumber - 1][playerID]);
+			return this.scoring[ roundNumber - 1][playerID] + "";
+		}
+		//~ console.log( "getScore - return null");
+		return "-1";
 	}
 
 	this.setScore = function( roundNumber, playerID, newScore ) {
@@ -166,7 +175,7 @@ function Tournament (importTournament, playerObjects) {
 			this.scoring[ roundNumber - 1] = Array();
 
 		if( typeof(this.scoring[ roundNumber - 1][playerID]) == "undefined" )
-			this.scoring[ roundNumber - 1][playerID] = -1;
+			this.scoring[ roundNumber - 1][playerID] = "-1";
 
 		this.scoring[ roundNumber - 1][playerID] = newScore
 		return this.scoring[ roundNumber - 1][playerID];
@@ -188,6 +197,39 @@ function Tournament (importTournament, playerObjects) {
 		}
 		return 0;
 	}
+
+	this.getSteamArmyPoints = function( roundNumber, playerID ) {
+		console.log("getSteamArmyPoints",  roundNumber, playerID )
+		console.log("this.steamArmyPoints", this.steamArmyPoints);
+		if(
+			typeof(this.steamArmyPoints[ roundNumber - 1]) != "undefined"
+				&&
+			typeof(this.steamArmyPoints[ roundNumber - 1][playerID]) != "undefined"
+				&&
+			this.steamArmyPoints[ roundNumber - 1][playerID] > 0
+		) {
+			//console.log("found", this.extraPoints[ roundNumber - 1][playerID]);
+			return this.steamArmyPoints[ roundNumber - 1][playerID];
+		}
+		return 0;
+	}
+
+	this.getSteamControlPoints = function( roundNumber, playerID ) {
+		console.log("getSteamControlPoints",  roundNumber, playerID )
+		console.log("this.steamControlPoints", this.steamControlPoints);
+		if(
+			typeof(this.steamControlPoints[ roundNumber - 1]) != "undefined"
+				&&
+			typeof(this.steamControlPoints[ roundNumber - 1][playerID]) != "undefined"
+				&&
+			this.steamControlPoints[ roundNumber - 1][playerID] > 0
+		) {
+			//console.log("found", this.extraPoints[ roundNumber - 1][playerID]);
+			return this.steamControlPoints[ roundNumber - 1][playerID];
+		}
+		return 0;
+	}
+
 
 	this.getPaintingPoints = function( playerID ) {
 		if( this.pointsPainting[ playerID ] )
@@ -234,10 +276,36 @@ function Tournament (importTournament, playerObjects) {
 	}
 
 
-	this.sortPlayerObjsByBaseScore = function() {
+	this.setSteamArmyPoints = function( roundNumber, playerID, newScore ) {
+		if( typeof(this.steamArmyPoints[ roundNumber - 1]) == "undefined" )
+			this.steamArmyPoints[ roundNumber - 1] = Array();
+
+		if( typeof(this.steamArmyPoints[ roundNumber - 1][playerID]) == "undefined" )
+			this.steamArmyPoints[ roundNumber - 1][playerID] = -1;
+
+		this.steamArmyPoints[ roundNumber - 1][playerID] = newScore
+		return this.steamArmyPoints[ roundNumber - 1][playerID];
+	}
+
+	this.setSteamControlPoints = function( roundNumber, playerID, newScore ) {
+		if( typeof(this.steamControlPoints[ roundNumber - 1]) == "undefined" )
+			this.steamControlPoints[ roundNumber - 1] = Array();
+
+		if( typeof(this.steamControlPoints[ roundNumber - 1][playerID]) == "undefined" )
+			this.steamControlPoints[ roundNumber - 1][playerID] = -1;
+
+		this.steamControlPoints[ roundNumber - 1][playerID] = newScore
+		return this.steamControlPoints[ roundNumber - 1][playerID];
+	}
+
+	this.sortPlayerObjsByScores = function() {
 		this.calculateResults();
-		this.playerObjs.sort( sortByBaseScore );
-		console.log( "classTournament.sortPlayerObjsByBaseScore() called" );
+		if( this.type == "swiss" ) {
+			this.playerObjs.sort( sortByBaseScore );
+		} else if( this.type == "steamroller" ) {
+			this.playerObjs.sort( steamPlayerSort );
+		}
+		console.log( "classTournament.sortPlayerObjsByScores() called" );
 	}
 
 	this.createPlayerObjs = function( playersObjs) {
@@ -261,14 +329,14 @@ function Tournament (importTournament, playerObjects) {
 				if(
 					typeof( this.scoring[ roundC ][this.playerObjs[playerC].id] ) == "undefined"
 						||
-					this.scoring[ roundC ][this.playerObjs[playerC].id] == -1
+					this.scoring[ roundC ][this.playerObjs[playerC].id] == "-1"
 						||
 					this.scoring[ roundC ][this.playerObjs[playerC].id] == null
 				) {
 					if( this.isByeRound( roundC + 1, this.playerObjs[playerC].id) )
 						this.scoring[ roundC ][this.playerObjs[playerC].id] = "bye";
 					else
-						this.scoring[ roundC ][this.playerObjs[playerC].id] = -1;
+						this.scoring[ roundC ][this.playerObjs[playerC].id] = "-1";
 				}
 
 				if( typeof( this.pointsPainting[this.playerObjs[playerC].id] ) == "undefined")
@@ -281,8 +349,31 @@ function Tournament (importTournament, playerObjects) {
 					this.pointsSportsmanship[this.playerObjs[playerC].id] = -1;
 			}
 		}
-		this.sortPlayerObjsByBaseScore();
+		this.sortPlayerObjsByScores();
 
+		if( this.type == "steamroller" ) {
+			// TODO set # of rounds per player count
+			if( this.playerObjs.length > 64 ) {
+				this.numberOfRounds = 7;
+			} else if( this.playerObjs.length > 32 ) {
+				this.numberOfRounds = 6;
+			} else if( this.playerObjs.length > 16 ) {
+				this.numberOfRounds = 5;
+			} else if( this.playerObjs.length > 8 ) {
+				this.numberOfRounds = 4;
+			} else  {
+				this.numberOfRounds = 3;
+			}
+
+			this.pointsForWin = 1;
+			this.pointsForDraw = 0;
+			this.pointsForLoss = 0;
+			this.pointsForBye = 1;
+			this.byeIsAverage = false;
+			this.scoringPaint = false;
+			this.scoringComp = false;
+			this.scoringSportsmanship = false;
+		}
 
 		console.log( "this.scoring", this.scoring);
 	}
@@ -353,11 +444,14 @@ function Tournament (importTournament, playerObjects) {
 			numByes = 0;
 			playerTotal = 0;
 
+			this.playerObjs[playerC].steamControlPoints = 0;
+			this.playerObjs[playerC].steamArmyPoints = 0;
+
 			for( var roundC = 0; roundC < this.scoring.length; roundC++ ) {
 				if(
 					this.scoring[ roundC ][ this.playerObjs[playerC].id ] != "bye"
 						&&
-					this.scoring[ roundC ][ this.playerObjs[playerC].id ] != -1
+					this.scoring[ roundC ][ this.playerObjs[playerC].id ] != "-1"
 				) {
 					if( this.scoring[ roundC ][ this.playerObjs[playerC].id ] == "win" ) {
 						playerTotal += this.pointsForWin;
@@ -382,6 +476,26 @@ function Tournament (importTournament, playerObjects) {
 					this.extraPoints[ roundC ][ this.playerObjs[playerC].id ] > 0
 				) {
 					playerTotal += this.extraPoints[ roundC ][ this.playerObjs[playerC].id ];
+				}
+
+				if(
+					this.steamControlPoints[ roundC ]
+						&&
+					this.steamControlPoints[ roundC ][ this.playerObjs[playerC].id ]
+						&&
+					this.steamControlPoints[ roundC ][ this.playerObjs[playerC].id ] > 0
+				) {
+					this.playerObjs[playerC].steamControlPoints += this.steamControlPoints[ roundC ][ this.playerObjs[playerC].id ];
+				}
+
+				if(
+					this.steamArmyPoints[ roundC ]
+						&&
+					this.steamArmyPoints[ roundC ][ this.playerObjs[playerC].id ]
+						&&
+					this.steamArmyPoints[ roundC ][ this.playerObjs[playerC].id ] > 0
+				) {
+					this.playerObjs[playerC].steamArmyPoints += this.steamArmyPoints[ roundC ][ this.playerObjs[playerC].id ];
 				}
 
 				if( this.scoring[ roundC ][ this.playerObjs[playerC].id ] == "bye") {
@@ -494,6 +608,15 @@ function Tournament (importTournament, playerObjects) {
 		if( typeof(importTournament.matchupType) != "undefined" )
 			this.matchupType = importTournament.matchupType;
 
+		if( typeof(importTournament.type) != "undefined" )
+			this.type = importTournament.type;
+
+
+		if( typeof(importTournament.steamArmyPoints) != "undefined" )
+			this.steamArmyPoints = importTournament.steamArmyPoints;
+
+		if( typeof(importTournament.steamControlPoints) != "undefined" )
+			this.steamControlPoints = importTournament.steamControlPoints;
 	}
 
 	if( typeof(playerObjects) != "undefined" ) {

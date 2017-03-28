@@ -27,21 +27,9 @@ var playersManageArray =
 				$scope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
 			}
 
-			$scope.getNumberOfDeleted = function() {
-				$scope.deletedPlayers = Array();
-				$scope.activePlayers = Array();
 
-				for( var pC = 0; pC < $rootScope.playerList.length; pC++ ) {
-					if( $rootScope.playerList[pC].deleted )
-						$scope.deletedPlayers.push( $rootScope.playerList[pC] );
-					else
-						$scope.activePlayers.push( $rootScope.playerList[pC] );
-				}
 
-				$scope.numDeletedPlayers = $scope.deletedPlayers.length;
-			}
-
-			$scope.getNumberOfDeleted();
+			$rootScope.getNumberOfDeleted();
 
 			/* *********************************************************
 			 * Confirmation Dialog
@@ -62,148 +50,6 @@ var playersManageArray =
 				$scope.confirmDialogYes = function() {
 					$scope.showConfirmDialog = false;
 				}
-			}
-
-			/* *********************************************************
-			 * New & Edit Player Dialogs
-			 * ******************************************************* */
-
-			$scope.updatePlayerFirstName = function( newValue ) {
-				$scope.tmpPlayer.name.first = newValue;
-			}
-
-			$scope.updatePlayerLastName = function( newValue ) {
-				$scope.tmpPlayer.name.last = newValue;
-			}
-
-			$scope.updatePlayerNickName = function( newValue ) {
-				$scope.tmpPlayer.name.nick = newValue;
-			}
-
-			$scope.updatePlayerActive = function( newValue ) {
-				$scope.tmpPlayer.active = newValue;
-			}
-
-
-			$scope.updatePlayerEmail = function( newValue ) {
-				$scope.tmpPlayer.email = newValue;
-			}
-
-			$scope.updatePlayerPhone1 = function( newValue ) {
-				$scope.tmpPlayer.phone1 = newValue;
-			}
-
-			$scope.newPlayerDialog = function() {
-				//~ console.log("newPlayerDialog() called");
-
-
-				$scope.clearTempPlayerData();
-
-				$scope.showEditPlayerDialog = true;
-			}
-
-
-
-
-			$scope.deletePlayerDialog = function(playerID) {
-				$translate([
-					'PLAYERS_DELETE_CONFIRMATION'
-				]).then(
-					function (translation) {
-						$scope.confirmDialog(
-							translation.PLAYERS_DELETE_CONFIRMATION,
-							function() {
-								$scope.showConfirmDialog = false;
-								for( var pC = 0; pC < $rootScope.playerList.length; pC++ ) {
-									if( playerID == $rootScope.playerList[ pC ].id ) {
-										$rootScope.playerList[ pC ].deleted = true;
-										savePlayersToLocalStorage($rootScope.playerList);
-										$scope.getNumberOfDeleted();
-									}
-								}
-
-							}
-						);
-					}
-				);
-			}
-
-			$scope.restorePlayerFromDelete = function(playerID) {
-				console.log("restorePlayerFromDelete(" + playerID + ") called");
-				//playerObj = getPlayerByID( $rootScope.playerList, playerID );
-				indexNumber = getPlayerIndexByID( $rootScope.playerList, playerID );
-				if( $rootScope.playerList[indexNumber] ) {
-					$rootScope.playerList[indexNumber].deleted = false;
-					savePlayersToLocalStorage($rootScope.playerList);
-					$scope.getNumberOfDeleted();
-				} else {
-					console.log("ERROR", "No playerID " + playerID + " found!");
-				}
-			}
-
-
-
-
-			$scope.editPlayerDialog = function(playerID) {
-				//~ console.log("editPlayerDialog(" + playerID + ") called");
-				//~ playerObj = getPlayerByID( $rootScope.playerList, playerID );
-				indexNumber = getPlayerIndexByID( $rootScope.playerList, playerID );
-				if( $rootScope.playerList[indexNumber] ) {
-					$scope.tmpPlayer = angular.copy( $rootScope.playerList[indexNumber] );
-
-					$scope.tmpPlayerIndex = indexNumber;
-					$scope.showEditPlayerDialog = true;
-
-				}
-			}
-
-			$scope.clearTempPlayerData = function() {
-				//~ console.log("clearTempPlayerData() called");
-
-				$scope.tmpPlayer = new Player();
-
-				$scope.tmpPlayerIndex = -1;
-
-			}
-
-			$scope.saveEditPlayerDialog = function() {
-
-				//~ console.log("saveEditPlayerDialog() called");
-				$scope.showEditPlayerDialog = false;
-
-
-				if( $scope.tmpPlayerIndex > -1 ) {
-					// Save to Index...
-
-					$scope.tmpPlayer.updated = new Date();
-
-					//~ console.log( $scope.tmpPlayer.id );
-					if( $scope.tmpPlayer.id < 0 ) {
-						newID = getNextPlayerID($rootScope.playerList);
-						$scope.tmpPlayer.id = newID;
-					}
-					//~ console.log( $scope.tmpPlayer.id );
-					$rootScope.playerList[ $scope.tmpPlayerIndex ] = new Player( $scope.tmpPlayer );
-				} else {
-					newID = getNextPlayerID($rootScope.playerList);
-					$scope.tmpPlayer.created = new Date();
-
-					$scope.tmpPlayer.updated = new Date();
-					$scope.tmpPlayer.id = newID;
-					$rootScope.playerList.push( new Player( $scope.tmpPlayer ) );
-				}
-
-
-				savePlayersToLocalStorage($rootScope.playerList);
-				$scope.getNumberOfDeleted();
-
-				$scope.clearTempPlayerData();
-			}
-
-			$scope.closeEditPlayerDialog = function() {
-				$scope.showEditPlayerDialog = false;
-
-				$scope.clearTempPlayerData();
 			}
 
 			/* *********************************************************
@@ -267,7 +113,7 @@ var playersManageArray =
 
 								savePlayersToLocalStorage($rootScope.playerList);
 
-								$scope.getNumberOfDeleted();
+								$rootScope.getNumberOfDeleted();
 							}
 						}
 

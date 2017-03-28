@@ -32,12 +32,15 @@ var tournamentsManageArray =
 
 			$scope.currentTournamentsPage = true;
 
-			$rootScope.playerList = getPlayersFromLocalStorage();
+			$scope.refreshTournamentData = function() {
+				$rootScope.playerList = getPlayersFromLocalStorage();
 
-			$rootScope.tournamentList = getTournamentsFromLocalStorage();
-			for( var tC = 0; tC < $rootScope.tournamentList.length; tC++) {
-				$rootScope.tournamentList[ tC ].createPlayerObjs( $rootScope.playerList );
+				$rootScope.tournamentList = getTournamentsFromLocalStorage();
+				for( var tC = 0; tC < $rootScope.tournamentList.length; tC++) {
+					$rootScope.tournamentList[ tC ].createPlayerObjs( $rootScope.playerList );
+				}
 			}
+			$scope.refreshTournamentData();
 
 			$scope.currentTournament = null;
 			if( $rootScope.tournamentList[ localStorage["current_tournament_view"] ] ) {
@@ -193,6 +196,7 @@ var tournamentsManageArray =
 				}
 			}
 
+
 			$scope.saveEditTournamentDialog = function() {
 
 				//~ console.log("saveEditTournamentDialog() called");
@@ -249,7 +253,7 @@ var tournamentsManageArray =
 			 * ******************************************************* */
 
 			$scope.addPlayerToTournament = function(playerID) {
-				console.log( "addPlayerToTournament(" + playerID + ") called");
+				//~ console.log( "addPlayerToTournament(" + playerID + ") called");
 				$scope.tmpTournament.players.push( playerID );
 				$scope.tmpTournament.createPlayerObjs( $scope.playerList );
 				saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
@@ -257,7 +261,7 @@ var tournamentsManageArray =
 			}
 
 			$scope.removePlayerFromTournament = function(playerID) {
-				console.log( "removePlayerFromTournament(" + playerID + ") called");
+				//~ console.log( "removePlayerFromTournament(" + playerID + ") called");
 				for( var playerC = 0; playerC < $scope.tmpTournament.players.length; playerC++ ) {
 					if( $scope.tmpTournament.players[playerC] == playerID ) {
 						$scope.tmpTournament.players.splice( playerC, 1);
@@ -317,18 +321,18 @@ var tournamentsManageArray =
 				$scope.downloadTournamentData = (window.URL || window.webkitURL).createObjectURL( blob );
 
 				$scope.showImportExportTournamentDialog = true;
-				console.log("importExportTournamentsDialog - $scope.showImportExportTournamentDialog", $scope.showImportExportTournamentDialog);
+				//~ console.log("importExportTournamentsDialog - $scope.showImportExportTournamentDialog", $scope.showImportExportTournamentDialog);
 			}
 
 			$scope.closeImportExportTournamentDialog = function() {
 				$scope.showImportExportTournamentDialog = false;
-				console.log("closeImportExportTournamentDialog - $scope.showImportExportTournamentDialog", $scope.showImportExportTournamentDialog);
+				//~ console.log("closeImportExportTournamentDialog - $scope.showImportExportTournamentDialog", $scope.showImportExportTournamentDialog);
 			}
 
 
 
 			$scope.uploadFile = function(files) {
-				console.log( "files", files );
+				//~ console.log( "files", files );
 
 
 

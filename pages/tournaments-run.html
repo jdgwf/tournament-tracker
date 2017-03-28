@@ -40,7 +40,7 @@
 						<tr>
 							<th translate="GENERAL_PLAYER">Player</th>
 							<th class="text-center" ng-repeat="n in [].constructor( currentTournament.numberOfRounds ) track by $index">{{$index + 1}}</th>
-							<th class="text-center" translate="TOURNAMENT_BASE_SCORE">Base Score</th>
+							<th class="text-center" ng-hide="currentTournament.type=='steamroller'" translate="TOURNAMENT_BASE_SCORE">Base Score</th>
 
 							<th ng-show="currentTournament.scoringPaint" class="text-center" translate="TOURNAMENT_PAINTING_SCORE">Painting</th>
 							<th ng-show="currentTournament.scoringComp" class="text-center" translate="TOURNAMENT_COMPOSITION_SCORE">Comp</th>
@@ -57,17 +57,66 @@
 								<span ng-show="playerObjs.name.nick != ''">{{playerObjs.name.first}} <strong>"{{playerObjs.name.nick}}"</strong> {{playerObjs.name.last}}</span>
 							</td>
 							<td class="text-left" ng-repeat="n in [].constructor( currentTournament.numberOfRounds ) track by $index">
-								<div ng-click="editScore(playerObjs.id, $index + 1)" class="cursor-pointer" ng-show="currentTournament.currentRound > $index && currentTournament.scoring[$index][playerObjs.id] != 'bye' && currentTournament.scoring[$index][playerObjs.id] == 'win'"><span class="color-green" translate="GENERAL_WIN"></span> ({{currentTournament.pointsForWin}} <span ng-show="currentTournament.extraPoints[$index][playerObjs.id] > 0"> + {{currentTournament.extraPoints[$index][playerObjs.id]}}</span>)</div>
-								<div ng-click="editScore(playerObjs.id, $index + 1)" class="cursor-pointer" ng-show="currentTournament.currentRound > $index && currentTournament.scoring[$index][playerObjs.id] != 'bye' && currentTournament.scoring[$index][playerObjs.id] == 'draw'"><span class="color-yellow" translate="GENERAL_DRAW"></span> ({{currentTournament.pointsForDraw}} <span ng-show="currentTournament.extraPoints[$index][playerObjs.id] > 0"> + {{currentTournament.extraPoints[$index][playerObjs.id]}}</span>)</div>
-								<div ng-click="editScore(playerObjs.id, $index + 1)" class="cursor-pointer" ng-show="currentTournament.currentRound > $index && currentTournament.scoring[$index][playerObjs.id] != 'bye' && currentTournament.scoring[$index][playerObjs.id] == 'loss'"><span class="color-red" translate="GENERAL_LOSS"></span> ({{currentTournament.pointsForLoss}} <span ng-show="currentTournament.extraPoints[$index][playerObjs.id] > 0"> + {{currentTournament.extraPoints[$index][playerObjs.id]}}</span>)</div>
 
+								<div ng-click="editScore(playerObjs.id, $index + 1)" class="cursor-pointer" ng-show="currentTournament.currentRound > $index && currentTournament.scoring[$index][playerObjs.id] != 'bye' && currentTournament.scoring[$index][playerObjs.id] == 'win'">
+									<span class="color-green" translate="GENERAL_WIN"></span>
+									<span ng-show="currentTournament.type == 'swiss'">
+										(
+										{{currentTournament.pointsForWin}}
+										<span ng-show="currentTournament.extraPoints[$index][playerObjs.id] > 0"> + {{currentTournament.extraPoints[$index][playerObjs.id]}}</span>
+										)
+									</span>
+									<span ng-show="currentTournament.type == 'steamroller'">
+										(
+											{{currentTournament.steamControlPoints[$index][playerObjs.id]}}
+											/
+											{{currentTournament.steamArmyPoints[$index][playerObjs.id]}}
+										)
+									</span>
+								</div>
+								<div ng-click="editScore(playerObjs.id, $index + 1)" class="cursor-pointer" ng-show="currentTournament.currentRound > $index && currentTournament.scoring[$index][playerObjs.id] != 'bye' && currentTournament.scoring[$index][playerObjs.id] == 'draw'">
+									<span class="color-yellow" translate="GENERAL_DRAW"></span>
+									<span ng-show="currentTournament.type == 'swiss'">
+										(
+										{{currentTournament.pointsForDraw}}
+										<span ng-show="currentTournament.extraPoints[$index][playerObjs.id] > 0"> + {{currentTournament.extraPoints[$index][playerObjs.id]}}</span>
+										)
+									</span>
+									<span ng-show="currentTournament.type == 'steamroller'">
+										(
+											{{currentTournament.steamControlPoints[$index][playerObjs.id]}}
+											/
+											{{currentTournament.steamArmyPoints[$index][playerObjs.id]}}
+										)
+									</span>
+								</div>
+								<div ng-click="editScore(playerObjs.id, $index + 1)" class="cursor-pointer" ng-show="currentTournament.currentRound > $index && currentTournament.scoring[$index][playerObjs.id] != 'bye' && currentTournament.scoring[$index][playerObjs.id] == 'loss'">
+									<span class="color-red" translate="GENERAL_LOSS"></span>
+									<span ng-show="currentTournament.type == 'swiss'">
+										(
+										{{currentTournament.pointsForLoss}}
+										<span ng-show="currentTournament.extraPoints[$index][playerObjs.id] > 0"> + {{currentTournament.extraPoints[$index][playerObjs.id]}}</span>
+										)
+									</span>
+									<span ng-show="currentTournament.type == 'steamroller'">
+										(
+											{{currentTournament.steamControlPoints[$index][playerObjs.id]}}
+											/
+											{{currentTournament.steamArmyPoints[$index][playerObjs.id]}}
+										)
+									</span>
+								</div>
 
 								<div ng-click="editScore(playerObjs.id, $index + 1)" class="cursor-pointer" ng-show="currentTournament.currentRound > $index && currentTournament.scoring[$index][playerObjs.id] != 'bye' && currentTournament.scoring[$index][playerObjs.id] < 0" title="{{ 'TOURNAMENT_NOT_ENTERED' | translate }}" translate="TOURNAMENT_NE">n/e</div>
 								<div ng-show="currentTournament.currentRound > $index && currentTournament.scoring[$index][playerObjs.id] == 'bye'" title="{{ 'TOURNAMENT_GAME_IS_BYE' | translate }}" translate="GENERAL_BYE">bye</div>
 
 								<div ng-hide="currentTournament.currentRound > $index" title="{{ 'TOURNAMENT_NOT_AVAILABLE' | translate }}" translate="TOURNAMENT_NA" class="darker-text">n/a</div>
 							</td>
-							<td class="text-center">{{playerObjs.pointsBase}}</td>
+							<td class="text-center" ng-hide="currentTournament.type=='steamroller'">
+								{{playerObjs.pointsBase}}
+
+
+							</td>
 
 							<td ng-show="currentTournament.scoringPaint" ng-click="editPaintingScore(playerObjs.id)" class="text-center cursor-pointer"">
 								<div ng-show="currentTournament.pointsPainting[ playerObjs.id ] > -1">{{currentTournament.pointsPainting[ playerObjs.id ]}}</div>
@@ -82,7 +131,16 @@
 								<div ng-hide="currentTournament.pointsSportsmanship[ playerObjs.id ] > -1" title="{{ 'TOURNAMENT_NOT_ENTERED' | translate }}" translate="TOURNAMENT_NE">n/a</div>
 							</td>
 
-							<td class="text-center">{{playerObjs.pointsFinal}}</td>
+							<td class="text-left">
+								<strong>{{playerObjs.pointsFinal}}</strong>
+								<span ng-show="currentTournament.type == 'steamroller'">
+									(
+										{{playerObjs.steamControlPoints}}
+										/
+										{{playerObjs.steamArmyPoints}}
+									)
+								</span>
+							</td>
 						</tr>
 					</tbody>
 				</table>

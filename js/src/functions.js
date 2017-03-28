@@ -59,7 +59,6 @@ function savePlayersToLocalStorage( playersObject ) {
 }
 
 function saveTournamentsToLocalStorage( tournamentsObject, playersList ) {
-	console.log( tournamentsObject );
 	for( var tC = 0; tC < tournamentsObject.length; tC++ ) {
 		if( tournamentsObject[tC].playerObjs )
 			delete tournamentsObject[tC].playerObjs;
@@ -128,6 +127,25 @@ function sortByFinalScore(a,b) {
     return -1;
   if (a.pointsFinal < b.pointsFinal)
     return 1;
+  return 0;
+}
+
+function steamPlayerSort(a,b) {
+  if (a.pointsBase > b.pointsBase)
+    return -1;
+  if (a.pointsBase < b.pointsBase)
+    return 1;
+
+  if (a.steamControlPoints > b.steamControlPoints)
+    return -1;
+  if (a.steamControlPoints < b.steamControlPoints)
+    return 1;
+
+  if (a.steamArmyPoints > b.steamArmyPoints)
+    return -1;
+  if (a.steamArmyPoints < b.steamArmyPoints)
+    return 1;
+
   return 0;
 }
 
