@@ -18,6 +18,7 @@ var tournamentsRunArray =
 			$rootScope.playerList = getPlayersFromLocalStorage();
 
 			$rootScope.tournamentList = getTournamentsFromLocalStorage();
+
 			for( var tC = 0; tC < $rootScope.tournamentList.length; tC++) {
 				$rootScope.tournamentList[ tC ].createPlayerObjs( $rootScope.playerList );
 			}
@@ -110,7 +111,6 @@ var tournamentsRunArray =
 					$scope.tmpPlayer2ExtraPoints = newScore;
 				}
 			}
-
 
 			$scope.changeSteamControlPoints = function(  playerID, newScore ) {
 				if( playerID == 1 ) {

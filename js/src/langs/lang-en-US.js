@@ -126,7 +126,7 @@ available_languages.push ({
 
 		TOURNAMENTS_SWISS: "Swiss",
 		TOURNAMENTS_STEAMROLLER: "Steamroller",
-		TOURNAMENTS_STEAMROLLER_NO_OPTIONS: "Privateer Presse's Steamroller 2016 is quite illicit on how many rounds, how to score, etc. Thanksfully because of this, there are no options. Just press the Add button below to add players.",
+		TOURNAMENTS_STEAMROLLER_NO_OPTIONS: "Privateer Presse's Steamroller 2016 is quite illicit on how many rounds, how to score, etc. Thankfully because of this, there are no options. Just press the Add button below to add players.",
 
 		TOURNAMENTS_PLAYERS: "Players",
 		TOURNAMENTS_GENERAL_SETTINGS: "General Settings",
