@@ -1043,6 +1043,9 @@ function Tournament (importTournament, playerObjects) {
 			var theBye = -1;
 			if( this.playerObjs.length % 2 != 0 ) {
 				switch( this.byeType ) {
+					case "first":
+						theBye = 0;
+						break;
 					case "middle":
 						theBye = (this.playerObjs.length - 1) /2;
 						break;
@@ -3071,6 +3074,7 @@ available_languages.push ({
 		BUTTON_LANG_DE: 'German',
 		BUTTON_LANG_BR: 'Brazilian',
 
+		GENERAL_BYE_FIRST: "First",
 		GENERAL_BYE_MIDDLE: "Middle",
 		GENERAL_BYE_RANDOM: "Random",
 		GENERAL_BYE_LAST: "Last",
@@ -3106,6 +3110,7 @@ available_languages.push ({
 
 		TOURNAMENTS_MATCHUP_HIGHEST_RANKING: "Highest Ranking",
 		TOURNAMENTS_MATCHUP_RANDOM: "Random",
+		TOURNAMENTS_WHO_GETS_THE_BYE: "Who gets tye bye?",
 
 		TOURNAMENTS_SWISS: "Swiss",
 		TOURNAMENTS_STEAMROLLER: "Steamroller",

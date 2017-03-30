@@ -179,6 +179,9 @@ function Tournament (importTournament, playerObjects) {
 			var theBye = -1;
 			if( this.playerObjs.length % 2 != 0 ) {
 				switch( this.byeType ) {
+					case "first":
+						theBye = 0;
+						break;
 					case "middle":
 						theBye = (this.playerObjs.length - 1) /2;
 						break;
