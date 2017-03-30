@@ -63,8 +63,8 @@ var tournamentsRunArray =
 				$scope.tmpPlayer2SteamArmyPoints =  $scope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player2 );
 				$scope.tmpPlayer2SteamControlPoints =  $scope.currentTournament.getSteamControlPoints( roundNumber, theMatch.player2 );
 
-				console.log( "$scope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player1 )", $scope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player1 ) );
-				console.log( "$scope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player2 )", $scope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player2 ) );
+				//~ console.log( "$scope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player1 )", $scope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player1 ) );
+				//~ console.log( "$scope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player2 )", $scope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player2 ) );
 
 				$scope.editRoundNumber =  roundNumber;
 				$scope.editTableNumber =  theMatch.table;
@@ -157,22 +157,22 @@ var tournamentsRunArray =
 
 			$scope.saveEditScoreDialog = function() {
 
-				console.log( "saveEditScoreDialog" );
-				console.log( "-------------------------------------------------------" );
+				//~ console.log( "saveEditScoreDialog" );
+				//~ console.log( "-------------------------------------------------------" );
 
-				console.log( "$scope.tmpPlayer1Score", $scope.tmpPlayer1Score );
-				console.log( "$scope.tmpPlayer2Score", $scope.tmpPlayer2Score );
+				//~ console.log( "$scope.tmpPlayer1Score", $scope.tmpPlayer1Score );
+				//~ console.log( "$scope.tmpPlayer2Score", $scope.tmpPlayer2Score );
 
-				console.log( "$scope.tmpPlayer1ExtraPoints", $scope.tmpPlayer1ExtraPoints );
-				console.log( "$scope.tmpPlayer2ExtraPoints", $scope.tmpPlayer2ExtraPoints );
+				//~ console.log( "$scope.tmpPlayer1ExtraPoints", $scope.tmpPlayer1ExtraPoints );
+				//~ console.log( "$scope.tmpPlayer2ExtraPoints", $scope.tmpPlayer2ExtraPoints );
 
-				console.log( "$scope.tmpPlayer1SteamArmyPoints", $scope.tmpPlayer1SteamArmyPoints );
-				console.log( "$scope.tmpPlayer2SteamArmyPoints", $scope.tmpPlayer2SteamArmyPoints );
+				//~ console.log( "$scope.tmpPlayer1SteamArmyPoints", $scope.tmpPlayer1SteamArmyPoints );
+				//~ console.log( "$scope.tmpPlayer2SteamArmyPoints", $scope.tmpPlayer2SteamArmyPoints );
 
-				console.log( "$scope.tmpPlayer1SteamControlPoints", $scope.tmpPlayer1SteamControlPoints );
-				console.log( "$scope.tmpPlayer2SteamControlPoints", $scope.tmpPlayer2SteamControlPoints );
+				//~ console.log( "$scope.tmpPlayer1SteamControlPoints", $scope.tmpPlayer1SteamControlPoints );
+				//~ console.log( "$scope.tmpPlayer2SteamControlPoints", $scope.tmpPlayer2SteamControlPoints );
 
-				console.log( "-------------------------------------------------------" );
+				//~ console.log( "-------------------------------------------------------" );
 
 				$scope.currentTournament.setScore( $scope.editRoundNumber, $scope.editScorePlayer1.id, $scope.tmpPlayer1Score);
 				$scope.currentTournament.setScore( $scope.editRoundNumber, $scope.editScorePlayer2.id, $scope.tmpPlayer2Score);
@@ -211,22 +211,22 @@ var tournamentsRunArray =
 				$scope.editRoundNumber =  -1;
 				$scope.editTableNumber =  -1;
 
-				console.log( "after close" );
-				console.log( "-------------------------------------------------------" );
+				//~ console.log( "after close" );
+				//~ console.log( "-------------------------------------------------------" );
 
-				console.log( "$scope.tmpPlayer1Score", $scope.tmpPlayer1Score );
-				console.log( "$scope.tmpPlayer2Score", $scope.tmpPlayer2Score );
+				//~ console.log( "$scope.tmpPlayer1Score", $scope.tmpPlayer1Score );
+				//~ console.log( "$scope.tmpPlayer2Score", $scope.tmpPlayer2Score );
 
-				console.log( "$scope.tmpPlayer1ExtraPoints", $scope.tmpPlayer1ExtraPoints );
-				console.log( "$scope.tmpPlayer2ExtraPoints", $scope.tmpPlayer2ExtraPoints );
+				//~ console.log( "$scope.tmpPlayer1ExtraPoints", $scope.tmpPlayer1ExtraPoints );
+				//~ console.log( "$scope.tmpPlayer2ExtraPoints", $scope.tmpPlayer2ExtraPoints );
 
-				console.log( "$scope.tmpPlayer1SteamArmyPoints", $scope.tmpPlayer1SteamArmyPoints );
-				console.log( "$scope.tmpPlayer2SteamArmyPoints", $scope.tmpPlayer2SteamArmyPoints );
+				//~ console.log( "$scope.tmpPlayer1SteamArmyPoints", $scope.tmpPlayer1SteamArmyPoints );
+				//~ console.log( "$scope.tmpPlayer2SteamArmyPoints", $scope.tmpPlayer2SteamArmyPoints );
 
-				console.log( "$scope.tmpPlayer1SteamControlPoints", $scope.tmpPlayer1SteamControlPoints );
-				console.log( "$scope.tmpPlayer2SteamControlPoints", $scope.tmpPlayer2SteamControlPoints );
+				//~ console.log( "$scope.tmpPlayer1SteamControlPoints", $scope.tmpPlayer1SteamControlPoints );
+				//~ console.log( "$scope.tmpPlayer2SteamControlPoints", $scope.tmpPlayer2SteamControlPoints );
 
-				console.log( "-------------------------------------------------------" );
+				//~ console.log( "-------------------------------------------------------" );
 
 				$route.reload();
 
@@ -235,7 +235,7 @@ var tournamentsRunArray =
 			$scope.editPaintingScore = function( playerID ) {
 				$scope.tmpEditPlayer = Array();
 				$scope.tmpEditExtraPointValue = 0
-				console.log("editPaintingScore(" + playerID + ")");
+				//~ console.log("editPaintingScore(" + playerID + ")");
 				$scope.tmpEditPlayer = getPlayerByID( $scope.playerList, playerID );
 				$scope.tmpEditExtraPointValue = $scope.currentTournament.getPaintingPoints( playerID );
 				if( $scope.tmpEditExtraPointValue < 0 )
@@ -246,7 +246,7 @@ var tournamentsRunArray =
 			$scope.editCompositionScore = function( playerID ) {
 				$scope.tmpEditPlayer = Array();
 				$scope.tmpEditExtraPointValue = 0
-				console.log("editCompositionScore(" + playerID + ")");
+				//~ console.log("editCompositionScore(" + playerID + ")");
 				$scope.tmpEditPlayer = getPlayerByID( $scope.playerList, playerID );
 				$scope.tmpEditExtraPointValue = $scope.currentTournament.getCompPoints( playerID );
 				if( $scope.tmpEditExtraPointValue < 0 )
@@ -257,7 +257,7 @@ var tournamentsRunArray =
 			$scope.editSportsmanshipScore = function( playerID ) {
 				$scope.tmpEditPlayer = Array();
 				$scope.tmpEditExtraPointValue = 0
-				console.log("editSportsmanshipScore(" + playerID + ")");
+				//~ console.log("editSportsmanshipScore(" + playerID + ")");
 				$scope.tmpEditPlayer = getPlayerByID( $scope.playerList, playerID );
 				$scope.tmpEditExtraPointValue = $scope.currentTournament.getSportsPoints( playerID );
 				if( $scope.tmpEditExtraPointValue < 0 )
@@ -266,7 +266,7 @@ var tournamentsRunArray =
 			}
 
 			$scope.saveSportsScore = function() {
-				console.log("saveSportsScore");
+				//~ console.log("saveSportsScore");
 				 $scope.currentTournament.setSportsPoints( $scope.tmpEditPlayer.id, $scope.tmpEditExtraPointValue );
 				 saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
 				 $scope.currentTournament.calculateResults();
@@ -274,7 +274,7 @@ var tournamentsRunArray =
 			}
 
 			$scope.saveCompScore = function() {
-				console.log("saveCompScore");
+				//~ console.log("saveCompScore");
 				 $scope.currentTournament.setCompPoints( $scope.tmpEditPlayer.id, $scope.tmpEditExtraPointValue );
 				 saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
 				 $scope.currentTournament.calculateResults();
@@ -282,7 +282,7 @@ var tournamentsRunArray =
 			}
 
 			$scope.savePaintScore = function() {
-				console.log("savePaintScore");
+				//~ console.log("savePaintScore");
 				 $scope.currentTournament.setPaintingPoints( $scope.tmpEditPlayer.id, $scope.tmpEditExtraPointValue );
 				 saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
 				 $scope.currentTournament.calculateResults();
@@ -309,7 +309,7 @@ var tournamentsRunArray =
 			}
 
 			$scope.setupNextRound = function() {
-				console.log("setupNextRound()");
+				//~ console.log("setupNextRound()");
 
 				$scope.currentTournament.createMatchRound( $scope.currentTournament.currentRound + 1, $scope.playerList );
 
@@ -317,7 +317,7 @@ var tournamentsRunArray =
 			}
 
 			$scope.closePlayerMatchupDialog = function() {
-				console.log("closePlayerMatchupDialog()");
+				//~ console.log("closePlayerMatchupDialog()");
 
 				$scope.playerMatchupDialog = false;
 			}
@@ -343,7 +343,7 @@ var tournamentsRunArray =
 			}
 
 			$scope.completeTournament = function() {
-				console.log("completeTournament() called");
+				//~ console.log("completeTournament() called");
 
 				$scope.currentTournament.completed = true;
 				saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);

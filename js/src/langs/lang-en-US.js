@@ -129,6 +129,7 @@ available_languages.push ({
 		TOURNAMENTS_STEAMROLLER_NO_OPTIONS: "Privateer Presse's Steamroller 2016 is quite illicit on how many rounds, how to score, etc. Thankfully because of this, there are no options. Just press the Add button below to add players.",
 
 		TOURNAMENTS_PLAYERS: "Players",
+		TOURNAMENT_SWAP_LOG: "Automatic Player Swap Log",
 		TOURNAMENTS_GENERAL_SETTINGS: "General Settings",
 		TOURNAMENTS_POINTS_FOR_WIN: "Points for Win",
 		TOURNAMENTS_POINTS_FOR_DRAW: "Points for Draw",

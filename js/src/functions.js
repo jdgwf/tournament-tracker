@@ -80,6 +80,14 @@ function getPlayerByID( playersList, playerID ) {
 	return null;
 }
 
+function getStyledPlayerName( playerObj ) {
+	if( playerObj.name.nick ) {
+		return playerObj.name.first + "\"<strong>" + playerObj.name.nick + "</strong>\"" + playerObj.name.last;
+	} else {
+		return "<strong>" + playerObj.first + "</strong>" + playerObj.name.last;
+	}
+}
+
 function getPlayerIndexByID( playersList, playerID ) {
 	for( var playerCount = 0; playerCount < playersList.length; playerCount++ ) {
 		if( playersList[ playerCount ].id == playerID )
