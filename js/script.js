@@ -1056,16 +1056,17 @@ function Tournament (importTournament, playerObjects) {
 			var player1 = 0;
 			var player2 = 0;
 
+			var byeObject = null
+
 			for( var matchCounter = 0; matchCounter <  this.playerObjs.length; matchCounter++ ) {
 				if( theBye == matchCounter ) {
 
-					var matchObj = {
-						table: tableNumber,
+					byeObject = {
+						table: "-",
 						player1: this.playerObjs[ matchCounter ].id,
 						player2: -1
 					};
-					this.matches[ roundNumber ].push( matchObj );
-					tableNumber++;
+
 				} else if( player1 == 0 ) {
 					player1 = this.playerObjs[ matchCounter ].id;
 				} else if( player2 == 0 ) {
@@ -1090,9 +1091,12 @@ function Tournament (importTournament, playerObjects) {
 				}
 
 
-
 				//~ matchCounter++;
 
+			}
+
+			if( byeObject ) {
+				this.matches[ roundNumber ].push( byeObject );
 			}
 
 
