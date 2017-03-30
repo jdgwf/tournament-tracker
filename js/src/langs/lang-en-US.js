@@ -132,7 +132,7 @@ available_languages.push ({
 
 		TOURNAMENTS_MATCHUP_HIGHEST_RANKING: "Highest Ranking",
 		TOURNAMENTS_MATCHUP_RANDOM: "Random",
-		TOURNAMENTS_WHO_GETS_THE_BYE: "Who gets tye bye?",
+		TOURNAMENTS_WHO_GETS_THE_BYE: "Who gets the bye?",
 
 		TOURNAMENTS_SWISS: "Swiss",
 		TOURNAMENTS_STEAMROLLER: "Steamroller",
