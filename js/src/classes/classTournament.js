@@ -188,8 +188,6 @@ function Tournament (importTournament, playerObjects) {
 				}
 			}
 
-
-
 			//~ console.log( "theBye", theBye );
 
 			while( theBye > 0 && this.hasHadBye( this.playerObjs[ theBye ].id)  ) {
@@ -202,9 +200,14 @@ function Tournament (importTournament, playerObjects) {
 
 			for( var matchCounter = 0; matchCounter <  this.playerObjs.length; matchCounter++ ) {
 				if( theBye == matchCounter ) {
-					player1 = this.playerObjs[ matchCounter ].id;
-					player2 = -1;
-					hasByes = true;
+
+					var matchObj = {
+						table: tableNumber,
+						player1: this.playerObjs[ matchCounter ].id,
+						player2: -1
+					};
+					this.matches[ roundNumber ].push( matchObj );
+					tableNumber++;
 				} else if( player1 == 0 ) {
 					player1 = this.playerObjs[ matchCounter ].id;
 				} else if( player2 == 0 ) {
@@ -212,6 +215,7 @@ function Tournament (importTournament, playerObjects) {
 
 				}
 
+				//~ console.log( matchCounter, player1, player2 );
 
 				if( player1 != 0 && player2 != 0 ) {
 					var matchObj = {
@@ -224,13 +228,17 @@ function Tournament (importTournament, playerObjects) {
 					player1 = 0;
 					player2 = 0;
 					tableNumber++;
+					//~ console.log("newMatch", matchObj, matchCounter, this.playerObjs.length, this.playerObjs);
 				}
+
+
 
 				//~ matchCounter++;
 
 			}
 
-			console.log( this.matches[ roundNumber ] );
+
+			//~ console.log( this.matches[ roundNumber ] );
 
 		//~ }
 
