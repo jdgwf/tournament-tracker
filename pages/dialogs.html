@@ -127,6 +127,10 @@
 						<a class="button primary" href="#/players-manage/" ng-class="{currentItem:currentPlayersPage == true}" title="{{ 'TOURNAMENTS_GO_TO_PLAYERS' | translate }}" translate="TOURNAMENTS_GO_TO_PLAYERS">Go There Now</a>
 
 					</div>
+
+					<label ng-show="availablePlayers.length > 0">
+						<input placeholder="{{filterSearchPlayersPlaceholder}}" type="text" class="no-bottom-margin" ng-model="filterSearchTerm" />
+					</label>
 					<table ng-show="availablePlayers.length > 0">
 						<thead>
 							<tr>
@@ -136,7 +140,10 @@
 						</thead>
 
 						<tbody>
-							<tr ng-repeat="playerObj in availablePlayers track by $index">
+							<tr
+								ng-repeat="playerObj in availablePlayers track by $index"
+								ng-show="filterSearchTerm == '' || playerObj.name.first.toLowerCase().indexOf(filterSearchTerm.trim().toLowerCase()) > -1 || playerObj.name.nick.toLowerCase().indexOf(filterSearchTerm.trim().toLowerCase()) > -1 || playerObj.name.last.toLowerCase().indexOf(filterSearchTerm.trim().toLowerCase()) > -1"
+							>
 								<td>
 									<button ng-click="editPlayerDialog(playerObj.id)" class="inline-block button primary tiny no-bottom-margin"><i class="fa fa-edit"></i></button>
 									{{ playerObj.name.last }}, {{ playerObj.name.first }} {{ playerObj.name.nick }}

@@ -52,6 +52,7 @@ available_languages.push ({
 		GENERAL_ITEM_RESTORE: "Restore",
 		GENERAL_BYE: "Bye",
 		GENERAL_TOTAL: "Total",
+		GENERAL_FILTER_SEARCH_PLAYERS: "Filter/Search Players",
 
 		GENERAL_ITEM_EDIT: "Edit Item",
 		GENERAL_ITEM_REMOVE: "Remove Item",

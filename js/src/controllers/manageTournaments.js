@@ -7,11 +7,14 @@ var tournamentsManageArray =
 		function ($rootScope, $translate, $location, $scope) {
 
 
-			$translate(['APP_TITLE', 'WELCOME_BUTTON_MANAGE_TOURNAMENTS', 'TOURNAMENTS_MATCHUP_HIGHEST_RANKING', 'TOURNAMENTS_MATCHUP_RANDOM']).then(function (translation) {
+			$translate(['APP_TITLE', 'WELCOME_BUTTON_MANAGE_TOURNAMENTS', 'TOURNAMENTS_MATCHUP_HIGHEST_RANKING', 'TOURNAMENTS_MATCHUP_RANDOM', 'GENERAL_FILTER_SEARCH_PLAYERS']).then(function (translation) {
 				$rootScope.title_tag = translation.WELCOME_BUTTON_MANAGE_TOURNAMENTS + " | " + translation.APP_TITLE;
 				$rootScope.subtitle_tag = "&raquo; " + translation.WELCOME_BUTTON_MANAGE_TOURNAMENTS;
+				$rootScope.filterSearchPlayersPlaceholder = translation.GENERAL_FILTER_SEARCH_PLAYERS;
 
 				$scope.tournamentMatchupOptions = Array();
+
+				$scope.filterSearchTerm = "";
 
 				$scope.tournamentMatchupOptions.push(
 					{

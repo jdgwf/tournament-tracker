@@ -6,6 +6,9 @@
 
 		<fieldset class="fieldset">
 			<legend translate="WELCOME_BUTTON_MANAGE_PLAYERS">Manage Players</legend>
+			<label>
+				<input placeholder="{{filterSearchPlayersPlaceholder}}" type="text" class="no-bottom-margin" ng-model="filterSearchTerm" />
+			</label>
 			<table>
 				<thead>
 					<tr>
@@ -24,7 +27,10 @@
 				</thead>
 
 				<tbody>
-					<tr  ng-repeat="playerObj in activePlayers track by $index">
+					<tr
+					ng-repeat="playerObj in activePlayers track by $index"
+					ng-show="filterSearchTerm == '' || playerObj.name.first.toLowerCase().indexOf(filterSearchTerm.trim().toLowerCase()) > -1 || playerObj.name.nick.toLowerCase().indexOf(filterSearchTerm.trim().toLowerCase()) > -1 || playerObj.name.last.toLowerCase().indexOf(filterSearchTerm.trim().toLowerCase()) > -1"
+				>
 							<td>{{ playerObj.id }}</td>
 							<td>{{ playerObj.name.first }}</td>
 							<td>{{ playerObj.name.last }}</td>

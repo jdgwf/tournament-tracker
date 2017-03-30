@@ -1910,12 +1910,13 @@ var playersManageArray =
 		'$scope',
 		'$http',
 		function ($rootScope, $translate, $scope, $http) {
-			$translate(['APP_TITLE', 'WELCOME_BUTTON_MANAGE_PLAYERS']).then(function (translation) {
+			$translate(['APP_TITLE', 'WELCOME_BUTTON_MANAGE_PLAYERS', 'GENERAL_FILTER_SEARCH_PLAYERS']).then(function (translation) {
 				$rootScope.title_tag = translation.WELCOME_BUTTON_MANAGE_PLAYERS + " | " + translation.APP_TITLE;
-				$rootScope.subtitle_tag = "&raquo; " + translation.WELCOME_BUTTON_MANAGE_PLAYERS;
+				$rootScope.subtitle_tag = "&raquo; " + translation.GENERAL_FILTER_SEARCH_PLAYERS;
+				$rootScope.filterSearchPlayersPlaceholder = translation.GENERAL_FILTER_SEARCH_PLAYERS;
 			});
 
-
+			$scope.filterSearchTerm = "";
 
 			$scope.currentPlayersPage = true;
 			$rootScope.playerList = getPlayersFromLocalStorage();
@@ -2059,11 +2060,14 @@ var tournamentsManageArray =
 		function ($rootScope, $translate, $location, $scope) {
 
 
-			$translate(['APP_TITLE', 'WELCOME_BUTTON_MANAGE_TOURNAMENTS', 'TOURNAMENTS_MATCHUP_HIGHEST_RANKING', 'TOURNAMENTS_MATCHUP_RANDOM']).then(function (translation) {
+			$translate(['APP_TITLE', 'WELCOME_BUTTON_MANAGE_TOURNAMENTS', 'TOURNAMENTS_MATCHUP_HIGHEST_RANKING', 'TOURNAMENTS_MATCHUP_RANDOM', 'GENERAL_FILTER_SEARCH_PLAYERS']).then(function (translation) {
 				$rootScope.title_tag = translation.WELCOME_BUTTON_MANAGE_TOURNAMENTS + " | " + translation.APP_TITLE;
 				$rootScope.subtitle_tag = "&raquo; " + translation.WELCOME_BUTTON_MANAGE_TOURNAMENTS;
+				$rootScope.filterSearchPlayersPlaceholder = translation.GENERAL_FILTER_SEARCH_PLAYERS;
 
 				$scope.tournamentMatchupOptions = Array();
+
+				$scope.filterSearchTerm = "";
 
 				$scope.tournamentMatchupOptions.push(
 					{
@@ -3008,6 +3012,7 @@ available_languages.push ({
 		GENERAL_ITEM_RESTORE: "Restore",
 		GENERAL_BYE: "Bye",
 		GENERAL_TOTAL: "Total",
+		GENERAL_FILTER_SEARCH_PLAYERS: "Filter/Search Players",
 
 		GENERAL_ITEM_EDIT: "Edit Item",
 		GENERAL_ITEM_REMOVE: "Remove Item",

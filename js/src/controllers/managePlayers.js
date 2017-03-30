@@ -5,12 +5,13 @@ var playersManageArray =
 		'$scope',
 		'$http',
 		function ($rootScope, $translate, $scope, $http) {
-			$translate(['APP_TITLE', 'WELCOME_BUTTON_MANAGE_PLAYERS']).then(function (translation) {
+			$translate(['APP_TITLE', 'WELCOME_BUTTON_MANAGE_PLAYERS', 'GENERAL_FILTER_SEARCH_PLAYERS']).then(function (translation) {
 				$rootScope.title_tag = translation.WELCOME_BUTTON_MANAGE_PLAYERS + " | " + translation.APP_TITLE;
-				$rootScope.subtitle_tag = "&raquo; " + translation.WELCOME_BUTTON_MANAGE_PLAYERS;
+				$rootScope.subtitle_tag = "&raquo; " + translation.GENERAL_FILTER_SEARCH_PLAYERS;
+				$rootScope.filterSearchPlayersPlaceholder = translation.GENERAL_FILTER_SEARCH_PLAYERS;
 			});
 
-
+			$scope.filterSearchTerm = "";
 
 			$scope.currentPlayersPage = true;
 			$rootScope.playerList = getPlayersFromLocalStorage();
