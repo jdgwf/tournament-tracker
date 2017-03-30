@@ -45,6 +45,9 @@ function Tournament (importTournament, playerObjects) {
 
 	this.swapLog = "";
 
+	this.byeType = "middle";
+
+
 	this.createMatchupObjs = function( playersObjs) {
 		this.matchupObjs = Array();
 
@@ -175,12 +178,15 @@ function Tournament (importTournament, playerObjects) {
 		//~ } else {
 			var theBye = -1;
 			if( this.playerObjs.length % 2 != 0 ) {
-				switch( this.tournamentType ) {
-					case "steamroller":
+				switch( this.byeType ) {
+					case "middle":
 						theBye = (this.playerObjs.length - 1) /2;
 						break;
-					case "swiss":
-						theBye = (this.playerObjs.length - 1) /2;
+					case "last":
+						theBye = (this.playerObjs.length );
+						break;
+					case "random":
+						theBye = getRandomInt(0, this.playerObjs.length - 1 );
 						break;
 					default:
 						theBye = (this.playerObjs.length - 1) /2;
@@ -565,6 +571,7 @@ function Tournament (importTournament, playerObjects) {
 			this.scoringPaint = false;
 			this.scoringComp = false;
 			this.scoringSportsmanship = false;
+			this.byeType = "middle";
 		}
 
 		//~ console.log( "this.scoring", this.scoring);
@@ -804,9 +811,11 @@ function Tournament (importTournament, playerObjects) {
 		if( typeof(importTournament.type) != "undefined" )
 			this.type = importTournament.type;
 
+		if( typeof(importTournament.byeType) != "undefined" )
+			this.steamArmyPoints = importTournament.byeType;
 
 		if( typeof(importTournament.steamArmyPoints) != "undefined" )
-			this.steamArmyPoints = importTournament.steamArmyPoints;
+			this.byeType = importTournament.steamArmyPoints;
 
 		if( typeof(importTournament.steamControlPoints) != "undefined" )
 			this.steamControlPoints = importTournament.steamControlPoints;

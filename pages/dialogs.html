@@ -250,15 +250,31 @@
 							<input type="number" ng-model="tmpTournament.pointsForLoss" ng-change="updateTournamentPointsForLoss(tmpTournament.pointsForLoss)"  />
 						</label>
 
+
+
+
+
+				</fieldset>
+
+				<fieldset class="fieldset">
+					<legend translate="TOURNAMENTS_BYE_OPTIONS">Bye Options</legend>
+
+					<label>
+						<select ng-model="tmpTournament.byeType">
+							<option value="random" translate="GENERAL_BYE_RANDOM">Random</option>
+							<option value="middle" translate="GENERAL_BYE_MIDDLE">Middle</option>
+							<option value="last" translate="GENERAL_BYE_LAST">Last</option>
+						</select>
+					</label>
+
 						<label>
 							<input type="checkbox" ng-model="tmpTournament.byeIsAverage" ng-change="updateByeIsAverage(tmpTournament.byeIsAverage)" /> <span translate="TOURNAMENTS_BYE_IS_AVERAGE">Active</span><br />
 						</label>
+
 						<label ng-show="tmpTournament.byeIsAverage == false">
 							<span translate="TOURNAMENTS_POINTS_FOR_BYE"></span><br />
 							<input type="number" ng-model="tmpTournament.pointsForBye" ng-change="updateTournamentPointsForBye(tmpTournament.pointsForBye)"  />
 						</label>
-
-
 				</fieldset>
 
 				<fieldset class="fieldset">

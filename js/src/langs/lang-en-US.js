@@ -96,6 +96,10 @@ available_languages.push ({
 		BUTTON_LANG_DE: 'German',
 		BUTTON_LANG_BR: 'Brazilian',
 
+		GENERAL_BYE_MIDDLE: "Middle",
+		GENERAL_BYE_RANDOM: "Random",
+		GENERAL_BYE_LAST: "Last",
+
 		PLAYERS_DELETE_CONFIRMATION: "Are you sure you want to delete this player?",
 		PLAYERS_IMPORT_INSTRUCTIONS: "To import players into this app, navigate to your Players.json file you have saved.",
 		PLAYERS_DOWNLOAD_INSTRUCTIONS: "Click on the button below to download the current Players data object",
@@ -115,6 +119,8 @@ available_languages.push ({
 		TOURNAMENTS_EDIT_PLAYERS: "Edit Players",
 		TOURNAMENTS_BASE_SCORING: "Base Scoring",
 		TOURNAMENTS_EXTRA_SCORING: "Extra Scoring",
+
+		TOURNAMENTS_BYE_OPTIONS: "Bye Options",
 
 		TOURNAMENT_CONTROL_POINTS: "Control Points",
 		TOURNAMENT_ARMY_POINTS: "Army Points",

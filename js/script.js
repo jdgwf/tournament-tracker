@@ -177,6 +177,12 @@ function getPlayersFromLocalStorage() {
 	}
 }
 
+function getRandomInt(min, max) {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min)) + min;
+}
+
 function getTournamentsFromLocalStorage( playersObject ) {
 	if( !localStorage["tournaments_list"] ) {
 		localStorage["tournaments_list"] = "[]";
@@ -903,6 +909,9 @@ function Tournament (importTournament, playerObjects) {
 
 	this.swapLog = "";
 
+	this.byeType = "middle";
+
+
 	this.createMatchupObjs = function( playersObjs) {
 		this.matchupObjs = Array();
 
@@ -1033,12 +1042,15 @@ function Tournament (importTournament, playerObjects) {
 		//~ } else {
 			var theBye = -1;
 			if( this.playerObjs.length % 2 != 0 ) {
-				switch( this.tournamentType ) {
-					case "steamroller":
+				switch( this.byeType ) {
+					case "middle":
 						theBye = (this.playerObjs.length - 1) /2;
 						break;
-					case "swiss":
-						theBye = (this.playerObjs.length - 1) /2;
+					case "last":
+						theBye = (this.playerObjs.length );
+						break;
+					case "random":
+						theBye = getRandomInt(0, this.playerObjs.length - 1 );
 						break;
 					default:
 						theBye = (this.playerObjs.length - 1) /2;
@@ -1423,6 +1435,7 @@ function Tournament (importTournament, playerObjects) {
 			this.scoringPaint = false;
 			this.scoringComp = false;
 			this.scoringSportsmanship = false;
+			this.byeType = "middle";
 		}
 
 		//~ console.log( "this.scoring", this.scoring);
@@ -1662,9 +1675,11 @@ function Tournament (importTournament, playerObjects) {
 		if( typeof(importTournament.type) != "undefined" )
 			this.type = importTournament.type;
 
+		if( typeof(importTournament.byeType) != "undefined" )
+			this.steamArmyPoints = importTournament.byeType;
 
 		if( typeof(importTournament.steamArmyPoints) != "undefined" )
-			this.steamArmyPoints = importTournament.steamArmyPoints;
+			this.byeType = importTournament.steamArmyPoints;
 
 		if( typeof(importTournament.steamControlPoints) != "undefined" )
 			this.steamControlPoints = importTournament.steamControlPoints;
@@ -3056,6 +3071,10 @@ available_languages.push ({
 		BUTTON_LANG_DE: 'German',
 		BUTTON_LANG_BR: 'Brazilian',
 
+		GENERAL_BYE_MIDDLE: "Middle",
+		GENERAL_BYE_RANDOM: "Random",
+		GENERAL_BYE_LAST: "Last",
+
 		PLAYERS_DELETE_CONFIRMATION: "Are you sure you want to delete this player?",
 		PLAYERS_IMPORT_INSTRUCTIONS: "To import players into this app, navigate to your Players.json file you have saved.",
 		PLAYERS_DOWNLOAD_INSTRUCTIONS: "Click on the button below to download the current Players data object",
@@ -3075,6 +3094,8 @@ available_languages.push ({
 		TOURNAMENTS_EDIT_PLAYERS: "Edit Players",
 		TOURNAMENTS_BASE_SCORING: "Base Scoring",
 		TOURNAMENTS_EXTRA_SCORING: "Extra Scoring",
+
+		TOURNAMENTS_BYE_OPTIONS: "Bye Options",
 
 		TOURNAMENT_CONTROL_POINTS: "Control Points",
 		TOURNAMENT_ARMY_POINTS: "Army Points",
