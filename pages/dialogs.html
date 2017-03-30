@@ -428,7 +428,6 @@
 	<div class="reveal">
 		<fieldset class="fieldset">
 			<legend translate="TOURNAMENT_ROUND_MATCHUPS">Tournament Matchups</legend>
-
 			<table>
 				<thead>
 					<tr>
@@ -441,12 +440,13 @@
 				</thead>
 
 				<tbody>
-					<tr ng-repeat="matchup in currentTournament.matchupObjs[ currentTournament.currentRound + 1 ] track by $index">
+					<tr ng-repeat="matchup in currentTournament.matchupObjs[ currentTournament.currentRound + 1 ] track by $index" ng-class="{'has-played-each-other':currentTournament.hasPlayedEachOther(matchup.player1.id, matchup.player2.id)}">
 						<td>{{matchup.table}}</td>
 						<td>
 							<button ng-hide="matchup.player1.id == tmpMatchupSwappingID" class="button primary tiny" ng-click="swapPlayerButton( matchup.player1.id );" translate="TOURNAMENT_SWAP">Swap</button>
 						</td>
 						<td>
+							<span ng-show="currentTournament.currentRound > 0">#{{matchup.player1.rank}} - </span>
 							<span ng-hide="matchup.player1.name.nick != ''"><strong>{{matchup.player1.name.first}}</strong> {{matchup.player1.name.last}}</span>
 
 							<span ng-show="matchup.player1.name.nick != ''">{{matchup.player1.name.first}} <strong>"{{matchup.player1.name.nick}}"</strong> {{matchup.player1.name.last}}</span>
@@ -460,6 +460,7 @@
 						<td>
 							<div ng-show="matchup.player2 == null" translate="GENERAL_BYE"></div>
 							<div ng-show="matchup.player2">
+								<span ng-show="currentTournament.currentRound > 0">#{{matchup.player2.rank}} - </span>
 								<span ng-hide="matchup.player2.name.nick != ''"><strong>{{matchup.player2.name.first}}</strong> {{matchup.player2.name.last}}</span>
 
 								<span ng-show="matchup.player2.name.nick != ''">{{matchup.player2.name.first}} <strong>"{{matchup.player2.name.nick}}"</strong> {{matchup.player2.name.last}}</span>

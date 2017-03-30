@@ -21,6 +21,7 @@ $secondaryBGHover: #e4e4ce;
 $secondaryTextColor: #333;
 
 $colorRed: #c00;
+$colorDarkerRed: #a00;
 $colorGreen: #0c0;
 $colorYellow: #cc0;
 
@@ -1065,6 +1066,15 @@ button.round, .button.round {
 }
 .color-yellow {
 	color: $colorYellow !important;
+}
+
+.has-played-each-other {
+	background: $colorRed !important;
+
+	td {
+		background: $colorRed !important;
+	}
+
 }
 
 @media only screen and (max-device-width: 400px) and (orientation: portrait) {

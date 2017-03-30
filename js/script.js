@@ -1155,7 +1155,45 @@ function Tournament (importTournament, playerObjects) {
 		} else if( this.type == "steamroller" ) {
 			this.playerObjs.sort( steamPlayerSort );
 		}
+
+		var currentRank = 1;
+		for( var pC = 0; pC < this.playerObjs.length; pC++) {
+			this.playerObjs[ pC ].rank = currentRank;
+			currentRank++;
+		}
+
 		console.log( "classTournament.sortPlayerObjsByScores() called" );
+	}
+
+	this.hasPlayedEachOther = function(player1ID, player2ID) {
+		//~ console.log( "this.matches", this.matches);
+		console.log( "this.currentRound", this.currentRound);
+		for( var roundC = 0; roundC <= this.currentRound; roundC++) {
+
+			//~ console.log( "this.matches[ roundC ]", roundC, this.matches[ roundC ]);
+			if( this.matches[ roundC ] ) {
+				for( var matchC = 0; matchC < this.matches.length; matchC++ ) {
+					//~ console.log( this.matches[ roundC ][ matchC ].player1, this.matches[ roundC ][ matchC ].player2 );
+					if(
+						(
+							this.matches[ roundC ][ matchC ].player1 == player1ID
+								&&
+							this.matches[ roundC ][ matchC ].player2 == player2ID
+						)
+							||
+						(
+							this.matches[ roundC ][ matchC ].player1 == player2ID
+								&&
+							this.matches[ roundC ][ matchC ].player2 == player1ID
+						)
+					) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
 	}
 
 	this.createPlayerObjs = function( playersObjs) {
@@ -1168,6 +1206,8 @@ function Tournament (importTournament, playerObjects) {
 				else
 					player.displayName = player.name.first + " " + player.name.last;
 				this.playerObjs.push( player );
+
+
 			}
 		}
 
