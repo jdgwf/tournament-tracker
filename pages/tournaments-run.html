@@ -108,7 +108,21 @@
 								</div>
 
 								<div ng-click="editScore(playerObjs.id, $index + 1)" class="cursor-pointer" ng-show="currentTournament.currentRound > $index && currentTournament.scoring[$index][playerObjs.id] != 'bye' && currentTournament.scoring[$index][playerObjs.id] < 0" title="{{ 'TOURNAMENT_NOT_ENTERED' | translate }}" translate="TOURNAMENT_NE">n/e</div>
-								<div ng-show="currentTournament.currentRound > $index && currentTournament.scoring[$index][playerObjs.id] == 'bye'" title="{{ 'TOURNAMENT_GAME_IS_BYE' | translate }}" translate="GENERAL_BYE">bye</div>
+								<div ng-show="currentTournament.currentRound > $index && currentTournament.scoring[$index][playerObjs.id] == 'bye'" title="{{ 'TOURNAMENT_GAME_IS_BYE' | translate }}">
+									<span translate="GENERAL_BYE">bye</span>
+										<span ng-show="currentTournament.type == 'steamroller'">
+										(
+											{{currentTournament.byeSteamControlPoints[playerObjs.id]}}
+											/
+											{{currentTournament.byeSteamArmyPoints[playerObjs.id]}}
+										)
+										</span>
+										<span ng-show="currentTournament.type != 'steamroller' && currentTournament.byeIsAverage">
+											(
+												{{currentTournament.byePoints[playerObjs.id]}}
+											)
+										</span>
+								</div>
 
 								<div ng-hide="currentTournament.currentRound > $index" title="{{ 'TOURNAMENT_NOT_AVAILABLE' | translate }}" translate="TOURNAMENT_NA" class="darker-text">n/a</div>
 							</td>

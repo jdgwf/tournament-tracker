@@ -161,99 +161,81 @@ function Tournament (importTournament, playerObjects) {
 		var matchCounter = 0;
 		var tableNumber = 1;
 		var hasByes = false;
-		//~ if( this.playerObjs.length % 2 == 0 ) {
-			//~ while( matchCounter <  this.playerObjs.length  ) {
-				//~ var matchObj = {
-					//~ table: tableNumber,
-					//~ player1: this.playerObjs[ matchCounter ].id,
-					//~ player2: this.playerObjs[ matchCounter + 1 ].id
-				//~ };
 
-				//~ this.matches[ roundNumber ].push( matchObj );
-
-				//~ tableNumber++;
-
-				//~ matchCounter += 2;
-			//~ }
-		//~ } else {
-			var theBye = -1;
-			if( this.playerObjs.length % 2 != 0 ) {
-				switch( this.byeType ) {
-					case "first":
-						theBye = 0;
-						break;
-					case "middle":
-						theBye = (this.playerObjs.length - 1) /2;
-						break;
-					case "last":
-						theBye = (this.playerObjs.length );
-						break;
-					case "random":
-						theBye = getRandomInt(0, this.playerObjs.length - 1 );
-						break;
-					default:
-						theBye = (this.playerObjs.length - 1) /2;
-						break;
-				}
+		var theBye = -1;
+		if( this.playerObjs.length % 2 != 0 ) {
+			switch( this.byeType ) {
+				case "first":
+					theBye = 0;
+					break;
+				case "middle":
+					theBye = (this.playerObjs.length - 1) /2;
+					break;
+				case "last":
+					theBye = (this.playerObjs.length );
+					break;
+				case "random":
+					theBye = getRandomInt(0, this.playerObjs.length - 1 );
+					break;
+				default:
+					theBye = (this.playerObjs.length - 1) /2;
+					break;
 			}
-
-			//~ console.log( "theBye", theBye );
-
-			while( theBye > 0 && this.hasHadBye( this.playerObjs[ theBye ].id)  ) {
-				// move down to next player, this one already has had a bye
-				theBye++;
-			}
-
-			var player1 = 0;
-			var player2 = 0;
-
-			var byeObject = null
-
-			for( var matchCounter = 0; matchCounter <  this.playerObjs.length; matchCounter++ ) {
-				if( theBye == matchCounter ) {
-
-					byeObject = {
-						table: "-",
-						player1: this.playerObjs[ matchCounter ].id,
-						player2: -1
-					};
-
-				} else if( player1 == 0 ) {
-					player1 = this.playerObjs[ matchCounter ].id;
-				} else if( player2 == 0 ) {
-					player2 = this.playerObjs[ matchCounter ].id;
-
-				}
-
-				//~ console.log( matchCounter, player1, player2 );
-
-				if( player1 != 0 && player2 != 0 ) {
-					var matchObj = {
-						table: tableNumber,
-						player1: player1,
-						player2: player2
-					};
-					this.matches[ roundNumber ].push( matchObj );
-
-					player1 = 0;
-					player2 = 0;
-					tableNumber++;
-					//~ console.log("newMatch", matchObj, matchCounter, this.playerObjs.length, this.playerObjs);
-				}
+		}
 
 
-				//~ matchCounter++;
+		while( theBye > -1 && this.hasHadBye( this.playerObjs[ theBye ].id) && theBye < this.playerObjs.length ) {
+			// move down to next player, this one already has had a bye
+			theBye++;
+		}
+
+		var player1 = 0;
+		var player2 = 0;
+
+		var byeObject = null
+
+		for( var matchCounter = 0; matchCounter <  this.playerObjs.length; matchCounter++ ) {
+			if( theBye == matchCounter ) {
+
+				byeObject = {
+					table: "-",
+					player1: this.playerObjs[ matchCounter ].id,
+					player2: -1
+				};
+
+			} else if( player1 == 0 ) {
+				player1 = this.playerObjs[ matchCounter ].id;
+			} else if( player2 == 0 ) {
+				player2 = this.playerObjs[ matchCounter ].id;
 
 			}
 
-			if( byeObject ) {
-				this.matches[ roundNumber ].push( byeObject );
+			//~ console.log( matchCounter, player1, player2 );
+
+			if( player1 != 0 && player2 != 0 ) {
+				var matchObj = {
+					table: tableNumber,
+					player1: player1,
+					player2: player2
+				};
+				this.matches[ roundNumber ].push( matchObj );
+
+				player1 = 0;
+				player2 = 0;
+				tableNumber++;
+				//~ console.log("newMatch", matchObj, matchCounter, this.playerObjs.length, this.playerObjs);
 			}
 
 
-			//~ console.log( this.matches[ roundNumber ] );
+			//~ matchCounter++;
 
-		//~ }
+		}
+
+		if( byeObject ) {
+			this.matches[ roundNumber ].push( byeObject );
+		}
+
+
 
 		this.attemptToRemoveDuplicateMatches( roundNumber, playersObjs );
 
@@ -437,7 +419,7 @@ function Tournament (importTournament, playerObjects) {
 		if( this.noDuplicateMatchups == false )
 			return false;
 		//~ console.log( "this.currentRound", this.currentRound);
-		for( var roundC = 0; roundC < this.currentRound; roundC++) {
+		for( var roundC = 0; roundC <= this.currentRound; roundC++) {
 
 			if( this.matches[ roundC ] ) {
 				//~ console.log( "this.matches[ roundC ]", roundC, this.matches[ roundC ]);
@@ -477,11 +459,12 @@ function Tournament (importTournament, playerObjects) {
 			return false;
 
 		//~ console.log( "this.currentRound", this.currentRound);
-		for( var roundC = 1; roundC < this.currentRound; roundC++) {
+		//~ console.log( "player1ID", player1ID );
+		for( var roundC = 1; roundC <= this.currentRound; roundC++) {
 
 			//~ console.log( "---------------------------------- this.matches[ roundC ]", roundC, this.matches[ roundC ]);
 			if( this.matches[ roundC ] ) {
-				for( var matchC = 0; matchC < this.matches.length - 1; matchC++ ) {
+				for( var matchC = 0; matchC < this.matches.length; matchC++ ) {
 					//~ console.log( "matchC", matchC );
 					//~ console.log("this.matches[ roundC ][ matchC ]", this.matches[ roundC ][ matchC ]);
 					//~ console.log( this.matches[ roundC ][ matchC ].player1, this.matches[ roundC ][ matchC ].player2 );
@@ -643,6 +626,10 @@ function Tournament (importTournament, playerObjects) {
 	this.calculateResults = function() {
 		this.totals = Array();
 
+		this.byeSteamControlPoints = Array();
+		this.byeSteamArmyPoints = Array();
+		this.byePoints = Array();
+
 		for( var playerC = 0; playerC < this.playerObjs.length; playerC++ ) {
 			numByes = 0;
 			playerTotal = 0;
@@ -709,6 +696,7 @@ function Tournament (importTournament, playerObjects) {
 					) {
 						//~ console.log( "pointsForBye", this.currentRound );
 						playerTotal += this.pointsForBye;
+						this.byePoints[ this.playerObjs[playerC].id ] = this.pointsForBye;
 					}
 					numByes++;
 				}
@@ -719,10 +707,12 @@ function Tournament (importTournament, playerObjects) {
 				if( this.currentRound - numByes  > 0 ) {
 					averageRound = Math.round(playerTotal / ( this.currentRound - numByes ));
 					playerTotal += averageRound * numByes;
+					this.byePoints[ this.playerObjs[playerC].id ] = averageRound;
 				} else {
 					// two byes right at the start (WTF, really tourney admin?). Division by Zeros are BAD!
 					// We'll just put the default value for byes in until something comes up.
 					playerTotal += this.pointsForBye * numByes;
+					this.byePoints[ this.playerObjs[playerC].id ] = 0;
 				}
 
 			}
@@ -744,6 +734,72 @@ function Tournament (importTournament, playerObjects) {
 			if( this.pointsSportsmanship[ this.playerObjs[ playerC ].id] > 0 )
 				this.playerObjs[ playerC ].pointsFinal += this.pointsSportsmanship[ this.playerObjs[ playerC ].id];
 
+			if( this.type == "steamroller" ) {
+				if( playerTotal > 0 && this.hasHadBye( this.playerObjs[ playerC ].id ) ) {
+					//~ console.log("---------------------------------------------");
+					//~ console.log( "this.steamControlPoints", this.steamControlPoints );
+					//~ console.log( "this.steamArmyPoints", this.steamArmyPoints );
+					var divByZero = 0;
+					var tempSubTotal = 0;
+
+					for( var iC = 0; iC < this.steamArmyPoints.length; iC++ ) {
+						if(
+							this.steamControlPoints[ iC ]
+								&&
+							typeof( this.steamControlPoints[ iC ][ this.playerObjs[ playerC ].id ]) != "undefined"
+								&&
+							this.steamControlPoints[ iC ][ this.playerObjs[ playerC ].id ] !== null
+						) {
+							tempSubTotal +=  this.steamControlPoints[ iC ][ this.playerObjs[ playerC ].id ];
+							divByZero++;
+						}
+					}
+					//~ console.log( "control divByZero1", this.playerObjs[playerC].name.first, this.playerObjs[playerC].id, divByZero);
+					//~ console.log( "control tempSubTotal", this.playerObjs[playerC].name.first, this.playerObjs[playerC].id, tempSubTotal);
+
+					if( divByZero > 0 ) {
+						this.byeSteamControlPoints[ this.playerObjs[playerC].id ] = Math.round( tempSubTotal / divByZero );
+						this.playerObjs[ playerC ].steamControlPoints += this.byeSteamControlPoints[ this.playerObjs[playerC].id ];
+					} else {
+						this.byeSteamControlPoints[ this.playerObjs[playerC].id ] = 0;
+					}
+
+
+
+					var divByZero = 0;
+					var tempSubTotal = 0;
+					for( var iC = 0; iC < this.steamArmyPoints.length; iC++ ) {
+
+						if(
+							this.steamArmyPoints[ iC ]
+								&&
+							typeof( this.steamArmyPoints[ iC ][ this.playerObjs[ playerC ].id ]) != "undefined"
+								&&
+							this.steamArmyPoints[ iC ][ this.playerObjs[ playerC ].id ] !== null
+						) {
+							tempSubTotal +=  this.steamArmyPoints[ iC ][ this.playerObjs[ playerC ].id ];
+							divByZero++;
+						}
+					}
+					//~ console.log( "army divByZero2", this.playerObjs[playerC].name.first,  this.playerObjs[playerC].id, divByZero);
+					//~ console.log( "army tempSubTotal", this.playerObjs[playerC].name.first, this.playerObjs[playerC].id, tempSubTotal);
+
+					if( divByZero > 0 ) {
+						this.byeSteamArmyPoints[ this.playerObjs[playerC].id ] = Math.round( tempSubTotal / divByZero );
+						this.playerObjs[ playerC ].steamArmyPoints += this.byeSteamArmyPoints[ this.playerObjs[playerC].id ];
+					} else {
+						this.byeSteamArmyPoints[ this.playerObjs[playerC].id ] = 0;
+					}
+
+					//this.byeSteamControlPoints[ this.playerObjs[playerC].id ] = 0;
+					//this.byeSteamArmyPoints[ this.playerObjs[playerC].id ] = 0;
+
+
+				} else {
+					this.byeSteamControlPoints[ this.playerObjs[playerC].id ] = 0;
+					this.byeSteamArmyPoints[ this.playerObjs[playerC].id ] = 0;
+				}
+			}
 		}
 	}
 
@@ -815,10 +871,10 @@ function Tournament (importTournament, playerObjects) {
 			this.type = importTournament.type;
 
 		if( typeof(importTournament.byeType) != "undefined" )
-			this.steamArmyPoints = importTournament.byeType;
+			this.byeType = importTournament.byeType;
 
 		if( typeof(importTournament.steamArmyPoints) != "undefined" )
-			this.byeType = importTournament.steamArmyPoints;
+			this.steamArmyPoints = importTournament.steamArmyPoints;
 
 		if( typeof(importTournament.steamControlPoints) != "undefined" )
 			this.steamControlPoints = importTournament.steamControlPoints;
