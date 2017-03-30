@@ -65,6 +65,8 @@ function Tournament (importTournament, playerObjects) {
 	}
 
 	this.attemptToRemoveDuplicateMatches = function( roundNumber, playersObjs ) {
+		if( roundNumber == 1 )
+			return false;
 		if( this.noDuplicateMatchups  == false )
 			return false;
 
@@ -73,8 +75,11 @@ function Tournament (importTournament, playerObjects) {
 		var player1 = null;
 		var player2 = null;
 
+		//~ console.log( roundNumber );
+		//~ console.log( this.matches);
+		//~ console.log( this.matches[ roundNumber ]);
 
-		for( var matchC = 0; matchC < this.matches[ roundNumber ].length; matchC++ ) {
+		for( var matchC = 1; matchC < this.matches[ roundNumber ].length; matchC++ ) {
 
 			if( this.hasPlayedEachOther( this.matches[ roundNumber ][ matchC ].player1, this.matches[ roundNumber ][ matchC ].player2 ) ) {
 				player1 = getPlayerByID( playersObjs, this.matches[ roundNumber ][ matchC ].player1 );
@@ -127,54 +132,76 @@ function Tournament (importTournament, playerObjects) {
 
 		this.matches[ roundNumber ] = Array();
 
-		if( this.matchupType == "highest-ranking" ) {
-			//~ console.log( "classTournament.createMatchupObjs() - sorting by highest-ranking" );
-			this.sortPlayerObjsByScores();
-		} else if( this.matchupType == "random" ) {
-			//~ console.log( "classTournament.createMatchupObjs() - sorting by random" );
+		if( roundNumber == 1 ) {
+			// randomize first round.
 			this.playerObjs = shuffleArray( this.playerObjs );
 		} else {
-			//~ console.log( "classTournament.createMatchupObjs() - unknown sort '" + this.matchupType + "' - sorting by highest-ranking" );
-			this.sortPlayerObjsByScores();
+			if( this.type == "steamroller") {
+				//~ console.log( "classTournament.createMatchupObjs() - steamroller '" + this.matchupType + "' - sorting by highest-ranking" );
+
+				this.sortPlayerObjsByScores();
+			} else {
+				if( this.matchupType == "highest-ranking" ) {
+					//~ console.log( "classTournament.createMatchupObjs() - sorting by highest-ranking" );
+					this.sortPlayerObjsByScores();
+				} else if( this.matchupType == "random" ) {
+					//~ console.log( "classTournament.createMatchupObjs() - sorting by random" );
+					this.playerObjs = shuffleArray( this.playerObjs );
+				} else {
+					//~ console.log( "classTournament.createMatchupObjs() - unknown sort '" + this.matchupType + "' - sorting by highest-ranking" );
+					this.sortPlayerObjsByScores();
+				}
+			}
+
 		}
 
 		var matchCounter = 0;
 		var tableNumber = 1;
 		var hasByes = false;
-		if( this.playerObjs.length % 2 == 0 ) {
-			while( matchCounter <  this.playerObjs.length  ) {
-				var matchObj = {
-					table: tableNumber,
-					player1: this.playerObjs[ matchCounter ].id,
-					player2: this.playerObjs[ matchCounter + 1 ].id
-				};
+		//~ if( this.playerObjs.length % 2 == 0 ) {
+			//~ while( matchCounter <  this.playerObjs.length  ) {
+				//~ var matchObj = {
+					//~ table: tableNumber,
+					//~ player1: this.playerObjs[ matchCounter ].id,
+					//~ player2: this.playerObjs[ matchCounter + 1 ].id
+				//~ };
 
-				this.matches[ roundNumber ].push( matchObj );
+				//~ this.matches[ roundNumber ].push( matchObj );
 
-				tableNumber++;
+				//~ tableNumber++;
 
-				matchCounter += 2;
+				//~ matchCounter += 2;
+			//~ }
+		//~ } else {
+			var theBye = -1;
+			if( this.playerObjs.length % 2 != 0 ) {
+				switch( this.tournamentType ) {
+					case "steamroller":
+						theBye = (this.playerObjs.length - 1) /2;
+						break;
+					case "swiss":
+						theBye = (this.playerObjs.length - 1) /2;
+						break;
+					default:
+						theBye = (this.playerObjs.length - 1) /2;
+						break;
+				}
 			}
-		} else {
 
-			var theMiddleman = (this.playerObjs.length - 1) /2;
 
-			//~ console.log( "theMiddleman", theMiddleman );
 
-			while( this.hasHadBye( this.playerObjs[ theMiddleman ].id)  ) {
+			//~ console.log( "theBye", theBye );
+
+			while( theBye > 0 && this.hasHadBye( this.playerObjs[ theBye ].id)  ) {
 				// move down to next player, this one already has had a bye
-				theMiddleman++;
+				theBye++;
 			}
 
 			var player1 = 0;
 			var player2 = 0;
 
-			while( matchCounter <  this.playerObjs.length  ) {
-
-
-
-
-				if( theMiddleman == matchCounter ) {
+			for( var matchCounter = 0; matchCounter <  this.playerObjs.length; matchCounter++ ) {
+				if( theBye == matchCounter ) {
 					player1 = this.playerObjs[ matchCounter ].id;
 					player2 = -1;
 					hasByes = true;
@@ -199,12 +226,13 @@ function Tournament (importTournament, playerObjects) {
 					tableNumber++;
 				}
 
-				matchCounter++;
+				//~ matchCounter++;
 
 			}
 
+			console.log( this.matches[ roundNumber ] );
 
-		}
+		//~ }
 
 		this.attemptToRemoveDuplicateMatches( roundNumber, playersObjs );
 
@@ -382,17 +410,18 @@ function Tournament (importTournament, playerObjects) {
 			return true;
 		if( player1ID == -1 || player2ID == -1 )
 			return false;
-		//~ console.log( "this.matches", this.matches);
+		//~ console.log( "-------------------------hasPlayedEachOther this.matches", this.matches);
 		if( this.currentRound == 0 )
 			return false;
 		if( this.noDuplicateMatchups == false )
 			return false;
 		//~ console.log( "this.currentRound", this.currentRound);
-		for( var roundC = 0; roundC <= this.currentRound; roundC++) {
+		for( var roundC = 0; roundC < this.currentRound; roundC++) {
 
-			//~ console.log( "this.matches[ roundC ]", roundC, this.matches[ roundC ]);
 			if( this.matches[ roundC ] ) {
-				for( var matchC = 0; matchC < this.matches.length; matchC++ ) {
+				//~ console.log( "this.matches[ roundC ]", roundC, this.matches[ roundC ]);
+
+				for( var matchC = 0; matchC < this.matches[ roundC ].length; matchC++ ) {
 					//~ console.log( this.matches[ roundC ][ matchC ].player1, this.matches[ roundC ][ matchC ].player2 );
 					if(
 						this.matches[ roundC ][ matchC ].player1
@@ -427,11 +456,13 @@ function Tournament (importTournament, playerObjects) {
 			return false;
 
 		//~ console.log( "this.currentRound", this.currentRound);
-		for( var roundC = 0; roundC <= this.currentRound; roundC++) {
+		for( var roundC = 1; roundC < this.currentRound; roundC++) {
 
-			//~ console.log( "this.matches[ roundC ]", roundC, this.matches[ roundC ]);
+			//~ console.log( "---------------------------------- this.matches[ roundC ]", roundC, this.matches[ roundC ]);
 			if( this.matches[ roundC ] ) {
-				for( var matchC = 0; matchC < this.matches.length; matchC++ ) {
+				for( var matchC = 0; matchC < this.matches.length - 1; matchC++ ) {
+					//~ console.log( "matchC", matchC );
+					//~ console.log("this.matches[ roundC ][ matchC ]", this.matches[ roundC ][ matchC ]);
 					//~ console.log( this.matches[ roundC ][ matchC ].player1, this.matches[ roundC ][ matchC ].player2 );
 					if(
 						(
@@ -540,6 +571,7 @@ function Tournament (importTournament, playerObjects) {
 	}
 
 	this.getMatch = function( roundNumber, playerID ) {
+		//~ console.log( "getMatch", roundNumber, playerID, this.matches[ roundNumber ] );
 		if( this.matches[ roundNumber ] ) {
 			for( var matchC = 0; matchC < this.matches[ roundNumber ].length; matchC++ ) {
 				if(

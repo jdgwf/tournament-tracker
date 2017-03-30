@@ -82,9 +82,9 @@ function getPlayerByID( playersList, playerID ) {
 
 function getStyledPlayerName( playerObj ) {
 	if( playerObj.name.nick ) {
-		return playerObj.name.first + "\"<strong>" + playerObj.name.nick + "</strong>\"" + playerObj.name.last;
+		return playerObj.name.first + " \"<strong>" + playerObj.name.nick + "</strong>\" " + playerObj.name.last;
 	} else {
-		return "<strong>" + playerObj.first + "</strong>" + playerObj.name.last;
+		return "<strong>" + playerObj.name.first + "</strong> " + playerObj.name.last;
 	}
 }
 

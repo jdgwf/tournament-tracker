@@ -228,6 +228,8 @@ var tournamentsRunArray =
 
 				//~ console.log( "-------------------------------------------------------" );
 
+				$scope.currentTournament.sortPlayerObjsByScores();
+
 				$route.reload();
 
 			}
