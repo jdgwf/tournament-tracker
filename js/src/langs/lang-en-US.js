@@ -51,6 +51,7 @@ available_languages.push ({
 		GENERAL_PLAYER: 'Player',
 		GENERAL_ITEM_RESTORE: "Restore",
 		GENERAL_BYE: "Bye",
+		GENERAL_TOTAL: "Total",
 
 		GENERAL_ITEM_EDIT: "Edit Item",
 		GENERAL_ITEM_REMOVE: "Remove Item",
