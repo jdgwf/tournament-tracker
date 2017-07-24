@@ -12,13 +12,17 @@
 		<div class="text-center columns small-4 main-menu no-wrap">
 			<div ng-show="currentPlayersPage">
 				<a ng-click="newPlayerDialog()" title="{{ 'MENU_TITLE_ADD_PLAYER' | translate }}"><i class="fa fa-plus"></i></a>
+<!--
 				<a ng-click="importExportPlayersDialog()" title="{{ 'MENU_TITLE_EXPORT_PLAYERS' | translate }}"><i class="fa fa-file-code-o"></i></a>
+-->
 				<a href="#/players-deleted/" ng-show="numDeletedPlayers > 0" title="{{ 'PLAYERS_DELETED_PLAYERS' | translate }}"><i class="fa fa-trash"></i></a>
 
 			</div>
 			<div ng-show="currentTournamentsPage">
 				<a ng-click="newTournamentDialog()" title="{{ 'MENU_TITLE_ADD_TOURNAMENT' | translate }}"><i class="fa fa-plus"></i></a>
+<!--
 				<a ng-click="importExportTournamentsDialog()" title="{{ 'MENU_TITLE_EXPORT_TOURNAMENTS' | translate }}"><i class="fa fa-file-code-o"></i></a>
+-->
 
 			</div>
 		</div>

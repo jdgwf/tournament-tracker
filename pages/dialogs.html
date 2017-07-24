@@ -469,7 +469,9 @@
 					<tr ng-repeat="matchup in $root.currentTournament.matchupObjs[ $root.currentTournament.currentRound + 1 ] track by $index" ng-class="{'has-played-each-other':$root.currentTournament.hasPlayedEachOther(matchup.player1.id, matchup.player2.id)}">
 						<td>{{matchup.table}}</td>
 						<td>
-							<button ng-hide="matchup.player1.id == tmpMatchupSwappingID" class="button primary tiny" ng-click="swapPlayerButton( matchup.player1.id );" translate="TOURNAMENT_SWAP">Swap</button>
+							<button ng-show="$root.tmpMatchupSwappingID == ''" class="button primary tiny" ng-click="swapPlayerButton( matchup.player1.id );" translate="TOURNAMENT_SWAP">Swap</button>
+							<button ng-show="$root.tmpMatchupSwappingID != '' && matchup.player1.id != $root.tmpMatchupSwappingID" class="button primary tiny" ng-click="swapPlayerButton( matchup.player1.id );" translate="TOURNAMENT_SWAP_WITH">Swap With</button>
+							<span ng-show="$root.tmpMatchupSwappingID != '' && matchup.player1.id == $root.tmpMatchupSwappingID"  translate="TOURNAMENT_SWAPPING">Swapping</span>
 						</td>
 						<td>
 							<span ng-show="$root.currentTournament.currentRound > 0">#{{matchup.player1.rank}} - </span>
@@ -480,7 +482,9 @@
 						</td>
 						<td>
 							<div ng-show="matchup.player2">
-								<button ng-hide="matchup.player2.id == tmpMatchupSwappingID" class="button primary tiny" ng-click="swapPlayerButton( matchup.player2.id );" translate="TOURNAMENT_SWAP">Swap</button>
+								<button ng-show="$root.tmpMatchupSwappingID == ''" class="button primary tiny" ng-click="swapPlayerButton( matchup.player2.id );" translate="TOURNAMENT_SWAP">Swap</button>
+								<button ng-show="$root.tmpMatchupSwappingID != '' && matchup.player2.id != $root.tmpMatchupSwappingID" class="button primary tiny" ng-click="swapPlayerButton( matchup.player2.id );" translate="TOURNAMENT_SWAP_WITH">Swap With</button>
+								<span ng-show="$root.tmpMatchupSwappingID != '' && matchup.player2.id == $root.tmpMatchupSwappingID"  translate="TOURNAMENT_SWAPPING">Swapping</span>
 							</div>
 						</td>
 						<td>
@@ -496,7 +500,7 @@
 					</tr>
 				</tbody>
 			</table>
-			<div class="text-center" ng-show="tmpMatchupSwappingID > 0">
+			<div class="text-center" ng-show="$root.tmpMatchupSwappingID != ''">
 				<span translate="TOURNAMENT_CHOOSE_PLAYER_TO_SWAP">Choose Player To Swap</span><br />
 				<button class="button primary tiny" ng-click="cancelSwap();" translate="TOURNAMENT_CANCEL_SWAP">Cancel Swap</button>
 			</div>

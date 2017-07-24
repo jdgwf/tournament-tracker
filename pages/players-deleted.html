@@ -12,7 +12,9 @@
 			<table>
 				<thead>
 					<tr>
+<!--
 						<th translate="GENERAL_ID">id</th>
+-->
 						<th translate="GENERAL_NAME_FIRST">First Name</th>
 						<th translate="GENERAL_NAME_LAST">Last Name</th>
 						<th translate="GENERAL_NAME_NICK">Nickname</th>
@@ -25,7 +27,9 @@
 
 				<tbody>
 					<tr ng-repeat="playerObj in deletedPlayers track by $index">
+<!--
 							<td>{{ playerObj.id }}</td>
+-->
 							<td>{{ playerObj.name.first }}</td>
 							<td>{{ playerObj.name.last }}</td>
 							<td>{{ playerObj.name.nick }}</td>

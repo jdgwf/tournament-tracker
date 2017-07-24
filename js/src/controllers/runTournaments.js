@@ -15,6 +15,8 @@ var tournamentsRunArray =
 
 			$rootScope.currentTournamentsRun = true;
 
+			$rootScope.tmpMatchupSwappingID = "";
+
 			$rootScope.playerList = getPlayersFromLocalStorage();
 
 			$rootScope.tournamentList = getTournamentsFromLocalStorage();

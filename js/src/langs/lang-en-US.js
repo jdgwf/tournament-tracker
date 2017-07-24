@@ -193,7 +193,9 @@ available_languages.push ({
 		TOURNAMENT_EDITING_GAME_SCORES: "Editing Game Scores",
 		TOURNAMENT_EXTRA_POINTS: "Extra Points",
 		TOURNAMENT_SWAP: "Swap",
-		TOURNAMENT_CHOOSE_PLAYER_TO_SWAP: "Choose player to swap.",
+		TOURNAMENT_SWAPPING: "Swapping",
+		TOURNAMENT_SWAP_WITH: "Swap With",
+		TOURNAMENT_CHOOSE_PLAYER_TO_SWAP: "Choose a player to swap with.",
 		TOURNAMENT_CANCEL_SWAP: "Cancel Swap Mode",
 
 
