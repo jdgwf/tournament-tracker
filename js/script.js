@@ -3261,7 +3261,7 @@ available_languages.push ({
 
 		WELCOME_BUTTON_MANAGE_PLAYERS: "Manage Players",
 		WELCOME_BUTTON_MANAGE_PLAYERS_DESC: "Before you can actually set up a tournament, you'll probably need to add some players here.",
-		WELCOME_BUTTON_MANAGE_TOURNAMENTS: "Manage Tourmaments",
+		WELCOME_BUTTON_MANAGE_TOURNAMENTS: "Manage Tournaments",
 		WELCOME_BUTTON_MANAGE_TOURNAMENTS_DESC: "In this area you'll find your past tournaments you've tracked on this device."
 
 	}
