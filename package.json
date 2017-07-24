@@ -1,6 +1,6 @@
 {
-  "name": "SavageWorldsWebTools",
-  "version": "2.0.0",
+  "name": "Tournament Tracker",
+  "version": "1.0.0",
   "devDependencies": {
     "grunt": "latest",
     "grunt-contrib-uglify": "latest",
