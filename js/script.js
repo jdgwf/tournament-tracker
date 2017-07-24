@@ -188,10 +188,12 @@ function getTournamentsFromLocalStorage( playersObject ) {
 		localStorage["tournaments_list"] = "[]";
 		return Array();
 	} else {
-		//return JSON.parse( localStorage["tournaments_list"]  );
+		//~ return JSON.parse( localStorage["tournaments_list"]  );
 		var returnValue = Array();
 		var importTournaments = JSON.parse( localStorage["tournaments_list"]  );
+		//~ console.log( "getTournamentsFromLocalStorage raw", localStorage["tournaments_list"] );
 
+		//~ console.log( "getTournamentsFromLocalStorage", importTournaments );
 		for( var tournamentC = 0; tournamentC < importTournaments.length; tournamentC++ ) {
 			var newTournament = new Tournament( importTournaments[tournamentC] );
 
@@ -207,7 +209,6 @@ function getTournamentsFromLocalStorage( playersObject ) {
 function savePlayersToLocalStorage( playersObject ) {
 	playersObject.sort( sortByNames );
 	localStorage["players_list"] = JSON.stringify( playersObject );
-
 }
 
 function saveTournamentsToLocalStorage( tournamentsObject, playersList ) {
@@ -217,7 +218,9 @@ function saveTournamentsToLocalStorage( tournamentsObject, playersList ) {
 		if( tournamentsObject[tC].matchupObjs )
 			delete tournamentsObject[tC].matchupObjs;
 	}
+	//~ console.log( "saveTournamentsToLocalStorage", tournamentsObject );
 	localStorage["tournaments_list"] = JSON.stringify( tournamentsObject );
+	//~ console.log( "saved", localStorage["tournaments_list"] );
 	for( var tC = 0; tC < tournamentsObject.length; tC++ ) {
 		tournamentsObject[ tC ].createPlayerObjs( playersList );
 		tournamentsObject[ tC ].createMatchupObjs( playersList );
@@ -823,7 +826,7 @@ function Player ( importPlayer ) {
 
 	this.active = true;
 	this.deleted = false;
-	this.id = -1;
+	this.id = generateUUID();
 
 	if( typeof(importPlayer) != "undefined" ) {
 		if( typeof(importPlayer.email) != "undefined") {
@@ -853,8 +856,10 @@ function Player ( importPlayer ) {
 			this.deleted = importPlayer.deleted;
 
 
-		if( typeof(importPlayer.id) != "undefined")
+		if( typeof(importPlayer.id) != "undefined" || importPlayer.id > 0)
 			this.id = importPlayer.id;
+		else
+			this.id = generateUUID();
 	}
 
 	this.newFunction = function() {
@@ -892,14 +897,14 @@ function Tournament (importTournament, playerObjects) {
 	this.warnSportsmanship = 2;
 
 	this.scoring = Array();	// base score from win/loss/draw status
-	this.extraPoints = Array(); // per game extra points
+	this.extraPoints = {}; // per game extra points
 
-	this.steamControlPoints = Array(); // Steamroller control points
-	this.steamArmyPoints = Array(); // Steamroller army points
+	this.steamControlPoints = []; // Steamroller control points
+	this.steamArmyPoints = []; // Steamroller army points
 
-	this.pointsPainting = Array();
-	this.pointsComposition = Array();
-	this.pointsSportsmanship = Array();
+	this.pointsPainting = {};
+	this.pointsComposition = {}
+	this.pointsSportsmanship = {};
 
 	this.currentRound = 0;
 	this.matches = Array();
@@ -911,11 +916,16 @@ function Tournament (importTournament, playerObjects) {
 
 	this.byeType = "middle";
 
+	this.id = generateUUID();
+
 
 	this.createMatchupObjs = function( playersObjs) {
 		this.matchupObjs = Array();
 
+
+
 		for( var roundNumber in this.matches ) {
+
 			this.matchupObjs[ roundNumber ] = Array();
 			if( this.matches[ roundNumber ] ) {
 				for( var roundC = 0; roundC < this.matches[roundNumber].length; roundC++ ) {
@@ -1064,7 +1074,7 @@ function Tournament (importTournament, playerObjects) {
 				byeObject = {
 					table: "-",
 					player1: this.playerObjs[ matchCounter ].id,
-					player2: -1
+					player2: ""
 				};
 
 			} else if( player1 == 0 ) {
@@ -1127,13 +1137,19 @@ function Tournament (importTournament, playerObjects) {
 
 
 	this.setScore = function( roundNumber, playerID, newScore ) {
+		//~ console.log( "setScore", roundNumber, playerID, newScore );
+		//~ console.log( this.scoring[ roundNumber - 1] );
 		if( typeof(this.scoring[ roundNumber - 1]) == "undefined" )
-			this.scoring[ roundNumber - 1] = Array();
+			this.scoring[ roundNumber - 1] = {};
 
 		if( typeof(this.scoring[ roundNumber - 1][playerID]) == "undefined" )
 			this.scoring[ roundNumber - 1][playerID] = "-1";
 
 		this.scoring[ roundNumber - 1][playerID] = newScore
+
+		//~ console.log( "new score", this.scoring[ roundNumber - 1][playerID] );
+		//~ console.log( this.scoring[ roundNumber - 1] );
+		//~ console.log( "scoring", this.scoring );
 		return this.scoring[ roundNumber - 1][playerID];
 	}
 
@@ -1234,7 +1250,7 @@ function Tournament (importTournament, playerObjects) {
 
 	this.setSteamArmyPoints = function( roundNumber, playerID, newScore ) {
 		if( typeof(this.steamArmyPoints[ roundNumber - 1]) == "undefined" )
-			this.steamArmyPoints[ roundNumber - 1] = Array();
+			this.steamArmyPoints[ roundNumber - 1] = {};
 
 		if( typeof(this.steamArmyPoints[ roundNumber - 1][playerID]) == "undefined" )
 			this.steamArmyPoints[ roundNumber - 1][playerID] = -1;
@@ -1245,7 +1261,7 @@ function Tournament (importTournament, playerObjects) {
 
 	this.setSteamControlPoints = function( roundNumber, playerID, newScore ) {
 		if( typeof(this.steamControlPoints[ roundNumber - 1]) == "undefined" )
-			this.steamControlPoints[ roundNumber - 1] = Array();
+			this.steamControlPoints[ roundNumber - 1] = {};
 
 		if( typeof(this.steamControlPoints[ roundNumber - 1][playerID]) == "undefined" )
 			this.steamControlPoints[ roundNumber - 1][playerID] = -1;
@@ -1275,7 +1291,7 @@ function Tournament (importTournament, playerObjects) {
 
 		if( player1ID == player2ID )
 			return true;
-		if( player1ID == -1 || player2ID == -1 )
+		if( player1ID == "" || player2ID == "" )
 			return false;
 		//~ console.log( "-------------------------hasPlayedEachOther this.matches", this.matches);
 		if( this.currentRound == 0 )
@@ -1334,13 +1350,17 @@ function Tournament (importTournament, playerObjects) {
 					//~ console.log( this.matches[ roundC ][ matchC ].player1, this.matches[ roundC ][ matchC ].player2 );
 					if(
 						(
+							this.matches[ roundC ][ matchC ]
+								&&
 							this.matches[ roundC ][ matchC ].player1 == player1ID
 								&&
-							this.matches[ roundC ][ matchC ].player2 == -1
+							this.matches[ roundC ][ matchC ].player2 == ""
 						)
 							||
 						(
-							this.matches[ roundC ][ matchC ].player1 == -1
+							this.matches[ roundC ][ matchC ]
+								&&
+							this.matches[ roundC ][ matchC ].player1 == ""
 								&&
 							this.matches[ roundC ][ matchC ].player2 == player1ID
 						)
@@ -1372,7 +1392,7 @@ function Tournament (importTournament, playerObjects) {
 		for( var roundC = 0; roundC < this.numberOfRounds; roundC++ ) {
 			//~ console.log( "roundC", roundC);
 			if( typeof( this.scoring[ roundC ] ) == "undefined")
-				this.scoring[ roundC ] = Array();
+				this.scoring[ roundC ] = {};
 			for( var playerC = 0; playerC < this.playerObjs.length; playerC++ ) {
 				if(
 					typeof( this.scoring[ roundC ][this.playerObjs[playerC].id] ) == "undefined"
@@ -1430,7 +1450,7 @@ function Tournament (importTournament, playerObjects) {
 	this.isByeRound = function( roundNumber, playerID ) {
 		if( this.matches[ roundNumber ] ) {
 			for( var matchC = 0; matchC < this.matches[ roundNumber ].length; matchC++ ) {
-				if( this.matches[ roundNumber ][ matchC ].player1 == playerID && this.matches[ roundNumber ][ matchC ].player2 == -1 ) {
+				if( this.matches[ roundNumber ][ matchC ].player1 == playerID && this.matches[ roundNumber ][ matchC ].player2 == "" ) {
 					return true;
 				}
 			}
@@ -1585,6 +1605,8 @@ function Tournament (importTournament, playerObjects) {
 
 			this.playerObjs[ playerC ].pointsBase = playerTotal;
 
+			//~ console.log( "totals", this.totals );
+			//~ console.log( "playerobjs", this.playerObjs );
 
 			this.playerObjs[ playerC ].pointsFinal = this.playerObjs[ playerC ].pointsBase;
 
@@ -1668,6 +1690,7 @@ function Tournament (importTournament, playerObjects) {
 	}
 
 	if( typeof(importTournament) != "undefined" ) {
+		//~ console.log( "import", importTournament );
 		this.players = importTournament.players;
 		this.name = importTournament.name;
 
@@ -1690,6 +1713,9 @@ function Tournament (importTournament, playerObjects) {
 			this.scoring = importTournament.scoring;
 		if( typeof(importTournament.extraPoints) != "undefined" )
 			this.extraPoints = importTournament.extraPoints;
+
+		if( typeof(importTournament.id) != "undefined" )
+			this.id = generateUUID();
 
 		if( typeof(importTournament.pointsPainting) != "undefined" )
 			this.pointsPainting = importTournament.pointsPainting;
@@ -1833,6 +1859,27 @@ var coreGlobalFunctions = function ($timeout, $rootScope, $translate, $location,
 
 
 
+	/* *********************************************************
+	 * Confirmation Dialog
+	 * ******************************************************* */
+
+	$rootScope.confirmDialogQuestion = "";
+	$rootScope.showImportExportPlayerDialog = false;
+
+	$rootScope.confirmDialog = function( confirmationMessage, onYes ) {
+		$rootScope.confirmDialogQuestion = confirmationMessage;
+		$rootScope.showConfirmDialog = true;
+		$rootScope.confirmDialogYes = onYes;
+	}
+
+	$rootScope.closeConfirmDialog = function( ) {
+		$rootScope.showConfirmDialog = false;
+		// reset confirm to nothing...
+		$rootScope.confirmDialogYes = function() {
+			$rootScope.showConfirmDialog = false;
+		}
+	}
+
 
 	$rootScope.deletePlayerDialog = function(playerID) {
 		$translate([
@@ -1908,18 +1955,18 @@ var coreGlobalFunctions = function ($timeout, $rootScope, $translate, $location,
 			$rootScope.tmpPlayer.updated = new Date();
 
 			//~ console.log( $rootScope.tmpPlayer.id );
-			if( $rootScope.tmpPlayer.id < 0 ) {
-				newID = getNextPlayerID($rootScope.playerList);
-				$rootScope.tmpPlayer.id = newID;
+			if( $rootScope.tmpPlayer.id.length < 10 ) {
+				//~ newID = getNextPlayerID($rootScope.playerList);
+				$rootScope.tmpPlayer.id = generateUUID();
 			}
 			//~ console.log( $rootScope.tmpPlayer.id );
 			$rootScope.playerList[ $rootScope.tmpPlayerIndex ] = new Player( $rootScope.tmpPlayer );
 		} else {
-			newID = getNextPlayerID($rootScope.playerList);
+			//~ newID = getNextPlayerID($rootScope.playerList);
 			$rootScope.tmpPlayer.created = new Date();
 
 			$rootScope.tmpPlayer.updated = new Date();
-			$rootScope.tmpPlayer.id = newID;
+			//~ $rootScope.tmpPlayer.id = newID;
 			$rootScope.playerList.push( new Player( $rootScope.tmpPlayer ) );
 		}
 
@@ -2002,35 +2049,16 @@ var playersManageArray =
 				$rootScope.tournamentList[ tC ].createPlayerObjs( $rootScope.playerList );
 			}
 
-			$scope.currentTournament = null;
+			$rootScope.currentTournament = null;
 			if( $rootScope.tournamentList[ localStorage["current_tournament_view"] ] ) {
-				$scope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
+				$rootScope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
 			}
 
 
 
 			$rootScope.getNumberOfDeleted();
 
-			/* *********************************************************
-			 * Confirmation Dialog
-			 * ******************************************************* */
 
-			$scope.confirmDialogQuestion = "";
-			$scope.showImportExportPlayerDialog = false;
-
-			$scope.confirmDialog = function( confirmationMessage, onYes ) {
-				$scope.confirmDialogQuestion = confirmationMessage;
-				$scope.showConfirmDialog = true;
-				$scope.confirmDialogYes = onYes;
-			}
-
-			$scope.closeConfirmDialog = function( ) {
-				$scope.showConfirmDialog = false;
-				// reset confirm to nothing...
-				$scope.confirmDialogYes = function() {
-					$scope.showConfirmDialog = false;
-				}
-			}
 
 			/* *********************************************************
 			 * Import/Export functions.....
@@ -2160,7 +2188,7 @@ var tournamentsManageArray =
 
 			});
 
-			$scope.currentTournamentsPage = true;
+			$rootScope.currentTournamentsPage = true;
 
 			$scope.refreshTournamentData = function() {
 				$rootScope.playerList = getPlayersFromLocalStorage();
@@ -2172,11 +2200,11 @@ var tournamentsManageArray =
 			}
 			$scope.refreshTournamentData();
 
-			$scope.currentTournament = null;
+			$rootScope.currentTournament = null;
 			if( $rootScope.tournamentList[ localStorage["current_tournament_view"] ] ) {
-				$scope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
-				if( $scope.currentTournament.playerObjs.length == 0 || $scope.currentTournament.completed )
-					$scope.currentTournament = null;
+				$rootScope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
+				if( $rootScope.currentTournament.playerObjs.length == 0 || $rootScope.currentTournament.completed )
+					$rootScope.currentTournament = null;
 			}
 
 			/* *********************************************************
@@ -2206,52 +2234,52 @@ var tournamentsManageArray =
 			 * ******************************************************* */
 
 			$scope.updateTournamentName = function( newValue ) {
-				$scope.tmpTournament.name = newValue;
+				$rootScope.tmpTournament.name = newValue;
 			}
 
 			$scope.updateTournamentRounds = function( newValue ) {
-				$scope.tmpTournament.numberOfRounds = newValue;
+				$rootScope.tmpTournament.numberOfRounds = newValue;
 			}
 
 			$scope.updateTournamentPointsForWin = function( newValue ) {
-				$scope.tmpTournament.pointsForWin = newValue;
+				$rootScope.tmpTournament.pointsForWin = newValue;
 			}
 
 			$scope.updateTournamentPointsForDraw = function( newValue ) {
-				$scope.tmpTournament.pointsForDraw = newValue;
+				$rootScope.tmpTournament.pointsForDraw = newValue;
 			}
 
 			$scope.updateTournamentPointsForLoss = function( newValue ) {
-				$scope.tmpTournament.pointsForLoss = newValue;
+				$rootScope.tmpTournament.pointsForLoss = newValue;
 			}
 
 			$scope.updateByeIsAverage = function( newValue ) {
-				$scope.tmpTournament.byeIsAverage = newValue;
+				$rootScope.tmpTournament.byeIsAverage = newValue;
 			}
 
 			$scope.updateTournamentPointsForBye = function( newValue ) {
-				$scope.tmpTournament.pointsForBye = newValue;
+				$rootScope.tmpTournament.pointsForBye = newValue;
 			}
 
 			$scope.updateTournamentScoringPaint = function( newValue ) {
-				$scope.tmpTournament.scoringPaint = newValue;
+				$rootScope.tmpTournament.scoringPaint = newValue;
 			}
 
 			$scope.updateTournamentScoringComp = function( newValue ) {
-				$scope.tmpTournament.scoringComp = newValue;
+				$rootScope.tmpTournament.scoringComp = newValue;
 			}
 
 			$scope.updateTournamentScoringSportsmanship = function( newValue ) {
-				$scope.tmpTournament.scoringSportsmanship = newValue;
+				$rootScope.tmpTournament.scoringSportsmanship = newValue;
 			}
 
 			$scope.updateTournamentTrackPerGameSportsmanship = function( newValue ) {
-				$scope.tmpTournament.trackPerGameSportsmanship = newValue;
+				$rootScope.tmpTournament.trackPerGameSportsmanship = newValue;
 			}
 
 
 			$scope.updateTournamentWarnSportsmanship = function( newValue ) {
-				$scope.tmpTournament.warnSportsmanship = newValue;
+				$rootScope.tmpTournament.warnSportsmanship = newValue;
 			}
 
 			$scope.newTournamentDialog = function() {
@@ -2260,7 +2288,7 @@ var tournamentsManageArray =
 
 				$scope.clearTempTournamentData();
 
-				$scope.getMatchupSelection( $scope.tmpTournament.matchupType );
+				$scope.getMatchupSelection( $rootScope.tmpTournament.matchupType );
 
 				$scope.showEditTournamentDialog = true;
 			}
@@ -2270,7 +2298,7 @@ var tournamentsManageArray =
 			}
 
 			$scope.updateNoDuplicateMatchups = function( newValue ) {
-				$scope.tmpTournament.noDuplicateMatchups = newValue;
+				$rootScope.tmpTournament.noDuplicateMatchups = newValue;
 			}
 
 
@@ -2299,11 +2327,11 @@ var tournamentsManageArray =
 				//~ console.log("editTournamentDialog() called");
 
 				if( $rootScope.tournamentList[ indexNumber] ) {
-					$scope.tmpTournament = angular.copy( $rootScope.tournamentList[ indexNumber ] );
+					$rootScope.tmpTournament = angular.copy( $rootScope.tournamentList[ indexNumber ] );
 
-					$scope.getMatchupSelection( $scope.tmpTournament.matchupType );
+					$scope.getMatchupSelection( $rootScope.tmpTournament.matchupType );
 
-					$scope.tmpTournamentIndex  = indexNumber;
+					$rootScope.tmpTournamentIndex  = indexNumber;
 					$scope.showEditTournamentDialog = true;
 				}
 			}
@@ -2311,10 +2339,10 @@ var tournamentsManageArray =
 			$scope.clearTempTournamentData = function() {
 				//~ console.log("clearTempTournamentData() called");
 
-				$scope.tmpTournament = new Tournament();
-				$scope.getMatchupSelection( $scope.tmpTournament.matchupType );
+				$rootScope.tmpTournament = new Tournament();
+				$scope.getMatchupSelection( $rootScope.tmpTournament.matchupType );
 
-				$scope.tmpTournamentIndex = -1;
+				$rootScope.tmpTournamentIndex = -1;
 
 			}
 
@@ -2332,24 +2360,24 @@ var tournamentsManageArray =
 				//~ console.log("saveEditTournamentDialog() called");
 				$scope.showEditTournamentDialog = false;
 
-				$scope.tmpTournament.matchupType = $scope.tmpMatchupSelection.id;
+				$rootScope.tmpTournament.matchupType = $scope.tmpMatchupSelection.id;
 
 
-				if( $scope.tmpTournamentIndex > -1 ) {
+				if( $rootScope.tmpTournamentIndex > -1 ) {
 					// Save to Index...
 
-					$scope.tmpTournament.updated = new Date();
-					$rootScope.tournamentList[ $scope.tmpTournamentIndex] = $scope.tmpTournament;
+					$rootScope.tmpTournament.updated = new Date();
+					$rootScope.tournamentList[ $rootScope.tmpTournamentIndex] = $rootScope.tmpTournament;
 					saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
 
 					$scope.clearTempTournamentData();
 				} else {
 					newID = getNextPlayerID($rootScope.playerList);
-					$scope.tmpTournament.created = new Date();
+					$rootScope.tmpTournament.created = new Date();
 
-					$scope.tmpTournament.updated = new Date();
+					$rootScope.tmpTournament.updated = new Date();
 					$rootScope.tournamentList.id = newID;
-					$rootScope.tournamentList.push( $scope.tmpTournament );
+					$rootScope.tournamentList.push( $rootScope.tmpTournament );
 					saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
 
 					$scope.clearTempTournamentData();
@@ -2384,17 +2412,17 @@ var tournamentsManageArray =
 
 			$scope.addPlayerToTournament = function(playerID) {
 				//~ console.log( "addPlayerToTournament(" + playerID + ") called");
-				$scope.tmpTournament.players.push( playerID );
-				$scope.tmpTournament.createPlayerObjs( $scope.playerList );
+				$rootScope.tmpTournament.players.push( playerID );
+				$rootScope.tmpTournament.createPlayerObjs( $scope.playerList );
 				saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
 				$scope.updateAvailableParticipatingPlayers();
 			}
 
 			$scope.removePlayerFromTournament = function(playerID) {
 				//~ console.log( "removePlayerFromTournament(" + playerID + ") called");
-				for( var playerC = 0; playerC < $scope.tmpTournament.players.length; playerC++ ) {
-					if( $scope.tmpTournament.players[playerC] == playerID ) {
-						$scope.tmpTournament.players.splice( playerC, 1);
+				for( var playerC = 0; playerC < $rootScope.tmpTournament.players.length; playerC++ ) {
+					if( $rootScope.tmpTournament.players[playerC] == playerID ) {
+						$rootScope.tmpTournament.players.splice( playerC, 1);
 						saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
 						$scope.updateAvailableParticipatingPlayers();
 					}
@@ -2404,11 +2432,11 @@ var tournamentsManageArray =
 
 			$scope.updateAvailableParticipatingPlayers = function() {
 				$scope.availablePlayers = Array();
-				$scope.participatingPlayers =  angular.copy($scope.tmpTournament.playerObjs);
+				$scope.participatingPlayers =  angular.copy($rootScope.tmpTournament.playerObjs);
 
 				for( var playerC = 0; playerC < $scope.playerList.length; playerC++ ) {
 					if(
-						$scope.tmpTournament.players.indexOf( $scope.playerList[playerC].id ) === -1
+						$rootScope.tmpTournament.players.indexOf( $scope.playerList[playerC].id ) === -1
 							&&
 						$scope.playerList[playerC].active == true
 							&&
@@ -2424,7 +2452,7 @@ var tournamentsManageArray =
 
 			$scope.showEditTournamentPlayersDialog = false;
 			$scope.editTournamentPlayersDialog = function( indexNumber ) {
-				$scope.tmpTournament = $rootScope.tournamentList[ indexNumber ];
+				$rootScope.tmpTournament = $rootScope.tournamentList[ indexNumber ];
 				$scope.updateAvailableParticipatingPlayers();
 
 				$scope.showEditTournamentPlayersDialog = true;
@@ -2432,7 +2460,7 @@ var tournamentsManageArray =
 
 			$scope.closeTournamentPlayersDialog = function() {
 				$scope.showEditTournamentPlayersDialog = false;
-				$scope.tmpTournament = null;
+				$rootScope.tmpTournament = null;
 			}
 
 			/* *********************************************************
@@ -2530,7 +2558,7 @@ var tournamentsRunArray =
 
 			// saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
 
-			$scope.currentTournamentsRun = true;
+			$rootScope.currentTournamentsRun = true;
 
 			$rootScope.playerList = getPlayersFromLocalStorage();
 
@@ -2540,48 +2568,48 @@ var tournamentsRunArray =
 				$rootScope.tournamentList[ tC ].createPlayerObjs( $rootScope.playerList );
 			}
 
-			$scope.currentTournament = null;
+			$rootScope.currentTournament = null;
 
 			if( $rootScope.tournamentList[ localStorage["current_tournament_view"] ] ) {
-				$scope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ];
-				$scope.currentTournament.calculateResults();
+				$rootScope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ];
+				$rootScope.currentTournament.calculateResults();
 			}
 
 			$scope.editScore = function( playerID, roundNumber ) {
 
 				//~ console.log("editScore(" + playerID + ", " + roundNumber + ")");
 
-				var theMatch = $scope.currentTournament.getMatch( roundNumber, playerID );
+				var theMatch = $rootScope.currentTournament.getMatch( roundNumber, playerID );
 				//~ console.log( "theMatch", theMatch );
 
-				$scope.tmpPlayer1Score = -1;
-				$scope.tmpPlayer1Score = -1
+				$rootScope.tmpPlayer1Score = -1;
+				$rootScope.tmpPlayer1Score = -1
 
-				$scope.tmpPlayer1ExtraPoints = 0;
-				$scope.tmpPlayer2ExtraPoints = 0;
+				$rootScope.tmpPlayer1ExtraPoints = 0;
+				$rootScope.tmpPlayer2ExtraPoints = 0;
 
-				$scope.tmpPlayer1SteamArmyPoints =  0;
-				$scope.tmpPlayer1SteamControlPoints = 0;
+				$rootScope.tmpPlayer1SteamArmyPoints =  0;
+				$rootScope.tmpPlayer1SteamControlPoints = 0;
 
-				$scope.tmpPlayer2SteamArmyPoints =  0;
-				$scope.tmpPlayer2SteamControlPoints =  0;
+				$rootScope.tmpPlayer2SteamArmyPoints =  0;
+				$rootScope.tmpPlayer2SteamControlPoints =  0;
 
 				$scope.editScorePlayer1 = getPlayerByID( $scope.playerList, theMatch.player1 );
 				$scope.editScorePlayer2 = getPlayerByID( $scope.playerList, theMatch.player2 );
-				$scope.tmpPlayer1Score = $scope.currentTournament.getScore( roundNumber, theMatch.player1 );
-				$scope.tmpPlayer2Score = $scope.currentTournament.getScore( roundNumber, theMatch.player2 );
+				$rootScope.tmpPlayer1Score = $rootScope.currentTournament.getScore( roundNumber, theMatch.player1 );
+				$rootScope.tmpPlayer2Score = $rootScope.currentTournament.getScore( roundNumber, theMatch.player2 );
 
-				$scope.tmpPlayer1ExtraPoints = $scope.currentTournament.getExtraPoints( roundNumber, theMatch.player1 );
-				$scope.tmpPlayer2ExtraPoints = $scope.currentTournament.getExtraPoints( roundNumber, theMatch.player2 );
+				$rootScope.tmpPlayer1ExtraPoints = $rootScope.currentTournament.getExtraPoints( roundNumber, theMatch.player1 );
+				$rootScope.tmpPlayer2ExtraPoints = $rootScope.currentTournament.getExtraPoints( roundNumber, theMatch.player2 );
 
-				$scope.tmpPlayer1SteamArmyPoints =  $scope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player1 );
-				$scope.tmpPlayer1SteamControlPoints =  $scope.currentTournament.getSteamControlPoints( roundNumber, theMatch.player1 );
+				$rootScope.tmpPlayer1SteamArmyPoints =  $rootScope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player1 );
+				$rootScope.tmpPlayer1SteamControlPoints =  $rootScope.currentTournament.getSteamControlPoints( roundNumber, theMatch.player1 );
 
-				$scope.tmpPlayer2SteamArmyPoints =  $scope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player2 );
-				$scope.tmpPlayer2SteamControlPoints =  $scope.currentTournament.getSteamControlPoints( roundNumber, theMatch.player2 );
+				$rootScope.tmpPlayer2SteamArmyPoints =  $rootScope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player2 );
+				$rootScope.tmpPlayer2SteamControlPoints =  $rootScope.currentTournament.getSteamControlPoints( roundNumber, theMatch.player2 );
 
-				//~ console.log( "$scope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player1 )", $scope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player1 ) );
-				//~ console.log( "$scope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player2 )", $scope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player2 ) );
+				//~ console.log( "$rootScope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player1 )", $rootScope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player1 ) );
+				//~ console.log( "$rootScope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player2 )", $rootScope.currentTournament.getSteamArmyPoints( roundNumber, theMatch.player2 ) );
 
 				$scope.editRoundNumber =  roundNumber;
 				$scope.editTableNumber =  theMatch.table;
@@ -2595,55 +2623,55 @@ var tournamentsRunArray =
 
 			$scope.changePlayerScore = function(  playerID, newScore ) {
 				if( playerID == 1 ) {
-					$scope.tmpPlayer1Score = newScore;
+					$rootScope.tmpPlayer1Score = newScore;
 
 					if( newScore == "win" ) {
-						$scope.tmpPlayer2Score = "loss"
+						$rootScope.tmpPlayer2Score = "loss"
 					} else if (newScore == "draw") {
-						$scope.tmpPlayer2Score = "draw"
+						$rootScope.tmpPlayer2Score = "draw"
 					} else if ( newScore == "loss" ) {
-						$scope.tmpPlayer2Score = "win";
+						$rootScope.tmpPlayer2Score = "win";
 					} else {
-						$scope.tmpPlayer2Score = "-1";
+						$rootScope.tmpPlayer2Score = "-1";
 					}
 				} else {
-					$scope.tmpPlayer2Score = newScore;
+					$rootScope.tmpPlayer2Score = newScore;
 					if( newScore == "win" ) {
-						$scope.tmpPlayer1Score = "loss"
+						$rootScope.tmpPlayer1Score = "loss"
 					} else if (newScore == "draw") {
-						$scope.tmpPlayer1Score = "draw"
+						$rootScope.tmpPlayer1Score = "draw"
 					} else if ( newScore == "loss" ) {
-						$scope.tmpPlayer1Score = "win";
+						$rootScope.tmpPlayer1Score = "win";
 					} else {
-						$scope.tmpPlayer1Score = "-1";
+						$rootScope.tmpPlayer1Score = "-1";
 					}
 				}
 			}
 
 			$scope.changePlayerExtraPoints = function(  playerID, newScore ) {
 				if( playerID == 1 ) {
-					$scope.tmpPlayer1ExtraPoints = newScore;
+					$rootScope.tmpPlayer1ExtraPoints = newScore;
 
 				} else {
-					$scope.tmpPlayer2ExtraPoints = newScore;
+					$rootScope.tmpPlayer2ExtraPoints = newScore;
 				}
 			}
 
 			$scope.changeSteamControlPoints = function(  playerID, newScore ) {
 				if( playerID == 1 ) {
-					$scope.tmpPlayer1SteamControlPoints = newScore;
+					$rootScope.tmpPlayer1SteamControlPoints = newScore;
 
 				} else {
-					$scope.tmpPlayer2SteamControlPoints = newScore;
+					$rootScope.tmpPlayer2SteamControlPoints = newScore;
 				}
 			}
 
 			$scope.changeSteamArmyPoints = function(  playerID, newScore ) {
 				if( playerID == 1 ) {
-					$scope.tmpPlayer1SteamArmyPoints = newScore;
+					$rootScope.tmpPlayer1SteamArmyPoints = newScore;
 
 				} else {
-					$scope.tmpPlayer2SteamArmyPoints = newScore;
+					$rootScope.tmpPlayer2SteamArmyPoints = newScore;
 				}
 			}
 
@@ -2653,17 +2681,17 @@ var tournamentsRunArray =
 				$scope.editScorePlayer1 = null;
 				$scope.editScorePlayer2 = null;
 
-				$scope.tmpPlayer1Score = -1;
-				$scope.tmpPlayer1Score = -1
+				$rootScope.tmpPlayer1Score = -1;
+				$rootScope.tmpPlayer1Score = -1
 
-				$scope.tmpPlayer1ExtraPoints = 0;
-				$scope.tmpPlayer2ExtraPoints = 0;
+				$rootScope.tmpPlayer1ExtraPoints = 0;
+				$rootScope.tmpPlayer2ExtraPoints = 0;
 
-				$scope.tmpPlayer1SteamArmyPoints =  0;
-				$scope.tmpPlayer1SteamControlPoints = 0;
+				$rootScope.tmpPlayer1SteamArmyPoints =  0;
+				$rootScope.tmpPlayer1SteamControlPoints = 0;
 
-				$scope.tmpPlayer2SteamArmyPoints =  0;
-				$scope.tmpPlayer2SteamControlPoints =  0;
+				$rootScope.tmpPlayer2SteamArmyPoints =  0;
+				$rootScope.tmpPlayer2SteamControlPoints =  0;
 
 
 				$scope.editRoundNumber =  -1;
@@ -2677,34 +2705,34 @@ var tournamentsRunArray =
 				//~ console.log( "saveEditScoreDialog" );
 				//~ console.log( "-------------------------------------------------------" );
 
-				//~ console.log( "$scope.tmpPlayer1Score", $scope.tmpPlayer1Score );
-				//~ console.log( "$scope.tmpPlayer2Score", $scope.tmpPlayer2Score );
+				//~ console.log( "$rootScope.tmpPlayer1Score", $rootScope.tmpPlayer1Score );
+				//~ console.log( "$rootScope.tmpPlayer2Score", $rootScope.tmpPlayer2Score );
 
-				//~ console.log( "$scope.tmpPlayer1ExtraPoints", $scope.tmpPlayer1ExtraPoints );
-				//~ console.log( "$scope.tmpPlayer2ExtraPoints", $scope.tmpPlayer2ExtraPoints );
+				//~ console.log( "$rootScope.tmpPlayer1ExtraPoints", $rootScope.tmpPlayer1ExtraPoints );
+				//~ console.log( "$rootScope.tmpPlayer2ExtraPoints", $rootScope.tmpPlayer2ExtraPoints );
 
-				//~ console.log( "$scope.tmpPlayer1SteamArmyPoints", $scope.tmpPlayer1SteamArmyPoints );
-				//~ console.log( "$scope.tmpPlayer2SteamArmyPoints", $scope.tmpPlayer2SteamArmyPoints );
+				//~ console.log( "$rootScope.tmpPlayer1SteamArmyPoints", $rootScope.tmpPlayer1SteamArmyPoints );
+				//~ console.log( "$rootScope.tmpPlayer2SteamArmyPoints", $rootScope.tmpPlayer2SteamArmyPoints );
 
-				//~ console.log( "$scope.tmpPlayer1SteamControlPoints", $scope.tmpPlayer1SteamControlPoints );
-				//~ console.log( "$scope.tmpPlayer2SteamControlPoints", $scope.tmpPlayer2SteamControlPoints );
+				//~ console.log( "$rootScope.tmpPlayer1SteamControlPoints", $rootScope.tmpPlayer1SteamControlPoints );
+				//~ console.log( "$rootScope.tmpPlayer2SteamControlPoints", $rootScope.tmpPlayer2SteamControlPoints );
 
 				//~ console.log( "-------------------------------------------------------" );
 
-				$scope.currentTournament.setScore( $scope.editRoundNumber, $scope.editScorePlayer1.id, $scope.tmpPlayer1Score);
-				$scope.currentTournament.setScore( $scope.editRoundNumber, $scope.editScorePlayer2.id, $scope.tmpPlayer2Score);
+				$rootScope.currentTournament.setScore( $scope.editRoundNumber, $scope.editScorePlayer1.id, $rootScope.tmpPlayer1Score);
+				$rootScope.currentTournament.setScore( $scope.editRoundNumber, $scope.editScorePlayer2.id, $rootScope.tmpPlayer2Score);
 
-				$scope.currentTournament.setExtraPoints( $scope.editRoundNumber, $scope.editScorePlayer1.id, $scope.tmpPlayer1ExtraPoints);
-				$scope.currentTournament.setExtraPoints( $scope.editRoundNumber, $scope.editScorePlayer2.id, $scope.tmpPlayer2ExtraPoints);
+				$rootScope.currentTournament.setExtraPoints( $scope.editRoundNumber, $scope.editScorePlayer1.id, $rootScope.tmpPlayer1ExtraPoints);
+				$rootScope.currentTournament.setExtraPoints( $scope.editRoundNumber, $scope.editScorePlayer2.id, $rootScope.tmpPlayer2ExtraPoints);
 
-				$scope.currentTournament.setSteamArmyPoints( $scope.editRoundNumber, $scope.editScorePlayer1.id, $scope.tmpPlayer1SteamArmyPoints);
-				$scope.currentTournament.setSteamArmyPoints( $scope.editRoundNumber, $scope.editScorePlayer2.id, $scope.tmpPlayer2SteamArmyPoints);
+				$rootScope.currentTournament.setSteamArmyPoints( $scope.editRoundNumber, $scope.editScorePlayer1.id, $rootScope.tmpPlayer1SteamArmyPoints);
+				$rootScope.currentTournament.setSteamArmyPoints( $scope.editRoundNumber, $scope.editScorePlayer2.id, $rootScope.tmpPlayer2SteamArmyPoints);
 
-				$scope.currentTournament.setSteamControlPoints( $scope.editRoundNumber, $scope.editScorePlayer1.id, $scope.tmpPlayer1SteamControlPoints);
-				$scope.currentTournament.setSteamControlPoints( $scope.editRoundNumber, $scope.editScorePlayer2.id, $scope.tmpPlayer2SteamControlPoints);
+				$rootScope.currentTournament.setSteamControlPoints( $scope.editRoundNumber, $scope.editScorePlayer1.id, $rootScope.tmpPlayer1SteamControlPoints);
+				$rootScope.currentTournament.setSteamControlPoints( $scope.editRoundNumber, $scope.editScorePlayer2.id, $rootScope.tmpPlayer2SteamControlPoints);
 
 
-				$scope.currentTournament.calculateResults();
+				$rootScope.currentTournament.calculateResults();
 				saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
 
 				$scope.showEditScoreDialog = false;
@@ -2712,17 +2740,17 @@ var tournamentsRunArray =
 				$scope.editScorePlayer1 = null;
 				$scope.editScorePlayer2 = null;
 
-				$scope.tmpPlayer1Score = -1;
-				$scope.tmpPlayer1Score = -1
+				$rootScope.tmpPlayer1Score = -1;
+				$rootScope.tmpPlayer1Score = -1
 
-				$scope.tmpPlayer1ExtraPoints = 0;
-				$scope.tmpPlayer2ExtraPoints = 0;
+				$rootScope.tmpPlayer1ExtraPoints = 0;
+				$rootScope.tmpPlayer2ExtraPoints = 0;
 
-				$scope.tmpPlayer1SteamArmyPoints =  0;
-				$scope.tmpPlayer1SteamArmyPoints = 0;
+				$rootScope.tmpPlayer1SteamArmyPoints =  0;
+				$rootScope.tmpPlayer1SteamArmyPoints = 0;
 
-				$scope.tmpPlayer2SteamArmyPoints =  0;
-				$scope.tmpPlayer2SteamControlPoints =  0;
+				$rootScope.tmpPlayer2SteamArmyPoints =  0;
+				$rootScope.tmpPlayer2SteamControlPoints =  0;
 
 
 				$scope.editRoundNumber =  -1;
@@ -2731,97 +2759,97 @@ var tournamentsRunArray =
 				//~ console.log( "after close" );
 				//~ console.log( "-------------------------------------------------------" );
 
-				//~ console.log( "$scope.tmpPlayer1Score", $scope.tmpPlayer1Score );
-				//~ console.log( "$scope.tmpPlayer2Score", $scope.tmpPlayer2Score );
+				//~ console.log( "$rootScope.tmpPlayer1Score", $rootScope.tmpPlayer1Score );
+				//~ console.log( "$rootScope.tmpPlayer2Score", $rootScope.tmpPlayer2Score );
 
-				//~ console.log( "$scope.tmpPlayer1ExtraPoints", $scope.tmpPlayer1ExtraPoints );
-				//~ console.log( "$scope.tmpPlayer2ExtraPoints", $scope.tmpPlayer2ExtraPoints );
+				//~ console.log( "$rootScope.tmpPlayer1ExtraPoints", $rootScope.tmpPlayer1ExtraPoints );
+				//~ console.log( "$rootScope.tmpPlayer2ExtraPoints", $rootScope.tmpPlayer2ExtraPoints );
 
-				//~ console.log( "$scope.tmpPlayer1SteamArmyPoints", $scope.tmpPlayer1SteamArmyPoints );
-				//~ console.log( "$scope.tmpPlayer2SteamArmyPoints", $scope.tmpPlayer2SteamArmyPoints );
+				//~ console.log( "$rootScope.tmpPlayer1SteamArmyPoints", $rootScope.tmpPlayer1SteamArmyPoints );
+				//~ console.log( "$rootScope.tmpPlayer2SteamArmyPoints", $rootScope.tmpPlayer2SteamArmyPoints );
 
-				//~ console.log( "$scope.tmpPlayer1SteamControlPoints", $scope.tmpPlayer1SteamControlPoints );
-				//~ console.log( "$scope.tmpPlayer2SteamControlPoints", $scope.tmpPlayer2SteamControlPoints );
+				//~ console.log( "$rootScope.tmpPlayer1SteamControlPoints", $rootScope.tmpPlayer1SteamControlPoints );
+				//~ console.log( "$rootScope.tmpPlayer2SteamControlPoints", $rootScope.tmpPlayer2SteamControlPoints );
 
 				//~ console.log( "-------------------------------------------------------" );
 
-				$scope.currentTournament.sortPlayerObjsByScores();
+				$rootScope.currentTournament.sortPlayerObjsByScores();
 
 				$route.reload();
 
 			}
 
 			$scope.editPaintingScore = function( playerID ) {
-				$scope.tmpEditPlayer = Array();
-				$scope.tmpEditExtraPointValue = 0
+				$rootScope.tmpEditPlayer = Array();
+				$rootScope.tmpEditExtraPointValue = 0
 				//~ console.log("editPaintingScore(" + playerID + ")");
-				$scope.tmpEditPlayer = getPlayerByID( $scope.playerList, playerID );
-				$scope.tmpEditExtraPointValue = $scope.currentTournament.getPaintingPoints( playerID );
-				if( $scope.tmpEditExtraPointValue < 0 )
-					$scope.tmpEditExtraPointValue = 0;
+				$rootScope.tmpEditPlayer = getPlayerByID( $scope.playerList, playerID );
+				$rootScope.tmpEditExtraPointValue = $rootScope.currentTournament.getPaintingPoints( playerID );
+				if( $rootScope.tmpEditExtraPointValue < 0 )
+					$rootScope.tmpEditExtraPointValue = 0;
 				$scope.showEditPaintScore = true;
 			}
 
 			$scope.editCompositionScore = function( playerID ) {
-				$scope.tmpEditPlayer = Array();
-				$scope.tmpEditExtraPointValue = 0
+				$rootScope.tmpEditPlayer = Array();
+				$rootScope.tmpEditExtraPointValue = 0
 				//~ console.log("editCompositionScore(" + playerID + ")");
-				$scope.tmpEditPlayer = getPlayerByID( $scope.playerList, playerID );
-				$scope.tmpEditExtraPointValue = $scope.currentTournament.getCompPoints( playerID );
-				if( $scope.tmpEditExtraPointValue < 0 )
-					$scope.tmpEditExtraPointValue = 0;
+				$rootScope.tmpEditPlayer = getPlayerByID( $scope.playerList, playerID );
+				$rootScope.tmpEditExtraPointValue = $rootScope.currentTournament.getCompPoints( playerID );
+				if( $rootScope.tmpEditExtraPointValue < 0 )
+					$rootScope.tmpEditExtraPointValue = 0;
 				$scope.showEditCompScore = true;
 			}
 
 			$scope.editSportsmanshipScore = function( playerID ) {
-				$scope.tmpEditPlayer = Array();
-				$scope.tmpEditExtraPointValue = 0
+				$rootScope.tmpEditPlayer = Array();
+				$rootScope.tmpEditExtraPointValue = 0
 				//~ console.log("editSportsmanshipScore(" + playerID + ")");
-				$scope.tmpEditPlayer = getPlayerByID( $scope.playerList, playerID );
-				$scope.tmpEditExtraPointValue = $scope.currentTournament.getSportsPoints( playerID );
-				if( $scope.tmpEditExtraPointValue < 0 )
-					$scope.tmpEditExtraPointValue = 0;
+				$rootScope.tmpEditPlayer = getPlayerByID( $scope.playerList, playerID );
+				$rootScope.tmpEditExtraPointValue = $rootScope.currentTournament.getSportsPoints( playerID );
+				if( $rootScope.tmpEditExtraPointValue < 0 )
+					$rootScope.tmpEditExtraPointValue = 0;
 				$scope.showEditSportsScore = true;
 			}
 
 			$scope.saveSportsScore = function() {
 				//~ console.log("saveSportsScore");
-				 $scope.currentTournament.setSportsPoints( $scope.tmpEditPlayer.id, $scope.tmpEditExtraPointValue );
+				 $rootScope.currentTournament.setSportsPoints( $rootScope.tmpEditPlayer.id, $rootScope.tmpEditExtraPointValue );
 				 saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
-				 $scope.currentTournament.calculateResults();
+				 $rootScope.currentTournament.calculateResults();
 				 $scope.cancelEditScore();
 			}
 
 			$scope.saveCompScore = function() {
 				//~ console.log("saveCompScore");
-				 $scope.currentTournament.setCompPoints( $scope.tmpEditPlayer.id, $scope.tmpEditExtraPointValue );
+				 $rootScope.currentTournament.setCompPoints( $rootScope.tmpEditPlayer.id, $rootScope.tmpEditExtraPointValue );
 				 saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
-				 $scope.currentTournament.calculateResults();
+				 $rootScope.currentTournament.calculateResults();
 				 $scope.cancelEditScore();
 			}
 
 			$scope.savePaintScore = function() {
 				//~ console.log("savePaintScore");
-				 $scope.currentTournament.setPaintingPoints( $scope.tmpEditPlayer.id, $scope.tmpEditExtraPointValue );
+				 $rootScope.currentTournament.setPaintingPoints( $rootScope.tmpEditPlayer.id, $rootScope.tmpEditExtraPointValue );
 				 saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
-				 $scope.currentTournament.calculateResults();
+				 $rootScope.currentTournament.calculateResults();
 				 $scope.cancelEditScore();
 			}
 
 			$scope.changeExtraBitsScore = function( newValue ) {
-				$scope.tmpEditExtraPointValue = newValue;
+				$rootScope.tmpEditExtraPointValue = newValue;
 			}
 
 			$scope.cancelEditScore = function() {
-				$scope.tmpEditPlayer = null;
-				$scope.tmpEditExtraPointValue = null
+				$rootScope.tmpEditPlayer = null;
+				$rootScope.tmpEditExtraPointValue = null
 				$scope.showEditPaintScore = false;
 				$scope.showEditCompScore = false;
 				$scope.showEditSportsScore = false;
 			}
 
 			$scope.closeCurrentTournament = function() {
-				$scope.currentTournament = null;
+				$rootScope.currentTournament = null;
 				localStorage["current_tournament_view"] = -1;
 				$location.path("tournaments-manage"); // path not hash
 
@@ -2830,7 +2858,7 @@ var tournamentsRunArray =
 			$scope.setupNextRound = function() {
 				//~ console.log("setupNextRound()");
 
-				$scope.currentTournament.createMatchRound( $scope.currentTournament.currentRound + 1, $scope.playerList );
+				$rootScope.currentTournament.createMatchRound( $rootScope.currentTournament.currentRound + 1, $scope.playerList );
 
 				$scope.playerMatchupDialog = true;
 			}
@@ -2842,34 +2870,34 @@ var tournamentsRunArray =
 			}
 
 			$scope.resetMatchups = function() {
-				$scope.currentTournament.createMatchRound( $scope.currentTournament.currentRound + 1, $scope.playerList );
+				$rootScope.currentTournament.createMatchRound( $rootScope.currentTournament.currentRound + 1, $scope.playerList );
 			}
 
 			$scope.swapPlayerButton = function( playerID ) {
-				if( $scope.tmpMatchupSwappingID > 0 ) {
+				if( $rootScope.tmpMatchupSwappingID ) {
 					// perform swap
-					$scope.currentTournament.swapPlayers( $scope.tmpMatchupSwappingID, playerID, $scope.currentTournament.currentRound + 1, $scope.playerList);
-					$scope.tmpMatchupSwappingID = 0;
+					$rootScope.currentTournament.swapPlayers( $rootScope.tmpMatchupSwappingID, playerID, $rootScope.currentTournament.currentRound + 1, $scope.playerList);
+					$rootScope.tmpMatchupSwappingID = "";
 				} else {
 					// activate swap
-					$scope.tmpMatchupSwappingID = playerID;
+					$rootScope.tmpMatchupSwappingID = playerID;
 				}
 
 			}
 
 			$scope.cancelSwap = function() {
-				$scope.tmpMatchupSwappingID = 0;
+				$rootScope.tmpMatchupSwappingID = "";
 			}
 
 			$scope.completeTournament = function() {
 				//~ console.log("completeTournament() called");
 
-				$scope.currentTournament.completed = true;
+				$rootScope.currentTournament.completed = true;
 				saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
 			}
 
 			$scope.startNextRound = function() {
-				$scope.currentTournament.currentRound++;
+				$rootScope.currentTournament.currentRound++;
 				saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
 				$scope.playerMatchupDialog = false;
 			}

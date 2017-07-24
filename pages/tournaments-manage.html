@@ -9,6 +9,7 @@
 			<table>
 				<thead>
 					<tr>
+						<th translate="GENERAL_ID">ID</th>
 						<th translate="GENERAL_NAME">First Name</th>
 						<th class="no-wrap" translate="GENERAL_CREATED">Created</th>
 						<th class="no-wrap" translate="TOURNAMENTS_NUM_PLAYERS"># Players</th>
@@ -20,6 +21,7 @@
 
 				<tbody>
 					<tr ng-repeat="tournObj in tournamentList track by $index">
+						<td>{{ tournObj.id }}</td>
 						<td>{{ tournObj.name }}</td>
 						<td>{{ tournObj.created.toLocaleFormat() }}</td>
 						<td>{{ tournObj.playerObjs.length }}</td>

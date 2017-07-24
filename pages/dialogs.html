@@ -16,32 +16,32 @@
 
 		<label>
 			<span translate="GENERAL_NAME_FIRST">First Name</span><br />
-			<input type="text" ng-model="tmpPlayer.name.first" ng-change="updatePlayerFirstName(tmpPlayer.name.first)"  />
+			<input type="text" ng-model="$root.tmpPlayer.name.first" ng-change="updatePlayerFirstName(tmpPlayer.name.first)"  />
 		</label>
 
 		<label>
 			<span translate="GENERAL_NAME_LAST">Last Name</span><br />
-			<input type="text" ng-model="tmpPlayer.name.last"ng-change="updatePlayerLastName(tmpPlayer.name.last)"  />
+			<input type="text" ng-model="$root.tmpPlayer.name.last"ng-change="updatePlayerLastName(tmpPlayer.name.last)"  />
 		</label>
 
 		<label>
 			<span translate="GENERAL_NAME_NICK">Nick Name</span><br />
-			<input type="text" ng-model="tmpPlayer.name.nick" ng-change="updatePlayerNickName(tmpPlayer.name.nick)" />
+			<input type="text" ng-model="$root.tmpPlayer.name.nick" ng-change="updatePlayerNickName(tmpPlayer.name.nick)" />
 		</label>
 
 
 		<label>
 			<span translate="GENERAL_EMAIL_ADDRESS">Email Address</span><br />
-			<input type="email" ng-model="tmpPlayer.email" ng-change="updatePlayerEmail(tmpPlayer.email)" />
+			<input type="email" ng-model="$root.tmpPlayer.email" ng-change="updatePlayerEmail(tmpPlayer.email)" />
 		</label>
 
 		<label>
 			<span translate="GENERAL_PHONE_NUMBER">Phone 1</span><br />
-			<input type="text" ng-model="tmpPlayer.phone1" ng-change="updatePlayerPhone1(tmpPlayer.phone1)" />
+			<input type="text" ng-model="$root.tmpPlayer.phone1" ng-change="updatePlayerPhone1(tmpPlayer.phone1)" />
 		</label>
 
 		<label>
-			<input type="checkbox" ng-model="tmpPlayer.active" ng-change="updatePlayerActive(tmpPlayer.active)" /> <span translate="GENERAL_ACTIVE">Active</span><br />
+			<input type="checkbox" ng-model="$root.tmpPlayer.active" ng-change="updatePlayerActive(tmpPlayer.active)" /> <span translate="GENERAL_ACTIVE">Active</span><br />
 		</label>
 
 	  <div class="text-right">
@@ -211,12 +211,12 @@
 			<div class="columns small-12">
 				<fieldset class="fieldset">
 					<legend translate="TOURNAMENTS_NAME">Tournament Name</legend>
-					<input type="text" ng-model="tmpTournament.name" ng-change="updateTournamentName(tmpTournament.name)"  />
+					<input type="text" ng-model="$root.tmpTournament.name" ng-change="updateTournamentName(tmpTournament.name)"  />
 				</fieldset>
 
 				<fieldset class="fieldset">
 					<legend translate="TOURNAMENTS_TYPE">Tournament Type</legend>
-					<select ng-model="tmpTournament.type" ng-change="updateTournamentType(tmpTournament.type)">
+					<select ng-model="$root.tmpTournament.type" ng-change="updateTournamentType(tmpTournament.type)">
 						<option value="swiss" translate="TOURNAMENTS_SWISS">Swiss</option>
 						<option value="steamroller" translate="TOURNAMENTS_STEAMROLLER">Steamroller</option>
 					</select>
@@ -239,15 +239,15 @@
 					<legend translate="TOURNAMENTS_BASE_SCORING">Base Scoring</legend>
 						<label>
 							<span translate="TOURNAMENTS_POINTS_FOR_WIN"></span><br />
-							<input type="number" ng-model="tmpTournament.pointsForWin" ng-change="updateTournamentPointsForWin(tmpTournament.pointsForWin)"  />
+							<input type="number" ng-model="$root.tmpTournament.pointsForWin" ng-change="updateTournamentPointsForWin(tmpTournament.pointsForWin)"  />
 						</label>
 						<label>
 							<span translate="TOURNAMENTS_POINTS_FOR_DRAW"></span><br />
-							<input type="number" ng-model="tmpTournament.pointsForDraw" ng-change="updateTournamentPointsForDraw(tmpTournament.pointsForDraw)"  />
+							<input type="number" ng-model="$root.tmpTournament.pointsForDraw" ng-change="updateTournamentPointsForDraw(tmpTournament.pointsForDraw)"  />
 						</label>
 						<label>
 							<span translate="TOURNAMENTS_POINTS_FOR_LOSS"></span><br />
-							<input type="number" ng-model="tmpTournament.pointsForLoss" ng-change="updateTournamentPointsForLoss(tmpTournament.pointsForLoss)"  />
+							<input type="number" ng-model="$root.tmpTournament.pointsForLoss" ng-change="updateTournamentPointsForLoss(tmpTournament.pointsForLoss)"  />
 						</label>
 
 
@@ -261,7 +261,7 @@
 
 					<label>
 						<span translate="TOURNAMENTS_WHO_GETS_THE_BYE"></span>
-						<select ng-model="tmpTournament.byeType">
+						<select ng-model="$root.tmpTournament.byeType">
 							<option value="random" translate="GENERAL_BYE_RANDOM">Random</option>
 							<option value="first" translate="GENERAL_BYE_FIRST">First</option>
 							<option value="middle" translate="GENERAL_BYE_MIDDLE">Middle</option>
@@ -270,12 +270,12 @@
 					</label>
 
 						<label>
-							<input type="checkbox" ng-model="tmpTournament.byeIsAverage" ng-change="updateByeIsAverage(tmpTournament.byeIsAverage)" /> <span translate="TOURNAMENTS_BYE_IS_AVERAGE">Active</span><br />
+							<input type="checkbox" ng-model="$root.tmpTournament.byeIsAverage" ng-change="updateByeIsAverage(tmpTournament.byeIsAverage)" /> <span translate="TOURNAMENTS_BYE_IS_AVERAGE">Active</span><br />
 						</label>
 
 						<label ng-show="tmpTournament.byeIsAverage == false">
 							<span translate="TOURNAMENTS_POINTS_FOR_BYE"></span><br />
-							<input type="number" ng-model="tmpTournament.pointsForBye" ng-change="updateTournamentPointsForBye(tmpTournament.pointsForBye)"  />
+							<input type="number" ng-model="$root.tmpTournament.pointsForBye" ng-change="updateTournamentPointsForBye(tmpTournament.pointsForBye)"  />
 						</label>
 				</fieldset>
 
@@ -283,17 +283,17 @@
 					<legend translate="TOURNAMENTS_EXTRA_SCORING">Extra Scoring</legend>
 
 						<label>
-							<input type="checkbox" ng-model="tmpTournament.scoringPaint" ng-change="updateTournamentScoringPaint(tmpTournament.scoringPaint)" /> <span translate="TOURNAMENTS_SCORING_PAINT">Score Painting</span><br />
+							<input type="checkbox" ng-model="$root.tmpTournament.scoringPaint" ng-change="updateTournamentScoringPaint(tmpTournament.scoringPaint)" /> <span translate="TOURNAMENTS_SCORING_PAINT">Score Painting</span><br />
 
 						</label>
 
 						<label>
-							<input type="checkbox" ng-model="tmpTournament.scoringComp" ng-change="updateTournamentScoringComp(tmpTournament.scoringComp)" /> <span translate="TOURNAMENTS_SCORING_COMP">Score Army Composition</span><br />
+							<input type="checkbox" ng-model="$root.tmpTournament.scoringComp" ng-change="updateTournamentScoringComp(tmpTournament.scoringComp)" /> <span translate="TOURNAMENTS_SCORING_COMP">Score Army Composition</span><br />
 
 						</label>
 
 						<label>
-							<input type="checkbox" ng-model="tmpTournament.scoringSportsmanship" ng-change="updateTournamentScoringSportsmanship(tmpTournament.scoringSportsmanship)" /> <span translate="TOURNAMENTS_SCORING_SPORTSMANSHIP">Score Sportsmanship</span><br />
+							<input type="checkbox" ng-model="$root.tmpTournament.scoringSportsmanship" ng-change="updateTournamentScoringSportsmanship(tmpTournament.scoringSportsmanship)" /> <span translate="TOURNAMENTS_SCORING_SPORTSMANSHIP">Score Sportsmanship</span><br />
 
 						</label>
 
@@ -304,15 +304,15 @@
 					<legend translate="TOURNAMENTS_GENERAL_SETTINGS">General Settings</legend>
 						<label>
 							<span translate="TOURNAMENTS_NUMBER_OF_ROUNDS"></span><br />
-							<input type="number" ng-model="tmpTournament.numberOfRounds" ng-change="updateTournamentRounds(tmpTournament.numberOfRounds)"  />
+							<input type="number" ng-model="$root.tmpTournament.numberOfRounds" ng-change="updateTournamentRounds(tmpTournament.numberOfRounds)"  />
 						</label>
 						<label>
-							<input type="checkbox" ng-model="tmpTournament.trackPerGameSportsmanship" ng-change="updateTournamentTrackPerGameSportsmanship(tmpTournament.trackPerGameSportsmanship)" /> <span translate="TOURNAMENTS_SPORTSMANSHIP_PER_GAME">Track per game sportsmanship</span><br />
+							<input type="checkbox" ng-model="$root.tmpTournament.trackPerGameSportsmanship" ng-change="updateTournamentTrackPerGameSportsmanship(tmpTournament.trackPerGameSportsmanship)" /> <span translate="TOURNAMENTS_SPORTSMANSHIP_PER_GAME">Track per game sportsmanship</span><br />
 
 						</label>
 						<label ng-show="tmpTournament.trackPerGameSportsmanship == true">
 							<span translate="TOURNAMENTS_SPORTSMANSHIP_WARN"></span><br />
-							<input type="number" ng-model="tmpTournament.warnSportsmanship" ng-change="updateTournamentWarnSportsmanship(tmpTournament.warnSportsmanship)"  />
+							<input type="number" ng-model="$root.tmpTournament.warnSportsmanship" ng-change="updateTournamentWarnSportsmanship(tmpTournament.warnSportsmanship)"  />
 						</label>
 				</fieldset>
 
@@ -320,10 +320,10 @@
 					<legend translate="TOURNAMENTS_MATCHUP_SETTINGS">Match Settings</legend>
 					<label>
 						<span translate="TOURNAMENTS_MATCHUP_ORDERING">Matchup Ordering</span><br />
-						<select ng-options="item as item.label for item in tournamentMatchupOptions track by item.id" ng-change="updateTmpMatchupSelection( tmpMatchupSelection ) "  ng-model="tmpMatchupSelection"></select>
+						<select ng-options="item as item.label for item in tournamentMatchupOptions track by item.id" ng-change="updateTmpMatchupSelection( tmpMatchupSelection ) "  ng-model="$root.tmpMatchupSelection"></select>
 					</label>
 					<label>
-						<input type="checkbox" ng-model="tmpTournament.noDuplicateMatchups" ng-change="updateNoDuplicateMatchups( tmpTournament.noDuplicateMatchups ) " />
+						<input type="checkbox" ng-model="$root.tmpTournament.noDuplicateMatchups" ng-change="updateNoDuplicateMatchups( tmpTournament.noDuplicateMatchups ) " />
 						<span translate="TOURNAMENTS_MATCHUP_NO_DUPLICATES">No Duplicate Matchups, if possible</span><br />
 
 					</label>
@@ -349,7 +349,7 @@
 	<div class="reveal">
 		<h4 class="pull-right"><span translate="GENERAL_ROUND">Round</span> {{editRoundNumber}}</h4>
 		<h4 class="text-left" translate="TOURNAMENT_EDITING_GAME_SCORES">Editing Game Scores</h4>
-		<div class="row" ng-show="currentTournament.type == 'steamroller'">
+		<div class="row" ng-show="$root.currentTournament.type == 'steamroller'">
 			<div class="columns small-12 medium-6">
 				<fieldset class="fieldset">
 					<legend><span translate="TOURNAMENT_PLAYER_1">Player 1</span>: {{editScorePlayer1.displayName}}</legend>
@@ -359,18 +359,18 @@
 						<span ng-show="editScorePlayer1.name.nick != ''"><h4 class="player-name">{{editScorePlayer1.name.first}} <strong>"{{editScorePlayer1.name.nick}}"</strong> {{editScorePlayer1.name.last}}</h4></span>
 					</div>
 
-						<button class="expanded rounded button" ng-class="{primary:tmpPlayer1Score == '-1',secondary:tmpPlayer1Score != '-1'}" ng-click="changePlayerScore(1, '-1')" translate="GENERAL_NOT_ENTERED">Not Entered</button>
-						<button class="expanded rounded  button" ng-class="{primary:tmpPlayer1Score == 'win',secondary:tmpPlayer1Score != 'win'}" ng-click="changePlayerScore(1, 'win')" translate="GENERAL_WIN">Win</button>
-						<button class="expanded rounded  button" ng-class="{primary:tmpPlayer1Score == 'loss',secondary:tmpPlayer1Score != 'loss'}" ng-click="changePlayerScore(1, 'loss')" translate="GENERAL_LOSS">Loss</button>
+						<button class="expanded rounded button" ng-class="{primary:$root.tmpPlayer1Score == '-1',secondary:$root.tmpPlayer1Score != '-1'}" ng-click="changePlayerScore(1, '-1')" translate="GENERAL_NOT_ENTERED">Not Entered</button>
+						<button class="expanded rounded  button" ng-class="{primary:$root.tmpPlayer1Score == 'win',secondary:$root.tmpPlayer1Score != 'win'}" ng-click="changePlayerScore(1, 'win')" translate="GENERAL_WIN">Win</button>
+						<button class="expanded rounded  button" ng-class="{primary:$root.tmpPlayer1Score == 'loss',secondary:$root.tmpPlayer1Score != 'loss'}" ng-click="changePlayerScore(1, 'loss')" translate="GENERAL_LOSS">Loss</button>
 
 
 						<label>
 							<span translate="TOURNAMENT_CONTROL_POINTS">Control Points</span>
-							<input type="number" ng-model="tmpPlayer1SteamControlPoints" ng-change="changeSteamControlPoints( 1, tmpPlayer1SteamControlPoints)" />
+							<input type="number" ng-model="$root.tmpPlayer1SteamControlPoints" ng-change="changeSteamControlPoints( 1, tmpPlayer1SteamControlPoints)" />
 						</label>
 						<label>
 							<span translate="TOURNAMENT_ARMY_POINTS">Army Points</span>
-							<input type="number" ng-model="tmpPlayer1SteamArmyPoints" ng-change="changeSteamArmyPoints( 1, tmpPlayer1SteamArmyPoints)" />
+							<input type="number" ng-model="$root.tmpPlayer1SteamArmyPoints" ng-change="changeSteamArmyPoints( 1, tmpPlayer1SteamArmyPoints)" />
 						</label>
 				</fieldset>
 			</div>
@@ -384,22 +384,22 @@
 
 					</div>
 
-						<button class="expanded rounded  button" ng-class="{primary:tmpPlayer2Score == '-1',secondary:tmpPlayer2Score != '-1'}" ng-click="changePlayerScore(2, '-1')" translate="GENERAL_NOT_ENTERED">Not Entered</button>
-						<button class="expanded rounded  button" ng-class="{primary:tmpPlayer2Score == 'win',secondary:tmpPlayer2Score != 'win'}" ng-click="changePlayerScore(2, 'win')" translate="GENERAL_WIN">Win</button>
-						<button class="expanded rounded  button" ng-class="{primary:tmpPlayer2Score == 'loss',secondary:tmpPlayer2Score != 'loss'}" ng-click="changePlayerScore(2, 'loss')" translate="GENERAL_LOSS">Loss</button>
+						<button class="expanded rounded  button" ng-class="{primary:$root.tmpPlayer2Score == '-1',secondary:$root.tmpPlayer2Score != '-1'}" ng-click="changePlayerScore(2, '-1')" translate="GENERAL_NOT_ENTERED">Not Entered</button>
+						<button class="expanded rounded  button" ng-class="{primary:$root.tmpPlayer2Score == 'win',secondary:$root.tmpPlayer2Score != 'win'}" ng-click="changePlayerScore(2, 'win')" translate="GENERAL_WIN">Win</button>
+						<button class="expanded rounded  button" ng-class="{primary:$root.tmpPlayer2Score == 'loss',secondary:$root.tmpPlayer2Score != 'loss'}" ng-click="changePlayerScore(2, 'loss')" translate="GENERAL_LOSS">Loss</button>
 
 						<label>
 							<span translate="TOURNAMENT_CONTROL_POINTS">Control Points</span>
-							<input type="number" ng-model="tmpPlayer2SteamControlPoints" ng-change="changeSteamControlPoints( 2, tmpPlayer2SteamControlPoints)" />
+							<input type="number" ng-model="$root.tmpPlayer2SteamControlPoints" ng-change="changeSteamControlPoints( 2, tmpPlayer2SteamControlPoints)" />
 						</label>
 						<label>
 							<span translate="TOURNAMENT_ARMY_POINTS">Army Points</span>
-							<input type="number" ng-model="tmpPlayer2SteamArmyPoints" ng-change="changeSteamArmyPoints( 2, tmpPlayer2SteamArmyPoints)" />
+							<input type="number" ng-model="$root.tmpPlayer2SteamArmyPoints" ng-change="changeSteamArmyPoints( 2, tmpPlayer2SteamArmyPoints)" />
 						</label>
 				</fieldset>
 			</div>
 		</div>
-		<div class="row" ng-show="currentTournament.type == 'swiss'">
+		<div class="row" ng-show="$root.currentTournament.type == 'swiss'">
 			<div class="columns small-12 medium-6">
 				<fieldset class="fieldset">
 					<legend><span translate="TOURNAMENT_PLAYER_1">Player 1</span>: {{editScorePlayer1.displayName}}</legend>
@@ -409,13 +409,13 @@
 						<span ng-show="editScorePlayer1.name.nick != ''"><h4 class="player-name">{{editScorePlayer1.name.first}} <strong>"{{editScorePlayer1.name.nick}}"</strong> {{editScorePlayer1.name.last}}</h4></span>
 					</div>
 
-						<button class="expanded rounded  button" ng-class="{primary:tmpPlayer1Score == '-1',secondary:tmpPlayer1Score != '-1'}" ng-click="changePlayerScore(1, '-1')" translate="GENERAL_NOT_ENTERED">Not Entered</button>
-						<button class="expanded rounded  button" ng-class="{primary:tmpPlayer1Score == 'win',secondary:tmpPlayer1Score != 'win'}" ng-click="changePlayerScore(1, 'win')" translate="GENERAL_WIN">Win</button>
-						<button class="expanded rounded  button" ng-class="{primary:tmpPlayer1Score == 'draw',secondary:tmpPlayer1Score != 'draw'}" ng-click="changePlayerScore(1, 'draw')" translate="GENERAL_DRAW">Draw</button>
-						<button class="expanded rounded  button" ng-class="{primary:tmpPlayer1Score == 'loss',secondary:tmpPlayer1Score != 'loss'}" ng-click="changePlayerScore(1, 'loss')" translate="GENERAL_LOSS">Loss</button>
+						<button class="expanded rounded  button" ng-class="{primary:$root.tmpPlayer1Score == '-1',secondary:$root.tmpPlayer1Score != '-1'}" ng-click="changePlayerScore(1, '-1')" translate="GENERAL_NOT_ENTERED">Not Entered</button>
+						<button class="expanded rounded  button" ng-class="{primary:$root.tmpPlayer1Score == 'win',secondary:$root.tmpPlayer1Score != 'win'}" ng-click="changePlayerScore(1, 'win')" translate="GENERAL_WIN">Win</button>
+						<button class="expanded rounded  button" ng-class="{primary:$root.tmpPlayer1Score == 'draw',secondary:$root.tmpPlayer1Score != 'draw'}" ng-click="changePlayerScore(1, 'draw')" translate="GENERAL_DRAW">Draw</button>
+						<button class="expanded rounded  button" ng-class="{primary:$root.tmpPlayer1Score == 'loss',secondary:$root.tmpPlayer1Score != 'loss'}" ng-click="changePlayerScore(1, 'loss')" translate="GENERAL_LOSS">Loss</button>
 						<label>
 							<span translate="TOURNAMENT_EXTRA_POINTS">Extra Points</span>
-							<input type="number" ng-model="tmpPlayer1ExtraPoints" ng-change="changePlayerExtraPoints( 1, tmpPlayer1ExtraPoints)" />
+							<input type="number" ng-model="$root.tmpPlayer1ExtraPoints" ng-change="changePlayerExtraPoints( 1, tmpPlayer1ExtraPoints)" />
 						</label>
 				</fieldset>
 			</div>
@@ -428,16 +428,16 @@
 						<span ng-show="editScorePlayer2.name.nick != ''"><h4 class="player-name">{{editScorePlayer2.name.first}} <strong>"{{editScorePlayer2.name.nick}}"</strong> {{editScorePlayer2.name.last}}</h4></span>
 
 					</div>
-						<button class="expanded rounded  button" ng-class="{primary:tmpPlayer2Score == '-1',secondary:tmpPlayer2Score != '-1'}" ng-click="changePlayerScore(2, '-1')" translate="GENERAL_NOT_ENTERED">Not Entered</button>
-						<button class="expanded rounded  button" ng-class="{primary:tmpPlayer2Score == 'win',secondary:tmpPlayer2Score != 'win'}" ng-click="changePlayerScore(2, 'win')" translate="GENERAL_WIN">Win</button>
-						<button class="expanded rounded  button" ng-class="{primary:tmpPlayer2Score == 'draw',secondary:tmpPlayer2Score != 'draw'}" ng-click="changePlayerScore(2, 'draw')" translate="GENERAL_DRAW">Draw</button>
-						<button class="expanded rounded  button" ng-class="{primary:tmpPlayer2Score == 'loss',secondary:tmpPlayer2Score != 'loss'}" ng-click="changePlayerScore(2, 'loss')" translate="GENERAL_LOSS">Loss</button>
+						<button class="expanded rounded  button" ng-class="{primary:$root.tmpPlayer2Score == '-1',secondary:$root.tmpPlayer2Score != '-1'}" ng-click="changePlayerScore(2, '-1')" translate="GENERAL_NOT_ENTERED">Not Entered</button>
+						<button class="expanded rounded  button" ng-class="{primary:$root.tmpPlayer2Score == 'win',secondary:$root.tmpPlayer2Score != 'win'}" ng-click="changePlayerScore(2, 'win')" translate="GENERAL_WIN">Win</button>
+						<button class="expanded rounded  button" ng-class="{primary:$root.tmpPlayer2Score == 'draw',secondary:$root.tmpPlayer2Score != 'draw'}" ng-click="changePlayerScore(2, 'draw')" translate="GENERAL_DRAW">Draw</button>
+						<button class="expanded rounded  button" ng-class="{primary:$root.tmpPlayer2Score == 'loss',secondary:$root.tmpPlayer2Score != 'loss'}" ng-click="changePlayerScore(2, 'loss')" translate="GENERAL_LOSS">Loss</button>
 
 
 
 						<label>
 							<span translate="TOURNAMENT_EXTRA_POINTS">Extra Points</span>
-							<input type="number" ng-model="tmpPlayer2ExtraPoints" ng-change="changePlayerExtraPoints( 2, tmpPlayer2ExtraPoints)" />
+							<input type="number" ng-model="$root.tmpPlayer2ExtraPoints" ng-change="changePlayerExtraPoints( 2, tmpPlayer2ExtraPoints)" />
 						</label>
 
 				</fieldset>
@@ -466,13 +466,13 @@
 				</thead>
 
 				<tbody>
-					<tr ng-repeat="matchup in currentTournament.matchupObjs[ currentTournament.currentRound + 1 ] track by $index" ng-class="{'has-played-each-other':currentTournament.hasPlayedEachOther(matchup.player1.id, matchup.player2.id)}">
+					<tr ng-repeat="matchup in $root.currentTournament.matchupObjs[ $root.currentTournament.currentRound + 1 ] track by $index" ng-class="{'has-played-each-other':$root.currentTournament.hasPlayedEachOther(matchup.player1.id, matchup.player2.id)}">
 						<td>{{matchup.table}}</td>
 						<td>
 							<button ng-hide="matchup.player1.id == tmpMatchupSwappingID" class="button primary tiny" ng-click="swapPlayerButton( matchup.player1.id );" translate="TOURNAMENT_SWAP">Swap</button>
 						</td>
 						<td>
-							<span ng-show="currentTournament.currentRound > 0">#{{matchup.player1.rank}} - </span>
+							<span ng-show="$root.currentTournament.currentRound > 0">#{{matchup.player1.rank}} - </span>
 							<span ng-hide="matchup.player1.name.nick != ''"><strong>{{matchup.player1.name.first}}</strong> {{matchup.player1.name.last}}</span>
 
 							<span ng-show="matchup.player1.name.nick != ''">{{matchup.player1.name.first}} <strong>"{{matchup.player1.name.nick}}"</strong> {{matchup.player1.name.last}}</span>
@@ -486,7 +486,7 @@
 						<td>
 							<div ng-show="matchup.player2 == null" translate="GENERAL_BYE"></div>
 							<div ng-show="matchup.player2">
-								<span ng-show="currentTournament.currentRound > 0">#{{matchup.player2.rank}} - </span>
+								<span ng-show="$root.currentTournament.currentRound > 0">#{{matchup.player2.rank}} - </span>
 								<span ng-hide="matchup.player2.name.nick != ''"><strong>{{matchup.player2.name.first}}</strong> {{matchup.player2.name.last}}</span>
 
 								<span ng-show="matchup.player2.name.nick != ''">{{matchup.player2.name.first}} <strong>"{{matchup.player2.name.nick}}"</strong> {{matchup.player2.name.last}}</span>
@@ -509,9 +509,9 @@
 			<button class="button small secondary" ng-click="closePlayerMatchupDialog()"  type="button" translate="GENERAL_CANCEL"></button>
 			<button class="button small primary" ng-click="startNextRound()"  type="button" translate="TOURNAMENT_START_ROUND"></button>
 		</div>
-		<fieldset class="fieldset" ng-show="currentTournament.swapLog">
+		<fieldset class="fieldset" ng-show="$root.currentTournament.swapLog">
 			<legend translate="TOURNAMENT_SWAP_LOG">Swap Log</legend>
-			<div ng-bind-html="currentTournament.swapLog"></div>
+			<div ng-bind-html="$root.currentTournament.swapLog"></div>
 		</fieldset>
 
 	</div>
@@ -524,7 +524,7 @@
 			<legend><span translate="TOURNAMENT_EDIT_PAINTING_SCORE">Edit Painting Score</span>: {{tmpEditPlayer.displayName}}</legend>
 				<label>
 					<span translate="TOURNAMENT_PAINTING_SCORE">Painting Score</span>
-					<input type="number" ng-model="tmpEditExtraPointValue" ng-change="changeExtraBitsScore(  tmpEditExtraPointValue)" />
+					<input type="number" ng-model="$root.tmpEditExtraPointValue" ng-change="changeExtraBitsScore(  tmpEditExtraPointValue)" />
 				</label>
 		</fieldset>
 		<div class="text-right">
@@ -540,7 +540,7 @@
 			<legend><span translate="TOURNAMENT_EDIT_COMPOSITION_SCORE">Edit Painting Score</span>: {{tmpEditPlayer.displayName}}</legend>
 				<label>
 					<span translate="TOURNAMENT_COMPOSITION_SCORE">Painting Score</span>
-					<input type="number" ng-model="tmpEditExtraPointValue" ng-change="changeExtraBitsScore(  tmpEditExtraPointValue)" />
+					<input type="number" ng-model="$root.tmpEditExtraPointValue" ng-change="changeExtraBitsScore(  tmpEditExtraPointValue)" />
 				</label>
 		</fieldset>
 		<div class="text-right">
@@ -556,7 +556,7 @@
 			<legend><span translate="TOURNAMENT_EDIT_SPORTSMANSHIP_SCORE">Edit Painting Score</span>: {{tmpEditPlayer.displayName}}</legend>
 				<label>
 					<span translate="TOURNAMENT_SPORTSMANSHIP_SCORE">Painting Score</span>
-					<input type="number" ng-model="tmpEditExtraPointValue" ng-change="changeExtraBitsScore( tmpEditExtraPointValue)" />
+					<input type="number" ng-model="$root.tmpEditExtraPointValue" ng-change="changeExtraBitsScore( tmpEditExtraPointValue)" />
 				</label>
 		</fieldset>
 		<div class="text-right">

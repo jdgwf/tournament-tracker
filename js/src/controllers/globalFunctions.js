@@ -41,6 +41,27 @@ var coreGlobalFunctions = function ($timeout, $rootScope, $translate, $location,
 
 
 
+	/* *********************************************************
+	 * Confirmation Dialog
+	 * ******************************************************* */
+
+	$rootScope.confirmDialogQuestion = "";
+	$rootScope.showImportExportPlayerDialog = false;
+
+	$rootScope.confirmDialog = function( confirmationMessage, onYes ) {
+		$rootScope.confirmDialogQuestion = confirmationMessage;
+		$rootScope.showConfirmDialog = true;
+		$rootScope.confirmDialogYes = onYes;
+	}
+
+	$rootScope.closeConfirmDialog = function( ) {
+		$rootScope.showConfirmDialog = false;
+		// reset confirm to nothing...
+		$rootScope.confirmDialogYes = function() {
+			$rootScope.showConfirmDialog = false;
+		}
+	}
+
 
 	$rootScope.deletePlayerDialog = function(playerID) {
 		$translate([
@@ -116,18 +137,18 @@ var coreGlobalFunctions = function ($timeout, $rootScope, $translate, $location,
 			$rootScope.tmpPlayer.updated = new Date();
 
 			//~ console.log( $rootScope.tmpPlayer.id );
-			if( $rootScope.tmpPlayer.id < 0 ) {
-				newID = getNextPlayerID($rootScope.playerList);
-				$rootScope.tmpPlayer.id = newID;
+			if( $rootScope.tmpPlayer.id.length < 10 ) {
+				//~ newID = getNextPlayerID($rootScope.playerList);
+				$rootScope.tmpPlayer.id = generateUUID();
 			}
 			//~ console.log( $rootScope.tmpPlayer.id );
 			$rootScope.playerList[ $rootScope.tmpPlayerIndex ] = new Player( $rootScope.tmpPlayer );
 		} else {
-			newID = getNextPlayerID($rootScope.playerList);
+			//~ newID = getNextPlayerID($rootScope.playerList);
 			$rootScope.tmpPlayer.created = new Date();
 
 			$rootScope.tmpPlayer.updated = new Date();
-			$rootScope.tmpPlayer.id = newID;
+			//~ $rootScope.tmpPlayer.id = newID;
 			$rootScope.playerList.push( new Player( $rootScope.tmpPlayer ) );
 		}
 

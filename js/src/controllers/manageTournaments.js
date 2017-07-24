@@ -33,7 +33,7 @@ var tournamentsManageArray =
 
 			});
 
-			$scope.currentTournamentsPage = true;
+			$rootScope.currentTournamentsPage = true;
 
 			$scope.refreshTournamentData = function() {
 				$rootScope.playerList = getPlayersFromLocalStorage();
@@ -45,11 +45,11 @@ var tournamentsManageArray =
 			}
 			$scope.refreshTournamentData();
 
-			$scope.currentTournament = null;
+			$rootScope.currentTournament = null;
 			if( $rootScope.tournamentList[ localStorage["current_tournament_view"] ] ) {
-				$scope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
-				if( $scope.currentTournament.playerObjs.length == 0 || $scope.currentTournament.completed )
-					$scope.currentTournament = null;
+				$rootScope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
+				if( $rootScope.currentTournament.playerObjs.length == 0 || $rootScope.currentTournament.completed )
+					$rootScope.currentTournament = null;
 			}
 
 			/* *********************************************************
@@ -79,52 +79,52 @@ var tournamentsManageArray =
 			 * ******************************************************* */
 
 			$scope.updateTournamentName = function( newValue ) {
-				$scope.tmpTournament.name = newValue;
+				$rootScope.tmpTournament.name = newValue;
 			}
 
 			$scope.updateTournamentRounds = function( newValue ) {
-				$scope.tmpTournament.numberOfRounds = newValue;
+				$rootScope.tmpTournament.numberOfRounds = newValue;
 			}
 
 			$scope.updateTournamentPointsForWin = function( newValue ) {
-				$scope.tmpTournament.pointsForWin = newValue;
+				$rootScope.tmpTournament.pointsForWin = newValue;
 			}
 
 			$scope.updateTournamentPointsForDraw = function( newValue ) {
-				$scope.tmpTournament.pointsForDraw = newValue;
+				$rootScope.tmpTournament.pointsForDraw = newValue;
 			}
 
 			$scope.updateTournamentPointsForLoss = function( newValue ) {
-				$scope.tmpTournament.pointsForLoss = newValue;
+				$rootScope.tmpTournament.pointsForLoss = newValue;
 			}
 
 			$scope.updateByeIsAverage = function( newValue ) {
-				$scope.tmpTournament.byeIsAverage = newValue;
+				$rootScope.tmpTournament.byeIsAverage = newValue;
 			}
 
 			$scope.updateTournamentPointsForBye = function( newValue ) {
-				$scope.tmpTournament.pointsForBye = newValue;
+				$rootScope.tmpTournament.pointsForBye = newValue;
 			}
 
 			$scope.updateTournamentScoringPaint = function( newValue ) {
-				$scope.tmpTournament.scoringPaint = newValue;
+				$rootScope.tmpTournament.scoringPaint = newValue;
 			}
 
 			$scope.updateTournamentScoringComp = function( newValue ) {
-				$scope.tmpTournament.scoringComp = newValue;
+				$rootScope.tmpTournament.scoringComp = newValue;
 			}
 
 			$scope.updateTournamentScoringSportsmanship = function( newValue ) {
-				$scope.tmpTournament.scoringSportsmanship = newValue;
+				$rootScope.tmpTournament.scoringSportsmanship = newValue;
 			}
 
 			$scope.updateTournamentTrackPerGameSportsmanship = function( newValue ) {
-				$scope.tmpTournament.trackPerGameSportsmanship = newValue;
+				$rootScope.tmpTournament.trackPerGameSportsmanship = newValue;
 			}
 
 
 			$scope.updateTournamentWarnSportsmanship = function( newValue ) {
-				$scope.tmpTournament.warnSportsmanship = newValue;
+				$rootScope.tmpTournament.warnSportsmanship = newValue;
 			}
 
 			$scope.newTournamentDialog = function() {
@@ -133,7 +133,7 @@ var tournamentsManageArray =
 
 				$scope.clearTempTournamentData();
 
-				$scope.getMatchupSelection( $scope.tmpTournament.matchupType );
+				$scope.getMatchupSelection( $rootScope.tmpTournament.matchupType );
 
 				$scope.showEditTournamentDialog = true;
 			}
@@ -143,7 +143,7 @@ var tournamentsManageArray =
 			}
 
 			$scope.updateNoDuplicateMatchups = function( newValue ) {
-				$scope.tmpTournament.noDuplicateMatchups = newValue;
+				$rootScope.tmpTournament.noDuplicateMatchups = newValue;
 			}
 
 
@@ -172,11 +172,11 @@ var tournamentsManageArray =
 				//~ console.log("editTournamentDialog() called");
 
 				if( $rootScope.tournamentList[ indexNumber] ) {
-					$scope.tmpTournament = angular.copy( $rootScope.tournamentList[ indexNumber ] );
+					$rootScope.tmpTournament = angular.copy( $rootScope.tournamentList[ indexNumber ] );
 
-					$scope.getMatchupSelection( $scope.tmpTournament.matchupType );
+					$scope.getMatchupSelection( $rootScope.tmpTournament.matchupType );
 
-					$scope.tmpTournamentIndex  = indexNumber;
+					$rootScope.tmpTournamentIndex  = indexNumber;
 					$scope.showEditTournamentDialog = true;
 				}
 			}
@@ -184,10 +184,10 @@ var tournamentsManageArray =
 			$scope.clearTempTournamentData = function() {
 				//~ console.log("clearTempTournamentData() called");
 
-				$scope.tmpTournament = new Tournament();
-				$scope.getMatchupSelection( $scope.tmpTournament.matchupType );
+				$rootScope.tmpTournament = new Tournament();
+				$scope.getMatchupSelection( $rootScope.tmpTournament.matchupType );
 
-				$scope.tmpTournamentIndex = -1;
+				$rootScope.tmpTournamentIndex = -1;
 
 			}
 
@@ -205,24 +205,24 @@ var tournamentsManageArray =
 				//~ console.log("saveEditTournamentDialog() called");
 				$scope.showEditTournamentDialog = false;
 
-				$scope.tmpTournament.matchupType = $scope.tmpMatchupSelection.id;
+				$rootScope.tmpTournament.matchupType = $scope.tmpMatchupSelection.id;
 
 
-				if( $scope.tmpTournamentIndex > -1 ) {
+				if( $rootScope.tmpTournamentIndex > -1 ) {
 					// Save to Index...
 
-					$scope.tmpTournament.updated = new Date();
-					$rootScope.tournamentList[ $scope.tmpTournamentIndex] = $scope.tmpTournament;
+					$rootScope.tmpTournament.updated = new Date();
+					$rootScope.tournamentList[ $rootScope.tmpTournamentIndex] = $rootScope.tmpTournament;
 					saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
 
 					$scope.clearTempTournamentData();
 				} else {
 					newID = getNextPlayerID($rootScope.playerList);
-					$scope.tmpTournament.created = new Date();
+					$rootScope.tmpTournament.created = new Date();
 
-					$scope.tmpTournament.updated = new Date();
+					$rootScope.tmpTournament.updated = new Date();
 					$rootScope.tournamentList.id = newID;
-					$rootScope.tournamentList.push( $scope.tmpTournament );
+					$rootScope.tournamentList.push( $rootScope.tmpTournament );
 					saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
 
 					$scope.clearTempTournamentData();
@@ -257,17 +257,17 @@ var tournamentsManageArray =
 
 			$scope.addPlayerToTournament = function(playerID) {
 				//~ console.log( "addPlayerToTournament(" + playerID + ") called");
-				$scope.tmpTournament.players.push( playerID );
-				$scope.tmpTournament.createPlayerObjs( $scope.playerList );
+				$rootScope.tmpTournament.players.push( playerID );
+				$rootScope.tmpTournament.createPlayerObjs( $scope.playerList );
 				saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
 				$scope.updateAvailableParticipatingPlayers();
 			}
 
 			$scope.removePlayerFromTournament = function(playerID) {
 				//~ console.log( "removePlayerFromTournament(" + playerID + ") called");
-				for( var playerC = 0; playerC < $scope.tmpTournament.players.length; playerC++ ) {
-					if( $scope.tmpTournament.players[playerC] == playerID ) {
-						$scope.tmpTournament.players.splice( playerC, 1);
+				for( var playerC = 0; playerC < $rootScope.tmpTournament.players.length; playerC++ ) {
+					if( $rootScope.tmpTournament.players[playerC] == playerID ) {
+						$rootScope.tmpTournament.players.splice( playerC, 1);
 						saveTournamentsToLocalStorage($rootScope.tournamentList, $rootScope.playerList);
 						$scope.updateAvailableParticipatingPlayers();
 					}
@@ -277,11 +277,11 @@ var tournamentsManageArray =
 
 			$scope.updateAvailableParticipatingPlayers = function() {
 				$scope.availablePlayers = Array();
-				$scope.participatingPlayers =  angular.copy($scope.tmpTournament.playerObjs);
+				$scope.participatingPlayers =  angular.copy($rootScope.tmpTournament.playerObjs);
 
 				for( var playerC = 0; playerC < $scope.playerList.length; playerC++ ) {
 					if(
-						$scope.tmpTournament.players.indexOf( $scope.playerList[playerC].id ) === -1
+						$rootScope.tmpTournament.players.indexOf( $scope.playerList[playerC].id ) === -1
 							&&
 						$scope.playerList[playerC].active == true
 							&&
@@ -297,7 +297,7 @@ var tournamentsManageArray =
 
 			$scope.showEditTournamentPlayersDialog = false;
 			$scope.editTournamentPlayersDialog = function( indexNumber ) {
-				$scope.tmpTournament = $rootScope.tournamentList[ indexNumber ];
+				$rootScope.tmpTournament = $rootScope.tournamentList[ indexNumber ];
 				$scope.updateAvailableParticipatingPlayers();
 
 				$scope.showEditTournamentPlayersDialog = true;
@@ -305,7 +305,7 @@ var tournamentsManageArray =
 
 			$scope.closeTournamentPlayersDialog = function() {
 				$scope.showEditTournamentPlayersDialog = false;
-				$scope.tmpTournament = null;
+				$rootScope.tmpTournament = null;
 			}
 
 			/* *********************************************************

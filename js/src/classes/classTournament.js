@@ -28,14 +28,14 @@ function Tournament (importTournament, playerObjects) {
 	this.warnSportsmanship = 2;
 
 	this.scoring = Array();	// base score from win/loss/draw status
-	this.extraPoints = Array(); // per game extra points
+	this.extraPoints = {}; // per game extra points
 
-	this.steamControlPoints = Array(); // Steamroller control points
-	this.steamArmyPoints = Array(); // Steamroller army points
+	this.steamControlPoints = []; // Steamroller control points
+	this.steamArmyPoints = []; // Steamroller army points
 
-	this.pointsPainting = Array();
-	this.pointsComposition = Array();
-	this.pointsSportsmanship = Array();
+	this.pointsPainting = {};
+	this.pointsComposition = {}
+	this.pointsSportsmanship = {};
 
 	this.currentRound = 0;
 	this.matches = Array();
@@ -47,11 +47,16 @@ function Tournament (importTournament, playerObjects) {
 
 	this.byeType = "middle";
 
+	this.id = generateUUID();
+
 
 	this.createMatchupObjs = function( playersObjs) {
 		this.matchupObjs = Array();
 
+
+
 		for( var roundNumber in this.matches ) {
+
 			this.matchupObjs[ roundNumber ] = Array();
 			if( this.matches[ roundNumber ] ) {
 				for( var roundC = 0; roundC < this.matches[roundNumber].length; roundC++ ) {
@@ -200,7 +205,7 @@ function Tournament (importTournament, playerObjects) {
 				byeObject = {
 					table: "-",
 					player1: this.playerObjs[ matchCounter ].id,
-					player2: -1
+					player2: ""
 				};
 
 			} else if( player1 == 0 ) {
@@ -263,13 +268,19 @@ function Tournament (importTournament, playerObjects) {
 
 
 	this.setScore = function( roundNumber, playerID, newScore ) {
+		//~ console.log( "setScore", roundNumber, playerID, newScore );
+		//~ console.log( this.scoring[ roundNumber - 1] );
 		if( typeof(this.scoring[ roundNumber - 1]) == "undefined" )
-			this.scoring[ roundNumber - 1] = Array();
+			this.scoring[ roundNumber - 1] = {};
 
 		if( typeof(this.scoring[ roundNumber - 1][playerID]) == "undefined" )
 			this.scoring[ roundNumber - 1][playerID] = "-1";
 
 		this.scoring[ roundNumber - 1][playerID] = newScore
+
+		//~ console.log( "new score", this.scoring[ roundNumber - 1][playerID] );
+		//~ console.log( this.scoring[ roundNumber - 1] );
+		//~ console.log( "scoring", this.scoring );
 		return this.scoring[ roundNumber - 1][playerID];
 	}
 
@@ -370,7 +381,7 @@ function Tournament (importTournament, playerObjects) {
 
 	this.setSteamArmyPoints = function( roundNumber, playerID, newScore ) {
 		if( typeof(this.steamArmyPoints[ roundNumber - 1]) == "undefined" )
-			this.steamArmyPoints[ roundNumber - 1] = Array();
+			this.steamArmyPoints[ roundNumber - 1] = {};
 
 		if( typeof(this.steamArmyPoints[ roundNumber - 1][playerID]) == "undefined" )
 			this.steamArmyPoints[ roundNumber - 1][playerID] = -1;
@@ -381,7 +392,7 @@ function Tournament (importTournament, playerObjects) {
 
 	this.setSteamControlPoints = function( roundNumber, playerID, newScore ) {
 		if( typeof(this.steamControlPoints[ roundNumber - 1]) == "undefined" )
-			this.steamControlPoints[ roundNumber - 1] = Array();
+			this.steamControlPoints[ roundNumber - 1] = {};
 
 		if( typeof(this.steamControlPoints[ roundNumber - 1][playerID]) == "undefined" )
 			this.steamControlPoints[ roundNumber - 1][playerID] = -1;
@@ -411,7 +422,7 @@ function Tournament (importTournament, playerObjects) {
 
 		if( player1ID == player2ID )
 			return true;
-		if( player1ID == -1 || player2ID == -1 )
+		if( player1ID == "" || player2ID == "" )
 			return false;
 		//~ console.log( "-------------------------hasPlayedEachOther this.matches", this.matches);
 		if( this.currentRound == 0 )
@@ -470,13 +481,17 @@ function Tournament (importTournament, playerObjects) {
 					//~ console.log( this.matches[ roundC ][ matchC ].player1, this.matches[ roundC ][ matchC ].player2 );
 					if(
 						(
+							this.matches[ roundC ][ matchC ]
+								&&
 							this.matches[ roundC ][ matchC ].player1 == player1ID
 								&&
-							this.matches[ roundC ][ matchC ].player2 == -1
+							this.matches[ roundC ][ matchC ].player2 == ""
 						)
 							||
 						(
-							this.matches[ roundC ][ matchC ].player1 == -1
+							this.matches[ roundC ][ matchC ]
+								&&
+							this.matches[ roundC ][ matchC ].player1 == ""
 								&&
 							this.matches[ roundC ][ matchC ].player2 == player1ID
 						)
@@ -508,7 +523,7 @@ function Tournament (importTournament, playerObjects) {
 		for( var roundC = 0; roundC < this.numberOfRounds; roundC++ ) {
 			//~ console.log( "roundC", roundC);
 			if( typeof( this.scoring[ roundC ] ) == "undefined")
-				this.scoring[ roundC ] = Array();
+				this.scoring[ roundC ] = {};
 			for( var playerC = 0; playerC < this.playerObjs.length; playerC++ ) {
 				if(
 					typeof( this.scoring[ roundC ][this.playerObjs[playerC].id] ) == "undefined"
@@ -566,7 +581,7 @@ function Tournament (importTournament, playerObjects) {
 	this.isByeRound = function( roundNumber, playerID ) {
 		if( this.matches[ roundNumber ] ) {
 			for( var matchC = 0; matchC < this.matches[ roundNumber ].length; matchC++ ) {
-				if( this.matches[ roundNumber ][ matchC ].player1 == playerID && this.matches[ roundNumber ][ matchC ].player2 == -1 ) {
+				if( this.matches[ roundNumber ][ matchC ].player1 == playerID && this.matches[ roundNumber ][ matchC ].player2 == "" ) {
 					return true;
 				}
 			}
@@ -721,6 +736,8 @@ function Tournament (importTournament, playerObjects) {
 
 			this.playerObjs[ playerC ].pointsBase = playerTotal;
 
+			//~ console.log( "totals", this.totals );
+			//~ console.log( "playerobjs", this.playerObjs );
 
 			this.playerObjs[ playerC ].pointsFinal = this.playerObjs[ playerC ].pointsBase;
 
@@ -804,6 +821,7 @@ function Tournament (importTournament, playerObjects) {
 	}
 
 	if( typeof(importTournament) != "undefined" ) {
+		//~ console.log( "import", importTournament );
 		this.players = importTournament.players;
 		this.name = importTournament.name;
 
@@ -826,6 +844,9 @@ function Tournament (importTournament, playerObjects) {
 			this.scoring = importTournament.scoring;
 		if( typeof(importTournament.extraPoints) != "undefined" )
 			this.extraPoints = importTournament.extraPoints;
+
+		if( typeof(importTournament.id) != "undefined" )
+			this.id = generateUUID();
 
 		if( typeof(importTournament.pointsPainting) != "undefined" )
 			this.pointsPainting = importTournament.pointsPainting;

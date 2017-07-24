@@ -14,7 +14,7 @@ function Player ( importPlayer ) {
 
 	this.active = true;
 	this.deleted = false;
-	this.id = -1;
+	this.id = generateUUID();
 
 	if( typeof(importPlayer) != "undefined" ) {
 		if( typeof(importPlayer.email) != "undefined") {
@@ -44,8 +44,10 @@ function Player ( importPlayer ) {
 			this.deleted = importPlayer.deleted;
 
 
-		if( typeof(importPlayer.id) != "undefined")
+		if( typeof(importPlayer.id) != "undefined" || importPlayer.id > 0)
 			this.id = importPlayer.id;
+		else
+			this.id = generateUUID();
 	}
 
 	this.newFunction = function() {

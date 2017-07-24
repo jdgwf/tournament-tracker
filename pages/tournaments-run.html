@@ -125,6 +125,9 @@
 								</div>
 
 								<div ng-hide="currentTournament.currentRound > $index" title="{{ 'TOURNAMENT_NOT_AVAILABLE' | translate }}" translate="TOURNAMENT_NA" class="darker-text">n/a</div>
+<!--
+								{{currentTournament.scoring[$index][playerObjs.id]}}
+-->
 							</td>
 							<td class="text-center" ng-hide="currentTournament.type=='steamroller'">
 								{{playerObjs.pointsBase}}

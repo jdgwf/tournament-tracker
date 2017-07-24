@@ -42,10 +42,12 @@ function getTournamentsFromLocalStorage( playersObject ) {
 		localStorage["tournaments_list"] = "[]";
 		return Array();
 	} else {
-		//return JSON.parse( localStorage["tournaments_list"]  );
+		//~ return JSON.parse( localStorage["tournaments_list"]  );
 		var returnValue = Array();
 		var importTournaments = JSON.parse( localStorage["tournaments_list"]  );
+		//~ console.log( "getTournamentsFromLocalStorage raw", localStorage["tournaments_list"] );
 
+		//~ console.log( "getTournamentsFromLocalStorage", importTournaments );
 		for( var tournamentC = 0; tournamentC < importTournaments.length; tournamentC++ ) {
 			var newTournament = new Tournament( importTournaments[tournamentC] );
 
@@ -61,7 +63,6 @@ function getTournamentsFromLocalStorage( playersObject ) {
 function savePlayersToLocalStorage( playersObject ) {
 	playersObject.sort( sortByNames );
 	localStorage["players_list"] = JSON.stringify( playersObject );
-
 }
 
 function saveTournamentsToLocalStorage( tournamentsObject, playersList ) {
@@ -71,7 +72,9 @@ function saveTournamentsToLocalStorage( tournamentsObject, playersList ) {
 		if( tournamentsObject[tC].matchupObjs )
 			delete tournamentsObject[tC].matchupObjs;
 	}
+	//~ console.log( "saveTournamentsToLocalStorage", tournamentsObject );
 	localStorage["tournaments_list"] = JSON.stringify( tournamentsObject );
+	//~ console.log( "saved", localStorage["tournaments_list"] );
 	for( var tC = 0; tC < tournamentsObject.length; tC++ ) {
 		tournamentsObject[ tC ].createPlayerObjs( playersList );
 		tournamentsObject[ tC ].createMatchupObjs( playersList );

@@ -23,35 +23,16 @@ var playersManageArray =
 				$rootScope.tournamentList[ tC ].createPlayerObjs( $rootScope.playerList );
 			}
 
-			$scope.currentTournament = null;
+			$rootScope.currentTournament = null;
 			if( $rootScope.tournamentList[ localStorage["current_tournament_view"] ] ) {
-				$scope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
+				$rootScope.currentTournament = $rootScope.tournamentList[ localStorage["current_tournament_view"] ]
 			}
 
 
 
 			$rootScope.getNumberOfDeleted();
 
-			/* *********************************************************
-			 * Confirmation Dialog
-			 * ******************************************************* */
 
-			$scope.confirmDialogQuestion = "";
-			$scope.showImportExportPlayerDialog = false;
-
-			$scope.confirmDialog = function( confirmationMessage, onYes ) {
-				$scope.confirmDialogQuestion = confirmationMessage;
-				$scope.showConfirmDialog = true;
-				$scope.confirmDialogYes = onYes;
-			}
-
-			$scope.closeConfirmDialog = function( ) {
-				$scope.showConfirmDialog = false;
-				// reset confirm to nothing...
-				$scope.confirmDialogYes = function() {
-					$scope.showConfirmDialog = false;
-				}
-			}
 
 			/* *********************************************************
 			 * Import/Export functions.....
