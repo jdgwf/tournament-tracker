@@ -2188,7 +2188,7 @@ var tournamentsManageArray =
 
 			});
 
-			$rootScope.currentTournamentsPage = true;
+			$scope.currentTournamentsPage = true;
 
 			$scope.refreshTournamentData = function() {
 				$rootScope.playerList = getPlayersFromLocalStorage();
