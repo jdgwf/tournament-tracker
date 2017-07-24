@@ -44,7 +44,7 @@ function Player ( importPlayer ) {
 			this.deleted = importPlayer.deleted;
 
 
-		if( typeof(importPlayer.id) != "undefined" || importPlayer.id > 0)
+		if( typeof(importPlayer.id) != "string")
 			this.id = importPlayer.id;
 		else
 			this.id = generateUUID();

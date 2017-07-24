@@ -12,7 +12,9 @@
 			<table>
 				<thead>
 					<tr>
+<!--
 						<th translate="GENERAL_ID">id</th>
+-->
 						<th translate="GENERAL_NAME_FIRST">First Name</th>
 						<th translate="GENERAL_NAME_LAST">Last Name</th>
 						<th translate="GENERAL_NAME_NICK">Nickname</th>
@@ -31,7 +33,9 @@
 					ng-repeat="playerObj in activePlayers track by $index"
 					ng-show="filterSearchTerm == '' || playerObj.name.first.toLowerCase().indexOf(filterSearchTerm.trim().toLowerCase()) > -1 || playerObj.name.nick.toLowerCase().indexOf(filterSearchTerm.trim().toLowerCase()) > -1 || playerObj.name.last.toLowerCase().indexOf(filterSearchTerm.trim().toLowerCase()) > -1"
 				>
+<!--
 							<td>{{ playerObj.id }}</td>
+-->
 							<td>{{ playerObj.name.first }}</td>
 							<td>{{ playerObj.name.last }}</td>
 							<td>{{ playerObj.name.nick }}</td>
