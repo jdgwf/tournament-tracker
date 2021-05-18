@@ -1,5 +1,6 @@
-#Tourmnent Tracker
-##Purpose
+# Tourmnent Tracker
+
+## Purpose
 Application for tracking and scoring various Miniature Wargame Tournaments
 
 ## Team
